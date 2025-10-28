@@ -9,6 +9,16 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Jobify.Application\Jobify.Application.csproj" />
+    <ProjectReference Include="..\Jobify.Domain\Jobify.Domain.csproj" />
+    <ProjectReference Include="..\Jobify.Infrastructure\Jobify.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
