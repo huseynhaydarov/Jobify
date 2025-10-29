@@ -2,7 +2,7 @@
 
 ## Build
 
-Run `dotnet build -tl` to build the solution.
+Run `dotnet build --tl` to build the solution.
 
 ## Run
 
