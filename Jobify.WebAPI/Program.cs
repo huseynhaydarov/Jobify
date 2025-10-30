@@ -20,6 +20,10 @@ ApplyMigrations(app);
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "Jobify API");
+    });
 }
 
 app.UseHttpsRedirection();
