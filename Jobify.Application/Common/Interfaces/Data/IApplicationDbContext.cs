@@ -1,8 +1,7 @@
 ﻿using Jobify.Domain.Common.Entities;
 using Microsoft.EntityFrameworkCore;
 
-
-namespace Jobify.Application.Common.Interfaces;
+namespace Jobify.Application.Common.Interfaces.Data;
 
 public interface IApplicationDbContext
 {

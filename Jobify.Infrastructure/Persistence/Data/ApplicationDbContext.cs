@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Jobify.Application.Common.Interfaces;
+using Jobify.Application.Common.Interfaces.Data;
 using Jobify.Domain.Common.BaseEntities;
 using Jobify.Domain.Common.Entities;
 using Microsoft.EntityFrameworkCore;

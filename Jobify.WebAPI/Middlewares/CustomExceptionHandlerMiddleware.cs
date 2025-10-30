@@ -37,7 +37,7 @@ public class CustomExceptionHandlerMiddleware(
         else
             details = exception switch
             {
-                NotFoundExceptions => (
+                NotFoundException => (
                     exception.Message,
                     "Resource Not Found",
                     StatusCodes.Status404NotFound

@@ -319,7 +319,7 @@ namespace Jobify.Infrastructure.Migrations
                             CreatedAt = new DateTimeOffset(new DateTime(2025, 10, 28, 12, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 5, 0, 0, 0)),
                             Description = "Guest of the System",
                             IsActive = true,
-                            Name = "Joob Seeker"
+                            Name = "Job Seeker"
                         });
                 });
 

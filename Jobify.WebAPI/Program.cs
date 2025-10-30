@@ -1,3 +1,4 @@
+using Jobify.Application;
 using Jobify.Infrastructure;
 using Jobify.Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,8 @@ app.UseHttpsRedirection();
 void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 {
     services
-        .AddInfrastructureServices(configuration);
+        .AddInfrastructureServices(configuration)
+        .AddApplicationServices(configuration);
     ;}
 
 
