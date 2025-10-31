@@ -1,3 +1,5 @@
+using Jobify.API;
+using Jobify.API.Middlewares;
 using Jobify.Application;
 using Jobify.Infrastructure;
 using Jobify.Infrastructure.Persistence.Data;
@@ -7,43 +9,72 @@ var builder = WebApplication.CreateBuilder(args);
 
 ConfigureServices(builder.Services, builder.Configuration);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-
 ApplyMigrations(app);
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/openapi/v1.json", "Jobify API");
-    });
 }
 
-app.UseHttpsRedirection();
+ConfigureMiddleware(app);
 
+app.Run();
+
+
+// ----------------------------
 
 void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 {
+    services.AddCors(options =>
+    {
+        options.AddPolicy("AllowAll", policy =>
+        {
+            policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        });
+    });
+
+    services
+        .AddControllers();
+    
     services
         .AddInfrastructureServices(configuration)
-        .AddApplicationServices(configuration);
-    ;}
+        .AddApplicationServices(configuration)
+        .AddAPIServices(configuration);
+}
 
+void ConfigureMiddleware(WebApplication app)
+{
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseDeveloperExceptionPage();
+        app.UseSwagger();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Jobify API v1");
+        });
+    }
+    else
+    {
+        app.UseExceptionHandler("/Home/Error");
+    }
+
+    app.UseCors("AllowAll");
+    app.UseRouting();
+    app.UseMiddleware<CustomExceptionHandlerMiddleware>();
+    app.MapControllers();
+}
 
 void ApplyMigrations(WebApplication app)
 {
     try
     {
-        var applicationDbContext =
-            app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        applicationDbContext.Database.MigrateAsync().Wait();
+        using var scope = app.Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        dbContext.Database.Migrate();
     }
     catch (Exception ex)
     {
@@ -52,7 +83,3 @@ void ApplyMigrations(WebApplication app)
         throw;
     }
 }
-
-
-app.Run();
-
