@@ -4,11 +4,9 @@ ConfigureServices(builder.Services, builder.Configuration);
 
 var app = builder.Build();
 
-await ApplyMigrationsAsync(app);
-
 ConfigureMiddleware(app);
 
-app.Run();
+await ApplyMigrationsAsync(app);
 
 void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 {
@@ -18,11 +16,12 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
             policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
     });
 
-    services.AddControllers();
-    services.AddEndpointsApiExplorer();
-    services.AddSwaggerGen();
-    services.AddHttpContextAccessor();
 
+    services.AddOpenApi();
+
+    services.AddControllers();
+
+    services.AddHttpContextAccessor();
 
     services
         .AddInfrastructureServices(configuration)
@@ -36,20 +35,27 @@ void ConfigureMiddleware(WebApplication app)
 
     if (app.Environment.IsDevelopment())
     {
+        app.MapOpenApi();
         app.UseDeveloperExceptionPage();
         app.UseSwagger();
-        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Jobify API v1"));
+        app.UseSwaggerUI();
     }
     else
     {
         app.UseExceptionHandler("/Home/Error");
+        app.UseHttpsRedirection();
     }
 
     app.UseCors("AllowAll");
+
     app.UseRouting();
+
     app.UseAuthentication();
+
     app.UseAuthorization();
+
     app.MapControllers();
+
 }
 
 async Task ApplyMigrationsAsync(WebApplication app)
@@ -67,3 +73,5 @@ async Task ApplyMigrationsAsync(WebApplication app)
         throw;
     }
 }
+
+app.Run();
