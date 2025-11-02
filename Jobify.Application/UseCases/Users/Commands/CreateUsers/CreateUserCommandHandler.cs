@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Jobify.Application.Common.Exceptions;
 using Jobify.Application.Common.Extensions;
-using Jobify.Application.Common.Extensions.UserExtensions;
 using Jobify.Application.Common.Interfaces.Data;
 using Jobify.Application.Common.Interfaces.Services;
+using Jobify.Domain.Constants;
 using Jobify.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -32,11 +32,11 @@ public class CreateUserCommandHandler : BaseSetting,  IRequestHandler<CreateUser
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         var jobSeekerRole = await _dbContext.Roles
-            .FirstAsync(r => r.Name == UserRoleNames.JobSeeker, cancellationToken);
+            .SingleOrDefaultAsync(r => r.Name == Roles.JobSeeker, cancellationToken);
 
         if (jobSeekerRole == null)
         {
-            throw new NotFoundException(nameof(Role), UserRoleNames.JobSeeker);
+            throw new NotFoundException(nameof(Role), Roles.JobSeeker);
         }
 
         var userRole = new UserRole()

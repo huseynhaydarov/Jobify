@@ -46,7 +46,7 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
             {
                 Id = Guid.Parse("2a9abd5b-36c2-4dad-abac-953b6b4b03be"),
                 Name = "JobSeeker",
-                Description = "Guest of the System",
+                Description = "JobSeeker of the System",
                 IsActive = true,
                 CreatedAt = new DateTime(2025, 10, 28, 12, 0, 0)
             }
