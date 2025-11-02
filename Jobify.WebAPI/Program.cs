@@ -1,61 +1,44 @@
-using Jobify.API;
-using Jobify.API.Middlewares;
-using Jobify.Application;
-using Jobify.Infrastructure;
-using Jobify.Infrastructure.Persistence.Data;
-using Microsoft.EntityFrameworkCore;
-
 var builder = WebApplication.CreateBuilder(args);
 
 ConfigureServices(builder.Services, builder.Configuration);
 
-builder.Services.AddOpenApi();
-
 var app = builder.Build();
 
-ApplyMigrations(app);
-
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+await ApplyMigrationsAsync(app);
 
 ConfigureMiddleware(app);
 
 app.Run();
-
-
-// ----------------------------
 
 void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 {
     services.AddCors(options =>
     {
         options.AddPolicy("AllowAll", policy =>
-        {
-            policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-        });
+            policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
     });
 
-    services
-        .AddControllers();
-    
+    services.AddControllers();
+    services.AddEndpointsApiExplorer();
+    services.AddSwaggerGen();
+    services.AddHttpContextAccessor();
+
+
     services
         .AddInfrastructureServices(configuration)
         .AddApplicationServices(configuration)
-        .AddAPIServices(configuration);
+        .AddWebServices(configuration);
 }
 
 void ConfigureMiddleware(WebApplication app)
 {
+    app.UseMiddleware<CustomExceptionHandlerMiddleware>();
+
     if (app.Environment.IsDevelopment())
     {
         app.UseDeveloperExceptionPage();
         app.UseSwagger();
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Jobify API v1");
-        });
+        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Jobify API v1"));
     }
     else
     {
@@ -64,17 +47,18 @@ void ConfigureMiddleware(WebApplication app)
 
     app.UseCors("AllowAll");
     app.UseRouting();
-    app.UseMiddleware<CustomExceptionHandlerMiddleware>();
+    app.UseAuthentication();
+    app.UseAuthorization();
     app.MapControllers();
 }
 
-void ApplyMigrations(WebApplication app)
+async Task ApplyMigrationsAsync(WebApplication app)
 {
     try
     {
         using var scope = app.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        dbContext.Database.Migrate();
+        await dbContext.Database.MigrateAsync();
     }
     catch (Exception ex)
     {

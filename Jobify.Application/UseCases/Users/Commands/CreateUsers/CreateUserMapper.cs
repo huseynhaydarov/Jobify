@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Jobify.Domain.Common.Entities;
+using Jobify.Domain.Entities;
 
 namespace Jobify.Application.UseCases.Users.Commands.CreateUsers;
 

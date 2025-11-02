@@ -1,6 +1,6 @@
 ﻿using Jobify.Domain.Common.BaseEntities;
 
-namespace Jobify.Domain.Common.Entities;
+namespace Jobify.Domain.Entities;
 
 public class Role : BaseAuditableEntity
 {

@@ -1,8 +1,7 @@
 ﻿using System.Reflection;
-using Jobify.Application.Common.Interfaces;
 using Jobify.Application.Common.Interfaces.Data;
 using Jobify.Domain.Common.BaseEntities;
-using Jobify.Domain.Common.Entities;
+using Jobify.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Jobify.Infrastructure.Persistence.Data;
@@ -37,7 +36,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.CreatedAt = DateTime.Now;
+                    entry.Entity.CreatedAt = DateTimeOffset.UtcNow;;
                     break;
                 case EntityState.Modified:
                     entry.Entity.ModifiedAt = DateTime.Now;
