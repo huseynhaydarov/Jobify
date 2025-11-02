@@ -1,56 +1,43 @@
-﻿using Jobify.Domain.Common.Entities;
+﻿using Jobify.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Jobify.Infrastructure.Persistence.Data.Configurations;
 
-public class UserConfiguration : IEntityTypeConfiguration<User>
+public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
-        builder.ToTable("Users");
+        builder.ToTable("DomainUsers");
 
-        builder.Property(u => u.Username)
-            .HasMaxLength(100)
-            .IsRequired();
-
-        builder.Property(u => u.Email)
-            .HasMaxLength(155)
-            .IsRequired();
-
-        builder.Property(u => u.PasswordHash)
-            .HasMaxLength(255);
-
-        builder.Property(u => u.IsActive)
-            .HasDefaultValue(false);
-
-        builder.HasMany(u => u.UserRoles)
-            .WithOne(u => u.User)
+        builder.HasMany<IdentityUserRole<Guid>>()
+            .WithOne()
             .HasForeignKey(u => u.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(u => u.JobListings)
-            .WithOne(u => u.User)
+            .WithOne()
             .HasForeignKey(u => u.EmployerId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(u => u.Applications)
-            .WithOne(u => u.User)
+            .WithOne()
             .HasForeignKey(u => u.ApplicantId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(u => u.SentMessages)
-            .WithOne(m => m.Sender)
+            .WithOne()
             .HasForeignKey(m => m.SenderId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(u => u.ReceivedMessages)
-            .WithOne(m => m.Receiver)
+            .WithOne()
             .HasForeignKey(m => m.ReceiverId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(u => u.Companies)
-            .WithOne(c => c.User)
+            .WithOne()
             .HasForeignKey(c => c.CreatedById)
             .OnDelete(DeleteBehavior.Restrict);
     }

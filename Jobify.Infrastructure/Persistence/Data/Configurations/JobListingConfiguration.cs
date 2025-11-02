@@ -1,5 +1,6 @@
-﻿using Jobify.Domain.Common.Entities;
-using Jobify.Domain.Common.Enumerations;
+﻿using Jobify.Domain.Common.Enumerations;
+using Jobify.Domain.Entities;
+using Jobify.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

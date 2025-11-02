@@ -1,4 +1,4 @@
-﻿using Jobify.Domain.Common.Entities;
+﻿using Jobify.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

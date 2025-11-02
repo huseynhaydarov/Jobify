@@ -1,13 +1,15 @@
 ﻿using System.Reflection;
-using Jobify.Application.Common.Interfaces;
 using Jobify.Application.Common.Interfaces.Data;
 using Jobify.Domain.Common.BaseEntities;
-using Jobify.Domain.Common.Entities;
+using Jobify.Domain.Entities;
+using Jobify.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Jobify.Infrastructure.Persistence.Data;
 
-public class ApplicationDbContext : DbContext, IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
@@ -27,6 +29,10 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         builder.Ignore<BaseEntity>();
 
         base.OnModelCreating(builder);
+
+        builder.Entity<ApplicationUser>().ToTable("IdentityUsers");
+        builder.Entity<ApplicationRole>().ToTable("IdentityRoles");
+        builder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoles");
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 

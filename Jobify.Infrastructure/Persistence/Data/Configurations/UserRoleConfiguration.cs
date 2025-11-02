@@ -1,4 +1,4 @@
-﻿using Jobify.Domain.Common.Entities;
+﻿using Jobify.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,7 +8,7 @@ public class UserRoleConfiguration : IEntityTypeConfiguration<UserRole>
 {
     public void Configure(EntityTypeBuilder<UserRole> builder)
     {
-        builder.ToTable("UserRoles");
+        builder.ToTable("DomainUserRoles");
 
         builder.HasOne(u => u.User)
             .WithMany(u => u.UserRoles)

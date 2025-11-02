@@ -1,4 +1,4 @@
-﻿using Jobify.Domain.Common.Entities;
+﻿using Jobify.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Jobify.Application.Common.Interfaces.Data;
