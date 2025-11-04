@@ -13,12 +13,12 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     }
 
     public DbSet<User> Users => Set<User>();
-    public DbSet<JobApplication> JobApplications { get; }
-    public DbSet<Company> Companies { get; }
-    public DbSet<JobListing> JobListings { get; }
-    public DbSet<Message> Messages { get; }
-    public DbSet<Role> Roles { get; }
-    public DbSet<UserRole> UsersRoles { get; }
+    public DbSet<JobApplication> JobApplications =>  Set<JobApplication>();
+    public DbSet<Company> Companies => Set<Company>();
+    public DbSet<JobListing> JobListings => Set<JobListing>();
+    public DbSet<Message> Messages => Set<Message>();
+    public DbSet<Role> Roles => Set<Role>();
+    public DbSet<UserRole> UsersRoles => Set<UserRole>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

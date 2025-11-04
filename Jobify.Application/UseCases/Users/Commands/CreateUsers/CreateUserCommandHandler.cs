@@ -3,7 +3,6 @@ using Jobify.Application.Common.Exceptions;
 using Jobify.Application.Common.Extensions;
 using Jobify.Application.Common.Interfaces.Data;
 using Jobify.Application.Common.Interfaces.Services;
-using Jobify.Domain.Constants;
 using Jobify.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -21,31 +20,29 @@ public class CreateUserCommandHandler : BaseSetting,  IRequestHandler<CreateUser
 
     public async Task<Guid> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
+        var role = await _dbContext.Roles
+            .FirstOrDefaultAsync(r => r.Id == request.RoleId, cancellationToken);
+
+        if (role == null)
+        {
+            throw new NotFoundException(nameof(Role), request.RoleId);
+        }
+
         var user = _mapper.Map<User>(request);
+
+        user.IsActive = true;
 
         user.PasswordHash = await _hasherService.HashPasswordAsync(request.Password);
 
         await _dbContext.Users.AddAsync(user, cancellationToken);
 
-        user.IsActive = true;
-
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        var jobSeekerRole = await _dbContext.Roles
-            .SingleOrDefaultAsync(r => r.Name == Roles.JobSeeker, cancellationToken);
-
-        if (jobSeekerRole == null)
-        {
-            throw new NotFoundException(nameof(Role), Roles.JobSeeker);
-        }
-
         var userRole = new UserRole()
         {
-            RoleId = jobSeekerRole.Id,
+            RoleId = role.Id,
             UserId = user.Id
         };
 
-        await _dbContext.UsersRoles.AddAsync(userRole);
+        user.UserRoles.Add(userRole);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
