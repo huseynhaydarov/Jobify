@@ -1,13 +1,4 @@
-﻿using Jobify.Application.Common.Interfaces;
-using Jobify.Application.Common.Interfaces.Data;
-using Jobify.Application.Common.Interfaces.Services;
-using Jobify.Infrastructure.Persistence.Data;
-using Jobify.Infrastructure.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace Jobify.Infrastructure;
+﻿namespace Jobify.Infrastructure;
 
 public static class DependencyInjection
 {

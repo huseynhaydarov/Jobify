@@ -1,10 +1,4 @@
-﻿using System.Reflection;
-using Jobify.Application.Common.Interfaces.Data;
-using Jobify.Domain.Common.BaseEntities;
-using Jobify.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-
-namespace Jobify.Infrastructure.Persistence.Data;
+﻿namespace Jobify.Infrastructure.Persistence.Data;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {

@@ -1,10 +1,4 @@
-﻿using Jobify.Application.Common.Interfaces.Data;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-
-namespace Jobify.Infrastructure.Services
+﻿namespace Jobify.Infrastructure.Services
 {
     public class RoleAuthorizationPolicyProvider : IAuthorizationPolicyProvider
     {

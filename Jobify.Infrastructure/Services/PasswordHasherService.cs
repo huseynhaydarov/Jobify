@@ -1,7 +1,4 @@
-﻿using System.Security.Cryptography;
-using Jobify.Application.Common.Interfaces.Services;
-
-namespace Jobify.Infrastructure.Services;
+﻿namespace Jobify.Infrastructure.Services;
 
 public sealed class PasswordHasherService : IPasswordHasherService
 {

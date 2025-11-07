@@ -1,15 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using Jobify.Application.Common.Interfaces.Services;
-using Jobify.Application.Common.Models;
-using Jobify.Domain.Entities;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
-
-namespace Jobify.Infrastructure.Services;
+﻿namespace Jobify.Infrastructure.Services;
 
 public class TokenService(IOptions<JwtSettings> jwtSettings) : ITokenService
 {
