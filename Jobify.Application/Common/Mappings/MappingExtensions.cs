@@ -1,9 +1,4 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Jobify.Application.Common.Models;
-using Microsoft.EntityFrameworkCore;
-
-namespace Jobify.Application.Common.Mappings;
+﻿namespace Jobify.Application.Common.Mappings;
 
 public static class MappingExtensions
 {

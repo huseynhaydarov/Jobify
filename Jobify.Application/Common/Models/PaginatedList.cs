@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace Jobify.Application.Common.Models;
+﻿namespace Jobify.Application.Common.Models;
 
 public class PaginatedList<T>
 {

@@ -1,8 +1,4 @@
-﻿using Jobify.Application.UseCases.Roles.Queries;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Jobify.API.Controllers.V1;
+﻿namespace Jobify.API.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]

@@ -1,11 +1,4 @@
-﻿using AutoMapper;
-using Jobify.Application.Common.Exceptions;
-using Jobify.Application.Common.Extensions;
-using Jobify.Application.Common.Interfaces.Data;
-using Jobify.Application.Common.Interfaces.Services;
-using Jobify.Domain.Entities;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Jobify.Application.Common.Extensions;
 
 namespace Jobify.Application.UseCases.Users.Commands.CreateUsers;
 

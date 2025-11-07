@@ -1,8 +1,4 @@
-﻿using AutoMapper;
-using Jobify.Application.Common.Interfaces;
-using Jobify.Application.Common.Interfaces.Data;
-
-namespace Jobify.Application.Common.Extensions;
+﻿namespace Jobify.Application.Common.Extensions;
 
 public class BaseSetting
 {

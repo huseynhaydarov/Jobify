@@ -1,7 +1,4 @@
-﻿using System.Security.Claims;
-using Jobify.Application.Common.Interfaces.Services;
-
-namespace Jobify.API.Services;
+﻿namespace Jobify.API.Services;
 
 public class AuthenticatedUser : IAuthenticatedUser
 {
@@ -12,6 +9,6 @@ public class AuthenticatedUser : IAuthenticatedUser
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public string? Id => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-    public List<string>? Roles => _httpContextAccessor.HttpContext?.User?.FindAll(ClaimTypes.Role).Select(x => x.Value).ToList();
+    public string? Id => _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+    public List<string>? Roles => _httpContextAccessor.HttpContext?.User.FindAll(ClaimTypes.Role).Select(x => x.Value).ToList();
 }

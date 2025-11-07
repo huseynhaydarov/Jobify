@@ -1,9 +1,4 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Jobify.Application.Common.Extensions;
-using Jobify.Application.Common.Interfaces.Data;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Jobify.Application.Common.Extensions;
 
 namespace Jobify.Application.UseCases.Roles.Queries;
 

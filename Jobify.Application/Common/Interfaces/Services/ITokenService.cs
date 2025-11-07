@@ -1,7 +1,4 @@
-﻿using System.Security.Claims;
-using Jobify.Domain.Entities;
-
-namespace Jobify.Application.Common.Interfaces.Services;
+﻿namespace Jobify.Application.Common.Interfaces.Services;
 
 public interface ITokenService
 {

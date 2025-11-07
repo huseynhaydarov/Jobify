@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using Jobify.Domain.Entities;
-
-namespace Jobify.Application.UseCases.Users.Commands.CreateUsers;
+﻿namespace Jobify.Application.UseCases.Users.Commands.CreateUsers;
 
 public class CreateUserMapper : Profile
 {
