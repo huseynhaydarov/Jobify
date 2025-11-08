@@ -50,7 +50,7 @@ public static class DependencyInjection
             });
 
         services.AddAuthorization(options =>
-            options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
+            options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(UserRoles.Administrator)));
 
         services.AddEndpointsApiExplorer();
 

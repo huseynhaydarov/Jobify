@@ -1,6 +1,4 @@
-﻿using Jobify.Application.Common.Extensions;
-
-namespace Jobify.Application.UseCases.Roles.Queries;
+﻿namespace Jobify.Application.UseCases.Roles.Queries.GetRoles;
 
 public class GetRoleDictionaryQueryHandler : BaseSetting, IRequestHandler<GetRoleDictionaryQuery, List<GetRoleDictionaryViewModel>>
 {

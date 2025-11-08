@@ -1,4 +1,6 @@
-﻿namespace Jobify.API.Controllers.V1;
+﻿using Jobify.Application.UseCases.Roles.Queries.GetRoles;
+
+namespace Jobify.API.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]
