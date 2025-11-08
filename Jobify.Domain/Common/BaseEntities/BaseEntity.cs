@@ -3,6 +3,6 @@
 public abstract class BaseEntity
 {
     public Guid Id { get; set; }
-    public required DateTimeOffset CreatedAt { get; set; }
-    public DateTime? ModifiedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset? ModifiedAt { get; set; }
 }

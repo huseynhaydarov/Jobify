@@ -1,8 +1,4 @@
-﻿using Jobify.Domain.Common.Entities;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace Jobify.Infrastructure.Persistence.Data.Configurations;
+﻿namespace Jobify.Infrastructure.Persistence.Data.Configurations;
 
 public class MessageConfiguration : IEntityTypeConfiguration<Message>
 {

@@ -1,11 +1,4 @@
-﻿using System.Reflection;
-using Jobify.Application.Common.Interfaces;
-using Jobify.Application.Common.Interfaces.Data;
-using Jobify.Domain.Common.BaseEntities;
-using Jobify.Domain.Common.Entities;
-using Microsoft.EntityFrameworkCore;
-
-namespace Jobify.Infrastructure.Persistence.Data;
+﻿namespace Jobify.Infrastructure.Persistence.Data;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
@@ -14,12 +7,12 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     }
 
     public DbSet<User> Users => Set<User>();
-    public DbSet<JobApplication> JobApplications { get; }
-    public DbSet<Company> Companies { get; }
-    public DbSet<JobListing> JobListings { get; }
-    public DbSet<Message> Messages { get; }
-    public DbSet<Role> Roles { get; }
-    public DbSet<UserRole> UsersRoles { get; }
+    public DbSet<JobApplication> JobApplications =>  Set<JobApplication>();
+    public DbSet<Company> Companies => Set<Company>();
+    public DbSet<JobListing> JobListings => Set<JobListing>();
+    public DbSet<Message> Messages => Set<Message>();
+    public DbSet<Role> Roles => Set<Role>();
+    public DbSet<UserRole> UsersRoles => Set<UserRole>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -37,7 +30,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.CreatedAt = DateTime.Now;
+                    entry.Entity.CreatedAt = DateTimeOffset.UtcNow;;
                     break;
                 case EntityState.Modified:
                     entry.Entity.ModifiedAt = DateTime.Now;

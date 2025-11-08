@@ -1,4 +1,4 @@
-﻿namespace Jobify.Domain.Common.Enumerations;
+﻿namespace Jobify.Domain.Enums;
 
 public enum ApplicationStatus
 {
