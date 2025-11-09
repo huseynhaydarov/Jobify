@@ -1,4 +1,5 @@
-﻿using Jobify.Domain.Events;
+﻿using Jobify.Domain.Enums;
+using Jobify.Domain.Events;
 using Microsoft.Extensions.Logging;
 
 namespace Jobify.Application.UseCases.Users.EventHandlers;
@@ -18,19 +19,27 @@ public class EmployerCreatedEventHandler : INotificationHandler<EmployerCreatedE
     {
         _logger.LogInformation("Domain Event: {DomainEvent}", notification.GetType().Name);
 
-
-        var employer = notification.User;
+        var user = notification.User;
 
         var company = new Company
         {
             Name = "New Company",
-            Description = $"Company for user {employer.Email}",
-            CreatedById = employer.Id,
+            Description = $"Company for employer {user.Email}",
+            CreatedById = user.Id,
             WebsiteUrl = null,
             Industry = null
         };
 
-        await _dbContext.Companies.AddAsync(company, cancellationToken);
+        _dbContext.Companies.Add(company);
+
+        var employer = new Employer
+        {
+            UserId = user.Id,
+            CompanyId = company.Id,
+            Position = EmployerPosition.CEO,
+            JoinedAt = DateTimeOffset.UtcNow
+        };
+        _dbContext.Employers.Add(employer);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

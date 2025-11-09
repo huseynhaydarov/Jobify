@@ -1,6 +1,4 @@
-﻿using Jobify.Domain.Common.BaseEntities;
-
-namespace Jobify.Domain.Entities;
+﻿namespace Jobify.Domain.Entities;
 
 public class User : BaseAuditableEntity
 {
@@ -14,6 +12,5 @@ public class User : BaseAuditableEntity
     public ICollection<JobApplication>  Applications { get; set; } = new List<JobApplication>();
     public ICollection<Message> SentMessages { get; set; } = new List<Message>();
     public ICollection<Message> ReceivedMessages  { get; set; } = new List<Message>();
-
-    public ICollection<Company> Companies { get; set; } = new List<Company>();
+    public ICollection<Employer> Employers { get; set; } = new List<Employer>();
 }

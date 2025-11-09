@@ -1,7 +1,7 @@
 ﻿namespace Jobify.Application.Common.Interfaces.Services;
 
-public class IAuthenticatedUser
+public interface IAuthenticatedUser
 {
-    string? Id { get; }
+    Guid? Id { get; }
     List<string>? Roles { get; }
 }

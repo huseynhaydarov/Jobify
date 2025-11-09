@@ -1,7 +1,4 @@
-﻿using Jobify.Domain.Common.BaseEntities;
-using Jobify.Domain.Enums;
-
-namespace Jobify.Domain.Entities;
+﻿namespace Jobify.Domain.Entities;
 
 public class JobListing : BaseAuditableEntity
 {
