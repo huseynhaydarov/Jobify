@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Jobify.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251109134954_addedEmployerTable")]
-    partial class addedEmployerTable
+    [Migration("20251109150125_changedDateTimeOffsetToUtcNow")]
+    partial class changedDateTimeOffsetToUtcNow
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
