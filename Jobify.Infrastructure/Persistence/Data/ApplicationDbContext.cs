@@ -30,10 +30,10 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.CreatedAt = DateTimeOffset.UtcNow;;
+                    entry.Entity.CreatedAt = DateTimeOffset.Now;;
                     break;
                 case EntityState.Modified:
-                    entry.Entity.ModifiedAt = DateTime.Now;
+                    entry.Entity.ModifiedAt = DateTimeOffset.Now;
                     break;
             }
         }

@@ -1,6 +1,4 @@
-﻿using Jobify.Domain.Common.BaseEntities;
-
-namespace Jobify.Domain.Entities;
+﻿namespace Jobify.Domain.Entities;
 
 public class UserRole : BaseEntity
 {
