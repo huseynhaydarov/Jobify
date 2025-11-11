@@ -36,7 +36,6 @@ void ConfigureMiddleware(WebApplication app)
     if (app.Environment.IsDevelopment())
     {
         app.MapOpenApi();
-        app.UseDeveloperExceptionPage();
         app.UseSwagger();
         app.UseSwaggerUI();
     }
