@@ -1,27 +1,24 @@
-﻿using Jobify.Domain.Events;
+﻿namespace Jobify.Application.UseCases.Users.Commands.CreateUsers;
 
-namespace Jobify.Application.UseCases.Users.Commands.CreateUsers;
-
-public class CreateUserCommandHandler : BaseSetting,  IRequestHandler<CreateUserCommand, Guid>
+public class CreateJobSeekerCommandHandler : BaseSetting,  IRequestHandler<CreateJobSeekerCommand, Guid>
 {
     private readonly IPasswordHasherService _hasherService;
     private readonly IMediator _mediator;
 
-    public CreateUserCommandHandler(IMapper mapper, IApplicationDbContext dbContext, IPasswordHasherService hasherService,
+    public CreateJobSeekerCommandHandler(IMapper mapper, IApplicationDbContext dbContext, IPasswordHasherService hasherService,
         IMediator mediator) : base(mapper, dbContext)
     {
         _hasherService = hasherService;
         _mediator = mediator;
     }
 
-    public async Task<Guid> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateJobSeekerCommand request, CancellationToken cancellationToken)
     {
-        var role = await _dbContext.Roles
-            .FirstOrDefaultAsync(r => r.Id == request.RoleId, cancellationToken);
+        var role = await _dbContext.Roles.FirstAsync(r => r.Name == UserRoles.JobSeeker, cancellationToken);
 
         if (role == null)
         {
-            throw new NotFoundException(nameof(Role), request.RoleId);
+            throw new NotFoundException(nameof(Role));
         }
 
         var user = _mapper.Map<User>(request);
@@ -41,11 +38,6 @@ public class CreateUserCommandHandler : BaseSetting,  IRequestHandler<CreateUser
         user.UserRoles.Add(userRole);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
-
-        if (role.Name == UserRoles.Employer)
-        {
-            await _mediator.Publish(new EmployerCreatedEvent(user), cancellationToken);
-        }
 
         return user.Id;
     }

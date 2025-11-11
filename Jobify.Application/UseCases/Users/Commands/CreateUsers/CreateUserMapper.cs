@@ -4,7 +4,7 @@ public class CreateUserMapper : Profile
 {
     public CreateUserMapper()
     {
-        CreateMap<CreateUserCommand, User>()
+        CreateMap<CreateJobSeekerCommand, User>()
             .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password));
     }
 }
