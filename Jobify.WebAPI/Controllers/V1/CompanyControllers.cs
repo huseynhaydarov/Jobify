@@ -27,4 +27,16 @@ public class CompanyController : ControllerBase
 
         return Ok(data);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll([FromQuery] PagingParameters parameters, CancellationToken cancellationToken)
+    {
+        var query = new GetAllCompaniesQuery(parameters);
+
+        var data = await _mediator.Send(query, cancellationToken);
+
+        return Ok(data);
+    }
+
 }
+

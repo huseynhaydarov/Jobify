@@ -1,4 +1,4 @@
-﻿namespace Jobify.Application.Common.Models;
+﻿namespace Jobify.Application.Common.Models.Pagination;
 
 public class PaginatedList<T>
 {
