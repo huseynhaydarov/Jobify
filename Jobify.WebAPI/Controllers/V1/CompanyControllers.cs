@@ -21,6 +21,7 @@ public class CompanyController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Roles = UserRoles.Employer)]
     public async Task<ActionResult<GetCompanyDetailViewModel>> GetDetail([FromRoute] Guid id)
     {
         var data = await _mediator.Send(new GetCompanyDetailQuery(id));
@@ -29,6 +30,7 @@ public class CompanyController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = UserRoles.Administrator)]
     public async Task<IActionResult> GetAll([FromQuery] PagingParameters parameters, CancellationToken cancellationToken)
     {
         var query = new GetAllCompaniesQuery(parameters);
