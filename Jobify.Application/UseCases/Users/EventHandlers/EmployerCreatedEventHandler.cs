@@ -30,7 +30,7 @@ public class EmployerCreatedEventHandler : INotificationHandler<EmployerCreatedE
             Industry = null
         };
 
-        _dbContext.Companies.Add(company);
+        await _dbContext.Companies.AddAsync(company, cancellationToken);
 
         var employer = new Employer
         {
@@ -39,7 +39,9 @@ public class EmployerCreatedEventHandler : INotificationHandler<EmployerCreatedE
             Position = EmployerPosition.CEO,
             JoinedAt = DateTimeOffset.UtcNow
         };
-        _dbContext.Employers.Add(employer);
+
+        await _dbContext.Employers.AddAsync(employer,  cancellationToken);
+
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

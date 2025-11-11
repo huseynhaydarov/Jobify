@@ -14,6 +14,7 @@ public class RolesController : ControllerBase
     }
 
     [HttpGet("dictionary")]
+    [Authorize(Roles = UserRoles.Administrator)]
     public async Task<ActionResult> GetDictionary([FromQuery] GetRoleDictionaryQuery query)
     {
         var roles = await _mediator.Send(query);

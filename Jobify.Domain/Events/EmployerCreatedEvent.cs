@@ -1,7 +1,4 @@
-﻿using Jobify.Domain.Entities;
-using MediatR;
-
-namespace Jobify.Domain.Events;
+﻿namespace Jobify.Domain.Events;
 
 public class EmployerCreatedEvent : INotification
 {
