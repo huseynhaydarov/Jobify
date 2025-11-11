@@ -11,6 +11,8 @@ global using Jobify.Application.Common.Interfaces.Services;
 global using Jobify.Application.Common.Models;
 global using Jobify.Application.UseCases.Auths.Login.Commands;
 global using Jobify.Application.UseCases.Auths.RefreshToken.Commands;
+global using Jobify.Application.UseCases.Companies.Commands.UpdateCompanies;
+global using Jobify.Application.UseCases.Companies.Queries.GetCompanyDetail;
 global using Jobify.Application.UseCases.Users.Commands.CreateUsers;
 global using Jobify.Domain.Constants;
 global using Jobify.Infrastructure;
