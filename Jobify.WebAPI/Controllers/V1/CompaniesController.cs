@@ -2,13 +2,21 @@
 
 [Route("api/[controller]")]
 [ApiController]
-public class CompanyController : ControllerBase
+public class CompaniesController : ControllerBase
 {
     private readonly ISender _mediator;
 
-    public CompanyController(ISender mediator)
+    public CompaniesController(ISender mediator)
     {
         _mediator = mediator;
+    }
+
+    [HttpPost("create")]
+    public async Task<IActionResult> Create([FromBody] CreateCompanyCommand command)
+    {
+        var data =  await _mediator.Send(command);
+
+        return Ok(data);
     }
 
     [HttpPost("update")]
@@ -17,7 +25,7 @@ public class CompanyController : ControllerBase
     {
         await _mediator.Send(command);
 
-        return NoContent();
+        return Ok();
     }
 
     [HttpGet("{id}")]
@@ -39,6 +47,5 @@ public class CompanyController : ControllerBase
 
         return Ok(data);
     }
-
 }
 

@@ -9,8 +9,8 @@ public class EmployerConfiguration : IEntityTypeConfiguration<Employer>
         builder.HasKey(e => e.Id);
 
         builder.HasOne(e => e.User)
-            .WithMany(u => u.Employers)
-            .HasForeignKey(e => e.UserId)
+            .WithOne(u => u.Employer)
+            .HasForeignKey<Employer>(e => e.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(e => e.Company)

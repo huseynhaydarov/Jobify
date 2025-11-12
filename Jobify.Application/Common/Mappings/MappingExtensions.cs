@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.Common.Mappings;
+﻿using IConfigurationProvider = AutoMapper.IConfigurationProvider;
+
+namespace Jobify.Application.Common.Mappings;
 
 public static class MappingExtensions
 {

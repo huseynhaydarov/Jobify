@@ -32,7 +32,6 @@ public class AuthsController : ControllerBase
         return Ok(new
         {
             AccessToken = data.Token,
-            FullName = data.Username,
             data.Email,
             data.Role
         });

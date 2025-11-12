@@ -1,6 +1,4 @@
-﻿using Jobify.Domain.Events;
-
-namespace Jobify.Application.UseCases.Users.Commands.CreateEmployers;
+﻿namespace Jobify.Application.UseCases.Users.Commands.CreateEmployers;
 
 public class CreateEmployerCommandCommandHandler : BaseSetting, IRequestHandler<CreateEmployerCommand, Guid>
 {
