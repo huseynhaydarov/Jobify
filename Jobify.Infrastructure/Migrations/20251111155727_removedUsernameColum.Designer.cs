@@ -3,6 +3,7 @@ using System;
 using Jobify.Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Jobify.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251111155727_removedUsernameColum")]
+    partial class removedUsernameColum
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,8 +106,7 @@ namespace Jobify.Infrastructure.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Employers", (string)null);
                 });
@@ -415,8 +417,8 @@ namespace Jobify.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Jobify.Domain.Entities.User", "User")
-                        .WithOne("Employer")
-                        .HasForeignKey("Jobify.Domain.Entities.Employer", "UserId")
+                        .WithMany("Employers")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -530,7 +532,7 @@ namespace Jobify.Infrastructure.Migrations
                 {
                     b.Navigation("Applications");
 
-                    b.Navigation("Employer");
+                    b.Navigation("Employers");
 
                     b.Navigation("JobListings");
 
