@@ -17,6 +17,8 @@ global using Jobify.Application.UseCases.Companies.Commands.UpdateCompanies;
 global using Jobify.Application.UseCases.Companies.Queries.GetCompanies;
 global using Jobify.Application.UseCases.Companies.Queries.GetCompanyDetail;
 global using Jobify.Application.UseCases.Employers.Commands.JoinCompany;
+global using Jobify.Application.UseCases.JobListings.Commands.CreateJobListing;
+global using Jobify.Application.UseCases.JobListings.Queries.GetJobListingDetail;
 global using Jobify.Application.UseCases.Users.Commands.CreateUsers;
 global using Jobify.Domain.Constants;
 global using Jobify.Infrastructure;
