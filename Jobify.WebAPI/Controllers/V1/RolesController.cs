@@ -1,4 +1,6 @@
-﻿namespace Jobify.API.Controllers.V1;
+﻿using Jobify.Application.UseCases.Roles.Queries.GetRoles;
+
+namespace Jobify.API.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -12,6 +14,7 @@ public class RolesController : ControllerBase
     }
 
     [HttpGet("dictionary")]
+    [Authorize(Roles = UserRoles.Administrator)]
     public async Task<ActionResult> GetDictionary([FromQuery] GetRoleDictionaryQuery query)
     {
         var roles = await _mediator.Send(query);

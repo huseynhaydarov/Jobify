@@ -22,7 +22,6 @@ public class TokenService(IOptions<JwtSettings> jwtSettings) : ITokenService
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new(JwtRegisteredClaimNames.Email, user.Email),
-            new(ClaimTypes.Name, user.Username),
         };
 
         foreach (var role in roles)

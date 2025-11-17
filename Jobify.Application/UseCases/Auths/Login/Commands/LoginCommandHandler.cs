@@ -52,7 +52,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponse>
             true,
             token,
             refreshToken,
-            user.Username,
             user.Email,
             user.UserRoles.Select(r => r.Role?.Name).Aggregate((x, y) => x + ", " + y));
     }

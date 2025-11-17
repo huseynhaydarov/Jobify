@@ -1,4 +1,4 @@
-﻿namespace Jobify.Application.UseCases.Roles.Queries;
+﻿namespace Jobify.Application.UseCases.Roles.Queries.GetRoles;
 
 public class GetRoleDictionaryMapper : Profile
 {

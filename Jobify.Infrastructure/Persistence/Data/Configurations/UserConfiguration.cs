@@ -6,10 +6,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.ToTable("Users");
 
-        builder.Property(u => u.Username)
-            .HasMaxLength(100)
-            .IsRequired();
-
         builder.Property(u => u.Email)
             .HasMaxLength(155)
             .IsRequired();
@@ -45,9 +41,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey(m => m.ReceiverId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasMany(u => u.Companies)
-            .WithOne(c => c.User)
-            .HasForeignKey(c => c.CreatedById)
-            .OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(u => u.Employer)
+            .WithOne(m => m.User)
+            .HasForeignKey<Employer>(u => u.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

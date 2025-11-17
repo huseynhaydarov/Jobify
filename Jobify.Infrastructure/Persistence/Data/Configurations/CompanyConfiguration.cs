@@ -21,13 +21,18 @@ public class CompanyConfiguration : IEntityTypeConfiguration<Company>
 
         builder
             .HasOne(c => c.User)
-            .WithMany(u => u.Companies)
+            .WithMany()
             .HasForeignKey(c => c.CreatedById)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(c => c.JobListings)
             .WithOne(j => j.Company)
-            .HasForeignKey(j => j.CreatedById)
+            .HasForeignKey(j => j.CompanyId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(c => c.Employers)
+            .WithOne(e => e.Company)
+            .HasForeignKey(e => e.CompanyId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

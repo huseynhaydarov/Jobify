@@ -31,8 +31,8 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("CreatedById")
                         .HasColumnType("uuid");
@@ -48,10 +48,7 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<DateTimeOffset?>("ModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("ModifiedById")
+                    b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -68,6 +65,48 @@ namespace Jobify.Infrastructure.Migrations
                     b.HasIndex("CreatedById");
 
                     b.ToTable("Companies", (string)null);
+                });
+
+            modelBuilder.Entity("Jobify.Domain.Entities.Employer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("JoinedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset?>("ModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Employers", (string)null);
                 });
 
             modelBuilder.Entity("Jobify.Domain.Entities.JobApplication", b =>
@@ -92,10 +131,7 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("CreatedById")
+                    b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("JobListingId")
@@ -104,10 +140,7 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<DateTimeOffset?>("ModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("ModifiedById")
+                    b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("WithdrawnAt")
@@ -134,10 +167,7 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("CreatedById")
+                    b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Currency")
@@ -161,10 +191,7 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<DateTimeOffset?>("ModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("ModifiedById")
+                    b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -207,10 +234,7 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("CreatedById")
+                    b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("JobId")
@@ -225,10 +249,7 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<DateTimeOffset?>("ModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("ModifiedById")
+                    b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("ReceiverId")
@@ -257,10 +278,7 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("CreatedById")
+                    b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Description")
@@ -273,10 +291,7 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<DateTimeOffset?>("ModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("ModifiedById")
+                    b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -324,10 +339,7 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("CreatedById")
+                    b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Email")
@@ -343,21 +355,13 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<DateTimeOffset?>("ModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("ModifiedById")
+                    b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uuid");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -394,10 +398,29 @@ namespace Jobify.Infrastructure.Migrations
             modelBuilder.Entity("Jobify.Domain.Entities.Company", b =>
                 {
                     b.HasOne("Jobify.Domain.Entities.User", "User")
-                        .WithMany("Companies")
+                        .WithMany()
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Jobify.Domain.Entities.Employer", b =>
+                {
+                    b.HasOne("Jobify.Domain.Entities.Company", "Company")
+                        .WithMany("Employers")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Jobify.Domain.Entities.User", "User")
+                        .WithOne("Employer")
+                        .HasForeignKey("Jobify.Domain.Entities.Employer", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
 
                     b.Navigation("User");
                 });
@@ -486,6 +509,8 @@ namespace Jobify.Infrastructure.Migrations
 
             modelBuilder.Entity("Jobify.Domain.Entities.Company", b =>
                 {
+                    b.Navigation("Employers");
+
                     b.Navigation("JobListings");
                 });
 
@@ -505,7 +530,7 @@ namespace Jobify.Infrastructure.Migrations
                 {
                     b.Navigation("Applications");
 
-                    b.Navigation("Companies");
+                    b.Navigation("Employer");
 
                     b.Navigation("JobListings");
 

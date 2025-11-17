@@ -2,9 +2,6 @@
 
 public abstract class BaseAuditableEntity : BaseEntity
 {
-    public Guid? CreatedById { get; set; }
-    public string? CreatedBy { get; set; }
-
-    public Guid? ModifiedById { get; set; }
-    public string? ModifiedBy { get; set; }
+    public Guid? CreatedBy { get; set; }
+    public Guid? ModifiedBy { get; set; }
 }
