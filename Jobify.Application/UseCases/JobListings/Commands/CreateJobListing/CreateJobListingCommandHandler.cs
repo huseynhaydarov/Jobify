@@ -15,16 +15,12 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
     public async Task<Guid> Handle(CreateJobListingCommand request, CancellationToken cancellationToken)
     {
         var employer = await _dbContext.Employers
-            .FirstOrDefaultAsync(e => e.UserId == _authenticatedUser.Id, cancellationToken);
-
-        if (employer is null)
-            throw new NotFoundException("Employer can not post a job.");
+            .FirstOrDefaultAsync(e => e.UserId == _authenticatedUser.Id, cancellationToken)
+            ?? throw new NotFoundException("Employer not found.");
 
         var jobListing = _mapper.Map<JobListing>(request);
 
-        jobListing.PostedAt = DateTime.Now;
         jobListing.Status = JobStatus.Open;
-
         jobListing.EmployerId = employer.Id;
         jobListing.CompanyId = request.CompanyId;
 

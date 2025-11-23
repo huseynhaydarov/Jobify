@@ -14,7 +14,6 @@ global using Jobify.Application.Common.Extensions;
 global using Jobify.Domain.Constants;
 global using Jobify.Application.Common.Interfaces.Data;
 global using Jobify.Application.Common.Interfaces.Services;
-global using Jobify.Application.Common.Models;
 global using Jobify.Application.Common.Models.Pagination;
 global using Jobify.Application.UseCases.Auths.AuthDtos;
 global using Jobify.Domain.Entities;

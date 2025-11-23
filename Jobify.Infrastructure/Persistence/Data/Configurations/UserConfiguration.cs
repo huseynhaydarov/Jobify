@@ -21,11 +21,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey(u => u.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasMany(u => u.JobListings)
-            .WithOne(u => u.User)
-            .HasForeignKey(u => u.EmployerId)
-            .OnDelete(DeleteBehavior.Restrict);
-
         builder.HasMany(u => u.Applications)
             .WithOne(u => u.User)
             .HasForeignKey(u => u.ApplicantId)

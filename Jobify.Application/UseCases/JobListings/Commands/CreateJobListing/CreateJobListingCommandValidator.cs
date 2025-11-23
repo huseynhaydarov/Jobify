@@ -2,10 +2,25 @@
 
 public class CreateJobListingCommandValidator : AbstractValidator<CreateJobListingCommand>
 {
-    public CreateJobListingCommandValidator()
+    private readonly IApplicationDbContext _dbContext;
+    private readonly IAuthenticatedUser _authenticatedUser;
+
+
+
+    public CreateJobListingCommandValidator(IApplicationDbContext dbContext, IAuthenticatedUser authenticatedUser)
     {
+        _dbContext = dbContext;
+        _authenticatedUser = authenticatedUser;
+
         RuleFor(x => x.CompanyId)
-            .NotEmpty();
+            .NotEmpty()
+            .WithMessage("CompanyId is required.")
+            .DependentRules(() =>
+            {
+                RuleFor(x => x.CompanyId)
+                    .MustAsync(CanEmployerPost)
+                    .WithMessage("Employer is not eligible to post!");
+            });
 
         RuleFor(x => x.Name)
             .NotEmpty()
@@ -16,5 +31,16 @@ public class CreateJobListingCommandValidator : AbstractValidator<CreateJobListi
 
         RuleFor(x => x.Location)
             .MaximumLength(200);
+    }
+
+
+    private async Task<bool> CanEmployerPost(Guid Id, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Companies
+            .AsNoTracking()
+            .Include(c => c.Employers)
+            .Select(c => c.Employers
+                .Where(e => e.Id == Id))
+            .AnyAsync(cancellationToken);
     }
 }

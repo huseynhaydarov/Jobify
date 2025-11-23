@@ -12,6 +12,7 @@ public class JobListingsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = UserRoles.Employer)]
     public async Task<IActionResult> Create(CreateJobListingCommand command)
     {
         var data =  await _mediator.Send(command);
