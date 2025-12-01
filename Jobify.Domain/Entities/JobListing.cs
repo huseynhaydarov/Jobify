@@ -2,10 +2,10 @@
 
 public class JobListing : BaseAuditableEntity
 {
-    public Guid? EmployerId { get; set; }
-    public User? User { get; set; }
+    public Guid EmployerId { get; set; }
+    public Employer? Employer { get; set; }
 
-    public Guid? CompanyId { get; set; }
+    public Guid CompanyId { get; set; }
     public Company? Company { get; set; }
 
     public required string Name { get; set; }
@@ -15,8 +15,8 @@ public class JobListing : BaseAuditableEntity
     public decimal? Salary { get; set; }
     public string? Currency { get; set; }
     public required JobStatus Status { get; set; } = JobStatus.Open;
-    public required DateTime PostedAt { get; set; }
-    public DateTime? ExpiresAt { get; set; }
+    public required DateTimeOffset PostedAt { get; set; }
+    public DateTimeOffset? ExpiresAt { get; set; }
     public int Views { get; set; }
 
     public ICollection<JobApplication> Applications { get; set; } = new List<JobApplication>();

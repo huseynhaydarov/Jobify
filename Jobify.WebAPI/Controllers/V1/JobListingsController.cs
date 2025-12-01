@@ -12,6 +12,7 @@ public class JobListingsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = UserRoles.Employer)]
     public async Task<IActionResult> Create(CreateJobListingCommand command)
     {
         var data =  await _mediator.Send(command);
@@ -23,6 +24,16 @@ public class JobListingsController : ControllerBase
     public async Task<ActionResult<JobListingDetailViewModel>> GetById(Guid id)
     {
         var data = await _mediator.Send(new GetJobListingDetailQuery(id));
+
+        return Ok(data);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll([FromQuery] PagingParameters parameters, CancellationToken cancellationToken)
+    {
+        var query = new GetAllJobListingsQuery(parameters);
+
+        var data = await _mediator.Send(query, cancellationToken);
 
         return Ok(data);
     }

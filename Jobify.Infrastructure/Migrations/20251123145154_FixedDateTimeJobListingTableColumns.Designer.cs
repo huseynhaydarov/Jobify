@@ -3,6 +3,7 @@ using System;
 using Jobify.Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Jobify.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251123145154_FixedDateTimeJobListingTableColumns")]
+    partial class FixedDateTimeJobListingTableColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -161,7 +164,7 @@ namespace Jobify.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CompanyId")
+                    b.Property<Guid?>("CompanyId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTimeOffset>("CreatedAt")
@@ -178,7 +181,7 @@ namespace Jobify.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<Guid>("EmployerId")
+                    b.Property<Guid?>("EmployerId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTimeOffset?>("ExpiresAt")
@@ -206,16 +209,12 @@ namespace Jobify.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<decimal?>("Salary")
+                    b.Property<decimal>("Salary")
                         .HasPrecision(14, 2)
                         .HasColumnType("numeric(14,2)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Views")
                         .HasColumnType("integer");
@@ -225,8 +224,6 @@ namespace Jobify.Infrastructure.Migrations
                     b.HasIndex("CompanyId");
 
                     b.HasIndex("EmployerId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("JobListings", (string)null);
                 });
@@ -455,22 +452,16 @@ namespace Jobify.Infrastructure.Migrations
                     b.HasOne("Jobify.Domain.Entities.Company", "Company")
                         .WithMany("JobListings")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Jobify.Domain.Entities.Employer", "Employer")
+                    b.HasOne("Jobify.Domain.Entities.User", "User")
                         .WithMany("JobListings")
                         .HasForeignKey("EmployerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Jobify.Domain.Entities.User", null)
-                        .WithMany("JobListings")
-                        .HasForeignKey("UserId");
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Company");
 
-                    b.Navigation("Employer");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Jobify.Domain.Entities.Message", b =>
@@ -523,11 +514,6 @@ namespace Jobify.Infrastructure.Migrations
                 {
                     b.Navigation("Employers");
 
-                    b.Navigation("JobListings");
-                });
-
-            modelBuilder.Entity("Jobify.Domain.Entities.Employer", b =>
-                {
                     b.Navigation("JobListings");
                 });
 
