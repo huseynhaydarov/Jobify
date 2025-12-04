@@ -13,4 +13,5 @@ public class User : BaseAuditableEntity
     public ICollection<Message> ReceivedMessages  { get; set; } = new List<Message>();
 
     public Employer? Employer { get; set; }
+    public UserProfile? UserProfile { get; set; }
 }
