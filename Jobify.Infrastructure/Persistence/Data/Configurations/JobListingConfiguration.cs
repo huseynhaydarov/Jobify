@@ -41,6 +41,9 @@ public class JobListingConfiguration : IEntityTypeConfiguration<JobListing>
 
         builder.Property(j => j.Views);
 
+        builder.Property(j => j.IsDeleted)
+            .HasDefaultValue(false);
+
         builder.HasOne(j => j.Company)
             .WithMany(c => c.JobListings)
             .HasForeignKey(j => j.CompanyId)
