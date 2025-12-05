@@ -11,7 +11,7 @@ public class JobListingsController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     [Authorize(Roles = UserRoles.Employer)]
     public async Task<IActionResult> Create(CreateJobListingCommand command)
     {
@@ -36,5 +36,15 @@ public class JobListingsController : ControllerBase
         var data = await _mediator.Send(query, cancellationToken);
 
         return Ok(data);
+    }
+
+
+    [HttpDelete("{id}")]
+    [Authorize(Roles = UserRoles.Employer)]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        await _mediator.Send(new DeleteJobListingCommand(id));
+
+        return NoContent();
     }
 }

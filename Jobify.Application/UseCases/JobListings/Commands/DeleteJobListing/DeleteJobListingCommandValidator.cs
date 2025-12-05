@@ -5,6 +5,7 @@ public class DeleteJobListingCommandValidator : AbstractValidator<DeleteJobListi
     public DeleteJobListingCommandValidator()
     {
         RuleFor(x => x.Id)
-            .NotEmpty().WithMessage("JobListing ID is required.");
+            .NotEmpty()
+            .WithMessage("JobListing ID is required.");
     }
 }

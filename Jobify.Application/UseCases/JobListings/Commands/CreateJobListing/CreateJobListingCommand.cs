@@ -8,5 +8,4 @@ public record CreateJobListingCommand(
     string? Location,
     decimal? Salary,
     string? Currency,
-    DateTimeOffset? ExpireDate
-) : IRequest<Guid>;
+    DateTimeOffset? ExpireDate) : IRequest<Guid>;

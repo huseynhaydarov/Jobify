@@ -20,6 +20,7 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
 
         var jobListing = _mapper.Map<JobListing>(request);
 
+        jobListing.PostedAt = DateTimeOffset.Now;
         jobListing.Status = JobStatus.Open;
         jobListing.EmployerId = employer.Id;
         jobListing.CompanyId = request.CompanyId;
