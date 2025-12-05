@@ -32,7 +32,7 @@ public class PerformanceBehaviour<TRequest, TResponse>
         if (elapsedMilliseconds > 500)
         {
             var requestName = typeof(TRequest).Name;
-            var userId = _authenticatedUser.Id ?? Guid.Empty;
+            var userId = _authenticatedUser.Id;
 
 
             _logger.LogWarning("Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@UserName}",

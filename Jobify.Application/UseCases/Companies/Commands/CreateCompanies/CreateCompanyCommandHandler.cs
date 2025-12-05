@@ -15,7 +15,7 @@ public class CreateCompanyCommandHandler : BaseSetting, IRequestHandler<CreateCo
     {
         var company = _mapper.Map<Company>(request);
 
-        company.CreatedById = _authenticatedUser.Id ?? Guid.Empty;
+        company.CreatedById = _authenticatedUser.Id;
 
         await _dbContext.Companies.AddAsync(company, cancellationToken);
 
