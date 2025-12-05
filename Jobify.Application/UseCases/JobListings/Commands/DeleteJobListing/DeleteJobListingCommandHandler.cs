@@ -14,17 +14,13 @@ public class DeleteJobListingCommandHandler : BaseSetting, IRequestHandler<Delet
     {
         var jobListing = await _dbContext.JobListings
             .Include(x => x.Company)
-            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken)
+            .FirstOrDefaultAsync(x => x.Id == request.Id &&
+                                      x.Employer != null &&
+                                      x.Employer.UserId == _authenticatedUser.Id, cancellationToken)
                          ?? throw new NotFoundException("JobListing not found", request.Id);
 
-        bool isEmployerOwner = jobListing.EmployerId == _authenticatedUser.Id;
 
-        if (!isEmployerOwner)
-        {
-            throw new ForbiddenAccessException("Don't have access to delete the current job listing.");
-        }
-
-        _dbContext.JobListings.Remove(jobListing);
+        jobListing.IsDeleted = true;
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 

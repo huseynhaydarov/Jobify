@@ -9,6 +9,6 @@ public class GetAllJobListingsViewModel
     public decimal? Salary { get; set; }
     public string? Currency { get; set; }
     public required JobStatus Status { get; set; } = JobStatus.Open;
-    public required DateTime PostedAt { get; set; }
+    public required DateTimeOffset PostedAt { get; set; }
     public int Views { get; set; }
 }
