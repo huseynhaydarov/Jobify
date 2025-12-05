@@ -7,5 +7,6 @@ public enum ApplicationStatus
     Interview = 3,
     Offered = 4,
     Hired = 5,
-    Rejected = 6
+    Rejected = 6,
+    Withdrawn = 7
 }

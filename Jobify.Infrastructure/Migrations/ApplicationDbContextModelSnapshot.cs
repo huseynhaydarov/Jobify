@@ -118,10 +118,11 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<Guid>("ApplicantId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("ApplicationStatus")
-                        .HasColumnType("integer");
+                    b.Property<string>("ApplicationStatus")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("AppliedAt")
+                    b.Property<DateTimeOffset>("AppliedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CoverLetter")
