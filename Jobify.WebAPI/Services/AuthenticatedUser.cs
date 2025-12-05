@@ -9,11 +9,11 @@ public class AuthenticatedUser : IAuthenticatedUser
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public Guid? Id
+    public Guid  Id
     {
         get
         {
-            var userIdString = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string? userIdString = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             return Guid.TryParse(userIdString, out var userId) ? userId : Guid.Empty;
         }
     }
