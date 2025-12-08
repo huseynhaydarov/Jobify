@@ -1,4 +1,6 @@
-﻿namespace Jobify.API.Controllers.V1;
+﻿using Jobify.Application.UseCases.Auths.ChangePassword.Commands;
+
+namespace Jobify.API.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -68,6 +70,15 @@ public class AuthsController : ControllerBase
         });
 
         return Ok(result);
+    }
+
+    [HttpPost("change_password")]
+    [Authorize(Roles = UserRoles.EmployerOrJobSeeker)]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand command)
+    {
+        var data = await _mediator.Send(command);
+
+        return Ok(data);
     }
 }
 
