@@ -12,4 +12,5 @@ public class UserProfile : BaseAuditableEntity
     public string? Bio { get; set; }
     public string? Education { get; set; }
     public string? Experience { get; set; }
+    public bool IsDeleted { get; set; }
 }

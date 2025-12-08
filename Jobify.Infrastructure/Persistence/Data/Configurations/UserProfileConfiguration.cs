@@ -20,6 +20,8 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
             .HasMaxLength(30)
             .IsRequired();
 
+        builder.Property(j => j.IsDeleted)
+            .HasDefaultValue(false);
 
         builder.HasOne(x => x.User)
             .WithOne(u => u.UserProfile)

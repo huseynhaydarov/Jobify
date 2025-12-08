@@ -1,4 +1,5 @@
 ﻿using Jobify.Application.UseCases.UserProfiles.Command.CreateUserProfiles;
+using Jobify.Application.UseCases.UserProfiles.Command.DeleteUserProfiles;
 using Jobify.Application.UseCases.UserProfiles.Command.UpdateUserProfile;
 using Jobify.Application.UseCases.UserProfiles.Queries.GetUserProfileDetail;
 using Jobify.Application.UseCases.UserProfiles.Queries.GetUserProfiles;
@@ -53,5 +54,15 @@ public class UserProfilesController : ControllerBase
         var data = await _mediator.Send(query);
 
         return Ok(data);
+    }
+
+    [HttpPost("delete")]
+    [Authorize(Roles = UserRoles.Administrator)]
+    [Authorize(Policy = Policies.CanPurge)]
+    public async Task<IActionResult> Delete([FromBody] DeleteUserProfilesCommand command)
+    {
+        await _mediator.Send(command);
+
+        return NoContent();
     }
 }
