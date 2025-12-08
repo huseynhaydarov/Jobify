@@ -6,12 +6,9 @@ public class TokenService(IOptions<JwtSettings> jwtSettings) : ITokenService
 
     public string GenerateJwtToken(User user)
     {
-        var securityKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(_jwtSettings.SecretKey!));
+        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey!));
 
-        var credentials = new SigningCredentials(
-            securityKey,
-            SecurityAlgorithms.HmacSha256);
+        var credentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
         var roles = user.UserRoles
             .Where(ur => ur.Role != null)
@@ -58,8 +55,9 @@ public class TokenService(IOptions<JwtSettings> jwtSettings) : ITokenService
             ValidateIssuerSigningKey = true,
             ValidIssuer = _jwtSettings.Issuer,
             ValidAudience = _jwtSettings.Audience,
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_jwtSettings.SecretKey!))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey!))
+
+
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
