@@ -29,11 +29,11 @@ public class JobListingsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] PagingParameters parameters, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAll([FromQuery] PagingParameters parameters)
     {
         var query = new GetAllJobListingsQuery(parameters);
 
-        var data = await _mediator.Send(query, cancellationToken);
+        var data = await _mediator.Send(query);
 
         return Ok(data);
     }
