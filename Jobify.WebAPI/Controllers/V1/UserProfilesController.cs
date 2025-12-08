@@ -18,6 +18,7 @@ public class UserProfilesController : ControllerBase
     }
 
     [HttpPost("create")]
+    [Authorize(Roles = UserRoles.EmployerOrJobSeeker)]
     public async Task<IActionResult> Create([FromBody] CreateUserProfileCommand command)
     {
         var userProfile = await _mediator.Send(command);
@@ -26,6 +27,7 @@ public class UserProfilesController : ControllerBase
     }
 
     [HttpPost("update")]
+    [Authorize(Roles = UserRoles.EmployerOrJobSeeker)]
     public async Task<IActionResult> Update([FromBody] UpdateUserProfileCommand command)
     {
         var userProfile = await _mediator.Send(command);
@@ -34,6 +36,7 @@ public class UserProfilesController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Roles = UserRoles.EmployerOrJobSeeker)]
     public async Task<IActionResult> GetDetail([FromRoute] Guid id)
     {
         var data = await _mediator.Send(new GetUserProfileDetailQuery(id));
@@ -42,6 +45,7 @@ public class UserProfilesController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = UserRoles.Administrator)]
     public async Task<IActionResult> GetAll([FromQuery] PagingParameters parameters)
     {
         var query = new GetAllUserProfilesQuery(parameters);
