@@ -5,7 +5,10 @@ public class CreateJobSeekerCommandHandler : BaseSetting,  IRequestHandler<Creat
     private readonly IPasswordHasherService _hasherService;
     private readonly IMediator _mediator;
 
-    public CreateJobSeekerCommandHandler(IMapper mapper, IApplicationDbContext dbContext, IPasswordHasherService hasherService,
+    public CreateJobSeekerCommandHandler(
+        IMapper mapper,
+        IApplicationDbContext dbContext,
+        IPasswordHasherService hasherService,
         IMediator mediator) : base(mapper, dbContext)
     {
         _hasherService = hasherService;
@@ -14,7 +17,18 @@ public class CreateJobSeekerCommandHandler : BaseSetting,  IRequestHandler<Creat
 
     public async Task<Guid> Handle(CreateJobSeekerCommand request, CancellationToken cancellationToken)
     {
-        var role = await _dbContext.Roles.FirstAsync(r => r.Name == UserRoles.JobSeeker, cancellationToken);
+        var existingUser = await _dbContext.Users
+            .Where(x => x.Email == request.Email)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (existingUser != null)
+        {
+            throw new DomainException("The email address is already in use.");
+        }
+
+        var role = await _dbContext.Roles
+            .Where(x => x.Name == UserRoles.JobSeeker)
+            .FirstAsync(cancellationToken);
 
         if (role == null)
         {

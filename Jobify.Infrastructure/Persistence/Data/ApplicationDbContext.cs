@@ -21,6 +21,9 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.Entity<UserProfile>()
+            .HasQueryFilter(x => !x.IsDeleted);
+
         builder.Ignore<BaseAuditableEntity>();
         builder.Ignore<BaseEntity>();
 

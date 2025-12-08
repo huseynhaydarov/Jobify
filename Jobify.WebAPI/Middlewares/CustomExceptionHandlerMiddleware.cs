@@ -33,6 +33,11 @@ public class CustomExceptionHandlerMiddleware(
                 "Bad Request",
                 StatusCodes.Status400BadRequest
             ),
+            DomainException => (
+                exception.Message,
+                "Business Rule Violation",
+                StatusCodes.Status400BadRequest
+            ),
             UnauthorizedException => (
                 exception.Message,
                 "Unauthorized",

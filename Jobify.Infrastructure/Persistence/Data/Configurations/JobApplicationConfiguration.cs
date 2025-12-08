@@ -10,6 +10,7 @@ public class JobApplicationConfiguration : IEntityTypeConfiguration<JobApplicati
             .HasMaxLength(500);
 
         builder.Property(a => a.ApplicationStatus)
+            .HasConversion<string>()
             .IsRequired();
 
         builder.Property(a => a.AppliedAt)
