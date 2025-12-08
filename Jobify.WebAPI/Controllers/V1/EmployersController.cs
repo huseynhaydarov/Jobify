@@ -19,12 +19,4 @@ public class EmployersController : ControllerBase
 
         return Ok();
     }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
-    {
-        await _mediator.Send(new DeleteJobListingCommand(id));
-
-        return NoContent();
-    }
 }

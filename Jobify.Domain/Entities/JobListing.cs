@@ -18,6 +18,7 @@ public class JobListing : BaseAuditableEntity
     public required DateTimeOffset PostedAt { get; set; }
     public DateTimeOffset? ExpiresAt { get; set; }
     public int Views { get; set; }
+    public bool IsDeleted { get; set; }
 
     public ICollection<JobApplication> Applications { get; set; } = new List<JobApplication>();
     public ICollection<Message> Messages { get; set; } = new List<Message>();
