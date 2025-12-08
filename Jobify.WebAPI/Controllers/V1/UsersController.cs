@@ -1,4 +1,6 @@
-﻿namespace Jobify.API.Controllers.V1;
+﻿using Jobify.Application.UseCases.Users.Commands.CreateEmployers;
+
+namespace Jobify.API.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -11,12 +13,19 @@ public class UsersController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost("create")]
-    public async Task<IActionResult> Create([FromBody] CreateUserCommand command)
+    [HttpPost("create-jobseeker")]
+    public async Task<IActionResult> Create([FromBody] CreateJobSeekerCommand command)
     {
         var data = await _mediator.Send(command);
 
         return Ok(data);
     }
 
+    [HttpPost("create-employer")]
+    public async Task<IActionResult> Create([FromBody] CreateEmployerCommand command)
+    {
+        var data = await _mediator.Send(command);
+
+        return Ok(data);
+    }
 }

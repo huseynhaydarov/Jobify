@@ -6,6 +6,12 @@ public class JobListingConfiguration : IEntityTypeConfiguration<JobListing>
     {
         builder.ToTable("JobListings");
 
+        builder.Property(j => j.CompanyId)
+            .IsRequired();
+
+        builder.Property(j => j.EmployerId)
+            .IsRequired();
+
         builder.Property(j => j.Name)
             .HasMaxLength(100)
             .IsRequired();
@@ -20,13 +26,13 @@ public class JobListingConfiguration : IEntityTypeConfiguration<JobListing>
             .HasMaxLength(100);
 
         builder.Property(j => j.Salary)
-            .HasPrecision(14, 2)
-            .IsRequired();
+            .HasPrecision(14, 2);
 
         builder.Property(j => j.Currency)
             .HasMaxLength(3);
 
         builder.Property(j => j.Status)
+            .HasConversion<string>()
             .IsRequired();
 
         builder.Property(j => j.PostedAt);
@@ -35,15 +41,19 @@ public class JobListingConfiguration : IEntityTypeConfiguration<JobListing>
 
         builder.Property(j => j.Views);
 
+        builder.Property(j => j.IsDeleted)
+            .HasDefaultValue(false);
+
         builder.HasOne(j => j.Company)
             .WithMany(c => c.JobListings)
             .HasForeignKey(j => j.CompanyId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(j => j.User)
-            .WithMany(u => u.JobListings)
+        builder.HasOne(j => j.Employer)
+            .WithMany(e => e.JobListings)
             .HasForeignKey(j => j.EmployerId)
             .OnDelete(DeleteBehavior.Restrict);
+
 
         builder.HasMany(m => m.Applications)
             .WithOne(j => j.JobListing)

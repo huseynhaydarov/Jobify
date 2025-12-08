@@ -1,7 +1,4 @@
-﻿using Jobify.Domain.Common.BaseEntities;
-using Jobify.Domain.Enums;
-
-namespace Jobify.Domain.Entities;
+﻿namespace Jobify.Domain.Entities;
 
 public class JobApplication : BaseAuditableEntity
 {
@@ -13,6 +10,6 @@ public class JobApplication : BaseAuditableEntity
 
     public string? CoverLetter { get; set; }
     public required ApplicationStatus ApplicationStatus { get; set; } = ApplicationStatus.Applied;
-    public required DateTime AppliedAt { get; set; } = DateTime.Now;
+    public required DateTimeOffset AppliedAt { get; set; }
     public DateTime? WithdrawnAt { get; set; }
 }

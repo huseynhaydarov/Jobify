@@ -1,10 +1,7 @@
-﻿using Jobify.Domain.Common.BaseEntities;
-
-namespace Jobify.Domain.Entities;
+﻿namespace Jobify.Domain.Entities;
 
 public class User : BaseAuditableEntity
 {
-    public required string  Username { get; set; }
     public required string Email { get; set; }
     public required string PasswordHash { get; set; }
     public required bool IsActive { get; set; }
@@ -15,5 +12,6 @@ public class User : BaseAuditableEntity
     public ICollection<Message> SentMessages { get; set; } = new List<Message>();
     public ICollection<Message> ReceivedMessages  { get; set; } = new List<Message>();
 
-    public ICollection<Company> Companies { get; set; } = new List<Company>();
+    public Employer? Employer { get; set; }
+    public UserProfile? UserProfile { get; set; }
 }

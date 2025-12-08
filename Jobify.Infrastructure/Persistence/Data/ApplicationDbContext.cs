@@ -2,8 +2,11 @@
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    private readonly IAuthenticatedUser _authenticatedUser;
+
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IAuthenticatedUser authenticatedUser) : base(options)
     {
+        _authenticatedUser = authenticatedUser;
     }
 
     public DbSet<User> Users => Set<User>();
@@ -13,9 +16,14 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Message> Messages => Set<Message>();
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<UserRole> UsersRoles => Set<UserRole>();
+    public DbSet<Employer> Employers => Set<Employer>();
+    public DbSet<UserProfile> UserProfiles => Set<UserProfile>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.Entity<UserProfile>()
+            .HasQueryFilter(x => !x.IsDeleted);
+
         builder.Ignore<BaseAuditableEntity>();
         builder.Ignore<BaseEntity>();
 
@@ -25,15 +33,17 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
-        foreach (var entry in ChangeTracker.Entries<BaseEntity>())
+        foreach (var entry in ChangeTracker.Entries<BaseAuditableEntity>())
         {
             switch (entry.State)
             {
                 case EntityState.Added:
                     entry.Entity.CreatedAt = DateTimeOffset.UtcNow;;
+                    entry.Entity.CreatedBy = _authenticatedUser.Id;
                     break;
                 case EntityState.Modified:
-                    entry.Entity.ModifiedAt = DateTime.Now;
+                    entry.Entity.ModifiedAt = DateTimeOffset.UtcNow;
+                    entry.Entity.ModifiedBy = _authenticatedUser.Id;
                     break;
             }
         }

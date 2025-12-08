@@ -1,6 +1,4 @@
-﻿using Jobify.Domain.Common.BaseEntities;
-
-namespace Jobify.Domain.Entities;
+﻿namespace Jobify.Domain.Entities;
 
 public class Company : BaseAuditableEntity
 {
@@ -9,8 +7,8 @@ public class Company : BaseAuditableEntity
     public string? Description { get; set; }
     public string? Industry { get; set; }
 
-    public new required Guid CreatedById { get; set; }
+    public required Guid CreatedById { get; set; }
     public User? User { get; set; }
-
+    public ICollection<Employer> Employers { get; set; } = new List<Employer>();
     public ICollection<JobListing> JobListings { get; set; } = new List<JobListing>();
 }
