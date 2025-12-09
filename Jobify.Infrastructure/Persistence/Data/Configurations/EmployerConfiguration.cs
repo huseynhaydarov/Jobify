@@ -20,8 +20,7 @@ public class EmployerConfiguration : IEntityTypeConfiguration<Employer>
 
         builder.Property(e => e.Position)
             .HasConversion<string>()
-            .HasMaxLength(50)
-            .IsRequired();
+            .HasMaxLength(50);
 
         builder.Property(e => e.JoinedAt)
             .IsRequired();
