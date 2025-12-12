@@ -3,18 +3,31 @@
 public class CreateEmployerCommandCommandHandler : BaseSetting, IRequestHandler<CreateEmployerCommand, Guid>
 {
     private readonly IPasswordHasherService _hasherService;
-    private readonly IMediator _mediator;
 
-    public CreateEmployerCommandCommandHandler(IApplicationDbContext dbContext, IPasswordHasherService hasherService, IMapper mapper,
+    public CreateEmployerCommandCommandHandler(
+        IApplicationDbContext dbContext,
+        IPasswordHasherService hasherService,
+        IMapper mapper,
         IMediator mediator) : base(mapper, dbContext)
     {
         _hasherService = hasherService;
-        _mediator = mediator;
     }
 
     public async Task<Guid> Handle(CreateEmployerCommand request, CancellationToken cancellationToken)
     {
-        var role = await _dbContext.Roles.FirstAsync(r => r.Name == UserRoles.Employer, cancellationToken);
+        var existingUser = await _dbContext.Users
+            .Where(x => x.Email == request.Email)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (existingUser != null)
+        {
+            throw new DomainException("The email address is already in use.");
+        }
+
+        var role = await _dbContext.Roles
+            .Where(x => x.Name == UserRoles.Employer)
+            .FirstAsync(cancellationToken);
+
 
         if (role == null)
         {
@@ -38,9 +51,6 @@ public class CreateEmployerCommandCommandHandler : BaseSetting, IRequestHandler<
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        await _mediator.Publish(new EmployerCreatedEvent(user), cancellationToken);
-
         return user.Id;
     }
-
 }

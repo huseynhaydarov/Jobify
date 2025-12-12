@@ -1,6 +1,4 @@
-﻿using Jobify.Application.Common.Mappings;
-
-namespace Jobify.Application.UseCases.Companies.Queries.GetCompanies;
+﻿namespace Jobify.Application.UseCases.Companies.Queries.GetCompanies;
 
 public class GetAllCompaniesQueryHandler : BaseSetting, IRequestHandler<GetAllCompaniesQuery, PaginatedList<GetAllCompaniesViewModel>>
 {

@@ -1,6 +1,4 @@
-﻿using Jobify.Application.Common.Mappings;
-
-namespace Jobify.Application.UseCases.JobListings.Queries.GetJobListings;
+﻿namespace Jobify.Application.UseCases.JobListings.Queries.GetJobListings;
 
 public class GetAllJobListingsQueryHandler : BaseSetting, IRequestHandler<GetAllJobListingsQuery, PaginatedList<GetAllJobListingsViewModel>>
 {
@@ -14,6 +12,6 @@ public class GetAllJobListingsQueryHandler : BaseSetting, IRequestHandler<GetAll
         return await _dbContext.JobListings
             .AsNoTracking()
             .ProjectTo<GetAllJobListingsViewModel>(_mapper.ConfigurationProvider)
-            .PaginatedListAsync(request.Parameters.PageNumber, request.Parameters.PageSize);
+            .PaginatedListAsync(request.Parameters.PageNumber, request.Parameters.PageSize, cancellationToken);
     }
 }
