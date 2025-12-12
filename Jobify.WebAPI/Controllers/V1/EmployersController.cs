@@ -23,7 +23,7 @@ public class EmployersController : ControllerBase
     }
 
     [HttpPost("position-update")]
-    /*[Authorize(Roles = UserRoles.Administrator)]*/
+    [Authorize(Roles = UserRoles.Administrator)]
     public async Task<IActionResult> Update([FromBody] PositionUpdateCommand command)
     {
         await _mediator.Send(command);
