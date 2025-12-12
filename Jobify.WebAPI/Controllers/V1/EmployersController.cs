@@ -1,4 +1,6 @@
-﻿namespace Jobify.API.Controllers.V1;
+﻿using Jobify.Application.UseCases.Employers.Commands.PositionUpdate;
+
+namespace Jobify.API.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -14,6 +16,15 @@ public class EmployersController : ControllerBase
     [HttpPost("join-company")]
     [Authorize(Roles = UserRoles.Employer)]
     public async Task<IActionResult> JoinCompany([FromBody] JoinCompanyCommand command)
+    {
+        await _mediator.Send(command);
+
+        return Ok();
+    }
+
+    [HttpPost("position-update")]
+    /*[Authorize(Roles = UserRoles.Administrator)]*/
+    public async Task<IActionResult> Update([FromBody] PositionUpdateCommand command)
     {
         await _mediator.Send(command);
 

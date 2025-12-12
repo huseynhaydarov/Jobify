@@ -92,7 +92,6 @@ namespace Jobify.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Position")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
