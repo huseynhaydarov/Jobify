@@ -8,14 +8,9 @@ public class GetRoleDictionaryQueryHandler : BaseSetting, IRequestHandler<GetRol
 
     public async Task<List<GetRoleDictionaryViewModel>> Handle(GetRoleDictionaryQuery request, CancellationToken cancellationToken)
     {
-        var queryable = _dbContext.Roles
-            .AsNoTracking()
+        return await _dbContext.Roles
             .Where(c => c.IsActive)
             .OrderByDescending(c => c.CreatedAt)
-            .AsQueryable();
-
-        return await queryable
-            .ProjectTo<GetRoleDictionaryViewModel>(_mapper.ConfigurationProvider)
-            .ToListAsync(cancellationToken);
+            .ProjectToListAsync<GetRoleDictionaryViewModel>(_mapper.ConfigurationProvider, cancellationToken);
     }
 }
