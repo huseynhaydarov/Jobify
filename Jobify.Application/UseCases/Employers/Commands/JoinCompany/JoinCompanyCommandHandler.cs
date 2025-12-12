@@ -34,13 +34,14 @@ public class JoinCompanyCommandHandler : BaseSetting, IRequestHandler<JoinCompan
             .FirstOrDefaultAsync(e => e.UserId == _authenticatedUser.Id, cancellationToken);
 
         if (existingEmployer != null)
+        {
             throw new BadRequestException("User is already associated with a company.");
+        }
 
         var employer = _mapper.Map<Employer>(request);
 
         employer.UserId = user.Id;
         employer.CompanyId = company.Id;
-        employer.Position = EmployerPosition.CEO;
         employer.JoinedAt = DateTimeOffset.UtcNow;
 
         await _dbContext.Employers.AddAsync(employer, cancellationToken);

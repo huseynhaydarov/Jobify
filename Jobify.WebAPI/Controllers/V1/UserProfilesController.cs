@@ -1,11 +1,4 @@
-﻿using Jobify.Application.UseCases.UserProfiles.Command.CreateUserProfiles;
-using Jobify.Application.UseCases.UserProfiles.Command.DeleteUserProfiles;
-using Jobify.Application.UseCases.UserProfiles.Command.UpdateUserProfile;
-using Jobify.Application.UseCases.UserProfiles.Queries.GetUserProfileDetail;
-using Jobify.Application.UseCases.UserProfiles.Queries.GetUserProfiles;
-
-namespace Jobify.API.Controllers.V1;
-
+﻿namespace Jobify.API.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -27,13 +20,13 @@ public class UserProfilesController : ControllerBase
         return Ok(userProfile);
     }
 
-    [HttpPost("update")]
+    [HttpPut]
     [Authorize(Roles = UserRoles.EmployerOrJobSeeker)]
     public async Task<IActionResult> Update([FromBody] UpdateUserProfileCommand command)
     {
-        var userProfile = await _mediator.Send(command);
+        await _mediator.Send(command);
 
-        return Ok(userProfile);
+        return NoContent();
     }
 
     [HttpGet("{id}")]
@@ -56,12 +49,21 @@ public class UserProfilesController : ControllerBase
         return Ok(data);
     }
 
-    [HttpPost("delete")]
+    [HttpDelete]
     [Authorize(Roles = UserRoles.Administrator)]
     [Authorize(Policy = Policies.CanPurge)]
     public async Task<IActionResult> Delete([FromBody] DeleteUserProfilesCommand command)
     {
         await _mediator.Send(command);
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize(Roles = UserRoles.EmployerOrJobSeeker)]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        await _mediator.Send(new DeleteUserProfileCommand(id));
 
         return NoContent();
     }

@@ -1,4 +1,4 @@
-﻿namespace Jobify.Application.UseCases.UserProfiles.Command.CreateUserProfiles;
+﻿namespace Jobify.Application.UseCases.UserProfiles.Command.CreateUserProfile;
 
 public record CreateUserProfileCommand(
     string FirstName,
@@ -7,4 +7,4 @@ public record CreateUserProfileCommand(
     string? Location,
     string? Bio,
     string? Education,
-    string? Experience) : IRequest<Unit>;
+    string? Experience) : IRequest<UserProfileDto>;

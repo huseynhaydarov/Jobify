@@ -1,6 +1,6 @@
 ﻿namespace Jobify.Application.UseCases.Users.Commands.CreateUsers;
 
-public class CreateJobSeekerCommandHandler : BaseSetting,  IRequestHandler<CreateJobSeekerCommand, Guid>
+public class CreateJobSeekerCommandHandler : BaseSetting,  IRequestHandler<CreateJobSeekerCommand, UserDto>
 {
     private readonly IPasswordHasherService _hasherService;
     private readonly IMediator _mediator;
@@ -15,7 +15,7 @@ public class CreateJobSeekerCommandHandler : BaseSetting,  IRequestHandler<Creat
         _mediator = mediator;
     }
 
-    public async Task<Guid> Handle(CreateJobSeekerCommand request, CancellationToken cancellationToken)
+    public async Task<UserDto> Handle(CreateJobSeekerCommand request, CancellationToken cancellationToken)
     {
         var existingUser = await _dbContext.Users
             .Where(x => x.Email == request.Email)
@@ -53,6 +53,6 @@ public class CreateJobSeekerCommandHandler : BaseSetting,  IRequestHandler<Creat
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return user.Id;
+        return new UserDto(user.Id);
     }
 }

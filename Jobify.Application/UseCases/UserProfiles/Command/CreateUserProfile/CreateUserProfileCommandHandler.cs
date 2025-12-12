@@ -1,6 +1,6 @@
-﻿namespace Jobify.Application.UseCases.UserProfiles.Command.CreateUserProfiles;
+﻿namespace Jobify.Application.UseCases.UserProfiles.Command.CreateUserProfile;
 
-public class CreateUserProfileCommandHandler : BaseSetting, IRequestHandler<CreateUserProfileCommand, Unit>
+public class CreateUserProfileCommandHandler : BaseSetting, IRequestHandler<CreateUserProfileCommand, UserProfileDto>
 {
     private readonly IAuthenticatedUser _authenticatedUser;
 
@@ -13,7 +13,7 @@ public class CreateUserProfileCommandHandler : BaseSetting, IRequestHandler<Crea
         _authenticatedUser = authenticatedUser;
     }
 
-    public async Task<Unit> Handle(CreateUserProfileCommand request, CancellationToken cancellationToken)
+    public async Task<UserProfileDto> Handle(CreateUserProfileCommand request, CancellationToken cancellationToken)
     {
         var userProfile = _mapper.Map<UserProfile>(request);
 
@@ -23,6 +23,6 @@ public class CreateUserProfileCommandHandler : BaseSetting, IRequestHandler<Crea
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return Unit.Value;
+        return new UserProfileDto(userProfile.Id);
     }
 }

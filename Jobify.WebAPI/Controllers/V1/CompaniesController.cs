@@ -12,6 +12,7 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpPost("create")]
+    [Authorize(Roles = UserRoles.Administrator)]
     public async Task<IActionResult> Create([FromBody] CreateCompanyCommand command)
     {
         var data =  await _mediator.Send(command);

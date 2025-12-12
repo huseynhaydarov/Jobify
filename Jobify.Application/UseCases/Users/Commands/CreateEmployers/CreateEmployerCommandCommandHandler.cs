@@ -1,6 +1,6 @@
 ﻿namespace Jobify.Application.UseCases.Users.Commands.CreateEmployers;
 
-public class CreateEmployerCommandCommandHandler : BaseSetting, IRequestHandler<CreateEmployerCommand, Guid>
+public class CreateEmployerCommandCommandHandler : BaseSetting, IRequestHandler<CreateEmployerCommand, UserDto>
 {
     private readonly IPasswordHasherService _hasherService;
 
@@ -13,7 +13,7 @@ public class CreateEmployerCommandCommandHandler : BaseSetting, IRequestHandler<
         _hasherService = hasherService;
     }
 
-    public async Task<Guid> Handle(CreateEmployerCommand request, CancellationToken cancellationToken)
+    public async Task<UserDto> Handle(CreateEmployerCommand request, CancellationToken cancellationToken)
     {
         var existingUser = await _dbContext.Users
             .Where(x => x.Email == request.Email)
@@ -33,6 +33,7 @@ public class CreateEmployerCommandCommandHandler : BaseSetting, IRequestHandler<
         {
             throw new NotFoundException(nameof(Role));
         }
+
         var user = _mapper.Map<User>(request);
 
         user.IsActive = true;
@@ -51,6 +52,6 @@ public class CreateEmployerCommandCommandHandler : BaseSetting, IRequestHandler<
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return user.Id;
+        return new UserDto(user.Id);
     }
 }
