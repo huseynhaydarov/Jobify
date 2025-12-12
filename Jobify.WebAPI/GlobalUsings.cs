@@ -23,6 +23,7 @@ global using Jobify.Application.UseCases.JobListings.Commands.CreateJobListing;
 global using Jobify.Application.UseCases.JobListings.Commands.DeleteJobListing;
 global using Jobify.Application.UseCases.JobListings.Queries.GetJobListingDetail;
 global using Jobify.Application.UseCases.JobListings.Queries.GetJobListings;
+global using Jobify.Application.UseCases.Roles.Queries.GetRoles;
 global using Jobify.Application.UseCases.UserProfiles.Command.CreateUserProfile;
 global using Jobify.Application.UseCases.UserProfiles.Command.DeleteUserProfile;
 global using Jobify.Application.UseCases.UserProfiles.Command.DeleteUserProfiles;
