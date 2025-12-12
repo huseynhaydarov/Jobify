@@ -1,6 +1,4 @@
-﻿using Jobify.Application.UseCases.Users.Commands.CreateEmployers;
-
-namespace Jobify.API.Controllers.V1;
+﻿namespace Jobify.API.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]

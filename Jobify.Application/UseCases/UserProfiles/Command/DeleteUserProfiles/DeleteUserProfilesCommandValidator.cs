@@ -6,6 +6,6 @@ public class DeleteUserProfilesCommandValidator : AbstractValidator<DeleteUserPr
     {
         RuleFor(x => x.Ids)
             .NotEmpty()
-            .WithMessage("JobListing ID is required.");
+            .WithMessage("Profile ID is required.");
     }
 }

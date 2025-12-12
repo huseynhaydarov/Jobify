@@ -1,6 +1,6 @@
 ﻿namespace Jobify.Application.UseCases.UserProfiles.Queries.GetUserProfileDetail;
 
-public record GetUserProfileDetailVievModel
+public record GetUserProfileDetailResponse
 {
     public Guid Id { get; init; }
 

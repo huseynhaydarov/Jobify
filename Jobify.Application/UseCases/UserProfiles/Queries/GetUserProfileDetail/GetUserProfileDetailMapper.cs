@@ -4,6 +4,6 @@ public class GetUserProfileDetailMapper : Profile
 {
     public GetUserProfileDetailMapper()
     {
-        CreateMap<UserProfile, GetUserProfileDetailVievModel>();
+        CreateMap<UserProfile, GetUserProfileDetailResponse>();
     }
 }

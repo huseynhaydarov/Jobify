@@ -1,6 +1,6 @@
 ﻿namespace Jobify.Application.UseCases.UserProfiles.Queries.GetUserProfiles;
 
-public class GetAllUserProfilesViewModel
+public class GetAllUserProfilesResponse
 {
     public Guid Id { get; init; }
     public string FullName { get; set; }

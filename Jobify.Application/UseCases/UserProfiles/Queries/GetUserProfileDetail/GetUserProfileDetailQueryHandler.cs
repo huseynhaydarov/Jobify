@@ -1,6 +1,6 @@
 ﻿namespace Jobify.Application.UseCases.UserProfiles.Queries.GetUserProfileDetail;
 
-public class GetUserProfileDetailQueryHandler : BaseSetting, IRequestHandler<GetUserProfileDetailQuery, GetUserProfileDetailVievModel>
+public class GetUserProfileDetailQueryHandler : BaseSetting, IRequestHandler<GetUserProfileDetailQuery, GetUserProfileDetailResponse>
 {
     private readonly IAuthenticatedUser _authenticatedUser;
 
@@ -12,12 +12,12 @@ public class GetUserProfileDetailQueryHandler : BaseSetting, IRequestHandler<Get
         _authenticatedUser = authenticatedUser;
     }
 
-    public async Task<GetUserProfileDetailVievModel> Handle(GetUserProfileDetailQuery request,
+    public async Task<GetUserProfileDetailResponse> Handle(GetUserProfileDetailQuery request,
         CancellationToken cancellationToken)
     {
         return await _dbContext.UserProfiles
                    .Where(j => j.Id == request.Id && j.UserId == _authenticatedUser.Id)
-                   .ProjectTo<GetUserProfileDetailVievModel>(_mapper.ConfigurationProvider)
+                   .ProjectTo<GetUserProfileDetailResponse>(_mapper.ConfigurationProvider)
                    .FirstOrDefaultAsync(cancellationToken)
                ?? throw new NotFoundException("Profile not found");
     }
