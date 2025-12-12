@@ -6,11 +6,13 @@ public class CreateUserProfileCommandValidator : AbstractValidator<CreateUserPro
     {
         RuleFor(x => x.FirstName)
             .NotEmpty()
-            .MaximumLength(100);
+            .MaximumLength(100)
+            .WithMessage("First Name is required");
 
         RuleFor(x => x.LastName)
             .NotEmpty()
-            .MaximumLength(100);
+            .MaximumLength(100)
+            .WithMessage("Last Name is required");
 
         RuleFor(x => x.PhoneNumber)
             .NotEmpty()

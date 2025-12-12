@@ -61,7 +61,7 @@ public class UserProfilesController : ControllerBase
 
     [HttpDelete("{id}")]
     [Authorize(Roles = UserRoles.EmployerOrJobSeeker)]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         await _mediator.Send(new DeleteUserProfileCommand(id));
 

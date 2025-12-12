@@ -18,14 +18,7 @@ public class UpdateCompanyCommandHandler : BaseSetting, IRequestHandler<UpdateCo
                                       && c.CreatedById == _authenticatedUser.Id, cancellationToken)
                       ?? throw new NotFoundException("Company not found");
 
-        if (company == null)
-        {
-            throw new NotFoundException(nameof(Company), request.Id);
-        }
-
         _mapper.Map(request, company);
-
-        _dbContext.Companies.Update(company);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 

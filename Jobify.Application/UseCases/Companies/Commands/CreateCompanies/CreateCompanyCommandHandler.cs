@@ -1,6 +1,6 @@
 ﻿namespace Jobify.Application.UseCases.Companies.Commands.CreateCompanies;
 
-public class CreateCompanyCommandHandler : BaseSetting, IRequestHandler<CreateCompanyCommand, Unit>
+public class CreateCompanyCommandHandler : BaseSetting, IRequestHandler<CreateCompanyCommand, CompanyDto>
 {
     private readonly IAuthenticatedUser _authenticatedUser;
 
@@ -11,7 +11,7 @@ public class CreateCompanyCommandHandler : BaseSetting, IRequestHandler<CreateCo
         _authenticatedUser = authenticatedUser;
     }
 
-    public async Task<Unit> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
+    public async Task<CompanyDto> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
     {
         var company = _mapper.Map<Company>(request);
 
@@ -21,6 +21,6 @@ public class CreateCompanyCommandHandler : BaseSetting, IRequestHandler<CreateCo
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return Unit.Value;
+        return new CompanyDto(company.Id);
     }
 }

@@ -4,6 +4,6 @@ public class GetCompanyDetailMapper : Profile
 {
     public GetCompanyDetailMapper()
     {
-        CreateMap<Company, GetCompanyDetailViewModel>();
+        CreateMap<Company, GetCompanyDetailResponse>();
     }
 }

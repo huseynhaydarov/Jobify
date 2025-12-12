@@ -19,7 +19,6 @@ public class DeleteJobListingCommandHandler : BaseSetting, IRequestHandler<Delet
                                       x.Employer.UserId == _authenticatedUser.Id, cancellationToken)
                          ?? throw new NotFoundException("JobListing not found", request.Id);
 
-
         jobListing.IsDeleted = true;
 
         await _dbContext.SaveChangesAsync(cancellationToken);

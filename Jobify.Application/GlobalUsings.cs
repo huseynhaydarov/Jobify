@@ -17,6 +17,7 @@ global using Jobify.Application.Common.Interfaces.Services;
 global using Jobify.Application.Common.Mappings;
 global using Jobify.Application.Common.Models.Pagination;
 global using Jobify.Application.UseCases.Auths.AuthDtos;
+global using Jobify.Application.UseCases.Companies.Dtos;
 global using Jobify.Application.UseCases.UserProfiles.Dtos;
 global using Jobify.Application.UseCases.Users.Dtos;
 global using Jobify.Domain.Entities;

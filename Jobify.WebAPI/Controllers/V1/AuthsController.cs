@@ -14,7 +14,7 @@ public class AuthsController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Create([FromBody] LoginCommand command)
+    public async Task<IActionResult> Login([FromBody] LoginCommand command)
     {
         var data = await _mediator.Send(command);
 

@@ -10,8 +10,7 @@ public class GetAllCompaniesQueryHandler : BaseSetting, IRequestHandler<GetAllCo
         CancellationToken cancellationToken)
     {
         return await _dbContext.Companies
-            .AsNoTracking()
             .ProjectTo<GetAllCompaniesViewModel>(_mapper.ConfigurationProvider)
-            .PaginatedListAsync(request.Parameters.PageNumber, request.Parameters.PageSize);
+            .PaginatedListAsync(request.Parameters.PageNumber, request.Parameters.PageSize, cancellationToken);
     }
 }

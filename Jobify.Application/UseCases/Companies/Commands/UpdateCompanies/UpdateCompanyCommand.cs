@@ -5,6 +5,5 @@ public record UpdateCompanyCommand(
     string? Name,
     string? WebsiteUrl,
     string? Description,
-    string? Industry
-) : IRequest<Unit>;
+    string? Industry ) : IRequest<Unit>;
 

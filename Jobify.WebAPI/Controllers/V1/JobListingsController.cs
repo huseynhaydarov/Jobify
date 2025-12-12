@@ -38,10 +38,9 @@ public class JobListingsController : ControllerBase
         return Ok(data);
     }
 
-
     [HttpDelete("{id}")]
     [Authorize(Roles = UserRoles.Employer)]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         await _mediator.Send(new DeleteJobListingCommand(id));
 

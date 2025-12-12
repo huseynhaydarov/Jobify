@@ -21,7 +21,7 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpPost("update")]
-    [Authorize(Roles = UserRoles.Employer)]
+    [Authorize(Roles = UserRoles.Administrator)]
     public async Task<IActionResult> Update([FromBody] UpdateCompanyCommand command)
     {
         await _mediator.Send(command);
@@ -30,8 +30,8 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize(Roles = UserRoles.Employer)]
-    public async Task<ActionResult<GetCompanyDetailViewModel>> GetDetail([FromRoute] Guid id)
+    [Authorize(Roles = UserRoles.Administrator)]
+    public async Task<ActionResult<GetCompanyDetailResponse>> GetDetail([FromRoute] Guid id)
     {
         var data = await _mediator.Send(new GetCompanyDetailQuery(id));
 
@@ -39,7 +39,7 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = UserRoles.Administrator)]
+    [Authorize(Policy = Policies.CanViewAll)]
     public async Task<IActionResult> GetAll([FromQuery] PagingParameters parameters, CancellationToken cancellationToken)
     {
         var query = new GetAllCompaniesQuery(parameters);
@@ -47,6 +47,16 @@ public class CompaniesController : ControllerBase
         var data = await _mediator.Send(query, cancellationToken);
 
         return Ok(data);
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize(Roles = UserRoles.Administrator)]
+    [Authorize(Policy = Policies.CanPurge)]
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    {
+        await _mediator.Send(new DeleteJobListingCommand(id));
+
+        return NoContent();
     }
 }
 
