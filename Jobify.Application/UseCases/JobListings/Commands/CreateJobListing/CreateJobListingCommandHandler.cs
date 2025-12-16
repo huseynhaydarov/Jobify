@@ -1,6 +1,6 @@
 ﻿namespace Jobify.Application.UseCases.JobListings.Commands.CreateJobListing;
 
-public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<CreateJobListingCommand, Guid>
+public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<CreateJobListingCommand, JobListingDto>
 {
     private readonly IAuthenticatedUser _authenticatedUser;
 
@@ -12,11 +12,16 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
         _authenticatedUser = authenticatedUser;
     }
 
-    public async Task<Guid> Handle(CreateJobListingCommand request, CancellationToken cancellationToken)
+    public async Task<JobListingDto> Handle(CreateJobListingCommand request, CancellationToken cancellationToken)
     {
         var employer = await _dbContext.Employers
-            .FirstOrDefaultAsync(e => e.UserId == _authenticatedUser.Id, cancellationToken)
+            .FirstOrDefaultAsync(e => e.UserId != _authenticatedUser.Id, cancellationToken)
             ?? throw new NotFoundException("Employer not found.");
+
+        if (employer.CompanyId != request.CompanyId)
+        {
+            throw new DomainException("Employer is not eligible to post!");
+        }
 
         var jobListing = _mapper.Map<JobListing>(request);
 
@@ -28,6 +33,6 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
         await _dbContext.JobListings.AddAsync(jobListing, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return jobListing.Id;
+        return new JobListingDto(jobListing.Id);
     }
 }

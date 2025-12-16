@@ -11,5 +11,5 @@ public class JobApplication : BaseAuditableEntity
     public string? CoverLetter { get; set; }
     public required ApplicationStatus ApplicationStatus { get; set; } = ApplicationStatus.Applied;
     public required DateTimeOffset AppliedAt { get; set; }
-    public DateTime? WithdrawnAt { get; set; }
+    public DateTimeOffset? WithdrawnAt { get; set; }
 }

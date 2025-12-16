@@ -1,8 +1,8 @@
-﻿namespace Jobify.Application.UseCases.Users.Commands.CreateEmployers;
+﻿namespace Jobify.Application.UseCases.JobSeekers.Commands.CreateJobSeekers;
 
-public class CreateEmployerCommandValidator : AbstractValidator<CreateEmployerCommand>
+public class CreateJobSeekerCommandValidator : AbstractValidator<CreateJobSeekerCommand>
 {
-    public CreateEmployerCommandValidator()
+    public CreateJobSeekerCommandValidator()
     {
         RuleFor(x => x.Password)
             .NotEmpty()
@@ -16,5 +16,4 @@ public class CreateEmployerCommandValidator : AbstractValidator<CreateEmployerCo
             .WithMessage("Invalid email format.")
             .When(x => !string.IsNullOrEmpty(x.Email));
     }
-
 }

@@ -148,7 +148,7 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("WithdrawnAt")
+                    b.Property<DateTimeOffset?>("WithdrawnAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");

@@ -1,19 +1,21 @@
-﻿namespace Jobify.Application.UseCases.Users.Commands.CreateEmployers;
+﻿namespace Jobify.Application.UseCases.JobSeekers.Commands.CreateJobSeekers;
 
-public class CreateEmployerCommandCommandHandler : BaseSetting, IRequestHandler<CreateEmployerCommand, UserDto>
+public class CreateJobSeekerCommandHandler : BaseSetting,  IRequestHandler<CreateJobSeekerCommand, JobSeekerDto>
 {
     private readonly IPasswordHasherService _hasherService;
+    private readonly IMediator _mediator;
 
-    public CreateEmployerCommandCommandHandler(
+    public CreateJobSeekerCommandHandler(
+        IMapper mapper,
         IApplicationDbContext dbContext,
         IPasswordHasherService hasherService,
-        IMapper mapper,
         IMediator mediator) : base(mapper, dbContext)
     {
         _hasherService = hasherService;
+        _mediator = mediator;
     }
 
-    public async Task<UserDto> Handle(CreateEmployerCommand request, CancellationToken cancellationToken)
+    public async Task<JobSeekerDto> Handle(CreateJobSeekerCommand request, CancellationToken cancellationToken)
     {
         var existingUser = await _dbContext.Users
             .Where(x => x.Email == request.Email)
@@ -25,9 +27,8 @@ public class CreateEmployerCommandCommandHandler : BaseSetting, IRequestHandler<
         }
 
         var role = await _dbContext.Roles
-            .Where(x => x.Name == UserRoles.Employer)
+            .Where(x => x.Name == UserRoles.JobSeeker)
             .FirstAsync(cancellationToken);
-
 
         if (role == null)
         {
@@ -52,6 +53,6 @@ public class CreateEmployerCommandCommandHandler : BaseSetting, IRequestHandler<
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return new UserDto(user.Id);
+        return new JobSeekerDto(user.Id);
     }
 }

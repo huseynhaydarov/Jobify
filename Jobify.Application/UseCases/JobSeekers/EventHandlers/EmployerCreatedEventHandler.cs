@@ -1,4 +1,4 @@
-﻿namespace Jobify.Application.UseCases.Users.EventHandlers;
+﻿namespace Jobify.Application.UseCases.JobSeekers.EventHandlers;
 
 public class EmployerCreatedEventHandler : INotificationHandler<EmployerCreatedEvent>
 {

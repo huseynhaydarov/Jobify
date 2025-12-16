@@ -15,8 +15,6 @@
 
   <ItemGroup>
     <Folder Include="UseCases\Auths\Login\" />
-    <Folder Include="UseCases\Employers\Queries\" />
-    <Folder Include="UseCases\JobApplications\Queries\" />
   </ItemGroup>
 
   <PropertyGroup>

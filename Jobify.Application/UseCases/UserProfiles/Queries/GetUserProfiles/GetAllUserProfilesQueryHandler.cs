@@ -11,7 +11,6 @@ public class GetAllUserProfilesQueryHandler : BaseSetting, IRequestHandler<GetAl
         CancellationToken cancellationToken)
     {
         return await _dbContext.UserProfiles
-            .AsNoTracking()
             .OrderByDescending(x => x.CreatedAt)
             .ProjectTo<GetAllUserProfilesResponse>(_mapper.ConfigurationProvider)
             .PaginatedListAsync(request.PagingParameters.PageNumber, request.PagingParameters.PageSize, cancellationToken);

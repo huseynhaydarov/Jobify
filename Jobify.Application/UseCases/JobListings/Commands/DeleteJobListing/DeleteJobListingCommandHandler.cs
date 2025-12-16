@@ -13,10 +13,7 @@ public class DeleteJobListingCommandHandler : BaseSetting, IRequestHandler<Delet
     public async Task<Unit> Handle(DeleteJobListingCommand request, CancellationToken cancellationToken)
     {
         var jobListing = await _dbContext.JobListings
-            .Include(x => x.Company)
-            .FirstOrDefaultAsync(x => x.Id == request.Id &&
-                                      x.Employer != null &&
-                                      x.Employer.UserId == _authenticatedUser.Id, cancellationToken)
+            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken)
                          ?? throw new NotFoundException("JobListing not found", request.Id);
 
         jobListing.IsDeleted = true;

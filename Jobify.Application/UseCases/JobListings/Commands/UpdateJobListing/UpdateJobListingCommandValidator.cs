@@ -1,9 +1,14 @@
-﻿namespace Jobify.Application.UseCases.JobListings.Commands.CreateJobListing;
+﻿namespace Jobify.Application.UseCases.JobListings.Commands.UpdateJobListing;
 
-public class CreateJobListingCommandValidator : AbstractValidator<CreateJobListingCommand>
+public class UpdateJobListingCommandValidator : AbstractValidator<UpdateJobListingCommand>
 {
-    public CreateJobListingCommandValidator()
+    public UpdateJobListingCommandValidator()
     {
+        RuleFor(x => x.Id)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty()
+            .WithMessage("Job listing ID is required.");
+
         RuleFor(x => x.CompanyId)
             .NotEmpty()
             .WithMessage("Company ID is required.");

@@ -1,4 +1,4 @@
-﻿namespace Jobify.Application.UseCases.Users.Commands.CreateUsers;
+﻿namespace Jobify.Application.UseCases.JobSeekers.Commands.CreateJobSeekers;
 
 public class CreateUserMapper : Profile
 {

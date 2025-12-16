@@ -11,7 +11,7 @@ public class JobListingsController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost("create")]
+    [HttpPost]
     [Authorize(Roles = UserRoles.Employer)]
     public async Task<IActionResult> Create(CreateJobListingCommand command)
     {
@@ -20,7 +20,17 @@ public class JobListingsController : ControllerBase
         return Ok(data);
     }
 
+    [HttpPut]
+    [Authorize(Roles = UserRoles.Employer)]
+    public async Task<IActionResult> Update(UpdateJobListingCommand command)
+    {
+        await _mediator.Send(command);
+
+        return NoContent();
+    }
+
     [HttpGet("{id}")]
+    [Authorize(Roles = UserRoles.EmployerOrJobSeeker)]
     public async Task<ActionResult<JobListingDetailViewModel>> GetById(Guid id)
     {
         var data = await _mediator.Send(new GetJobListingDetailQuery(id));
@@ -29,6 +39,7 @@ public class JobListingsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = UserRoles.JobSeeker)]
     public async Task<IActionResult> GetAll([FromQuery] PagingParameters parameters)
     {
         var query = new GetAllJobListingsQuery(parameters);

@@ -1,6 +1,7 @@
 ﻿namespace Jobify.Application.UseCases.JobApplications.Commands.CreateJobApplication;
 
-public class CreateJobApplicationCommandHandler : BaseSetting, IRequestHandler<CreateJobApplicationCommand, Guid>
+public class CreateJobApplicationCommandHandler : BaseSetting,
+    IRequestHandler<CreateJobApplicationCommand, Guid>
 {
     private readonly IAuthenticatedUser _authenticatedUser;
     private readonly ILogger<CreateJobApplicationCommandHandler> _logger;
@@ -26,6 +27,14 @@ public class CreateJobApplicationCommandHandler : BaseSetting, IRequestHandler<C
             throw new DomainException("You have already applied to this job.");
         }
 
+        var jobListing = await _dbContext.JobListings
+            .Where(l => l.Id == request.JobListingId)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (jobListing == null)
+        {
+            throw new NotFoundException("Job listing not found.");
+        }
 
         var application = _mapper.Map<JobApplication>(request);
 
