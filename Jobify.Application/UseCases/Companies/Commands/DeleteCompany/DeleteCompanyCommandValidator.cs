@@ -2,7 +2,7 @@ namespace Jobify.Application.UseCases.Companies.Commands.DeleteCompany;
 
 public class DeleteCompanyCommandValidator : AbstractValidator<DeleteCompanyCommand>
 {
-    DeleteCompanyCommandValidator()
+    public DeleteCompanyCommandValidator()
     {
         RuleFor(c => c.CompanyId)
             .NotEmpty()

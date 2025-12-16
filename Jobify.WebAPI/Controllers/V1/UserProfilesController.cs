@@ -11,7 +11,7 @@ public class UserProfilesController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost("create")]
+    [HttpPost]
     [Authorize(Roles = UserRoles.EmployerOrJobSeeker)]
     public async Task<IActionResult> Create([FromBody] CreateUserProfileCommand command)
     {

@@ -11,7 +11,7 @@ public class CompaniesController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost("create")]
+    [HttpPost]
     [Authorize(Roles = UserRoles.Administrator)]
     public async Task<IActionResult> Create([FromBody] CreateCompanyCommand command)
     {
@@ -20,13 +20,13 @@ public class CompaniesController : ControllerBase
         return Ok(data);
     }
 
-    [HttpPost("update")]
+    [HttpPut]
     [Authorize(Roles = UserRoles.Administrator)]
     public async Task<IActionResult> Update([FromBody] UpdateCompanyCommand command)
     {
         await _mediator.Send(command);
 
-        return Ok();
+        return NoContent();
     }
 
     [HttpGet("{id}")]
@@ -54,7 +54,7 @@ public class CompaniesController : ControllerBase
     [Authorize(Policy = Policies.CanPurge)]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
-        await _mediator.Send(new DeleteJobListingCommand(id));
+        await _mediator.Send(new DeleteCompanyCommand(id));
 
         return NoContent();
     }
