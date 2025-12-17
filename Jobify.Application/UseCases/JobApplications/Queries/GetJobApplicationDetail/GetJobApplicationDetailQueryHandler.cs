@@ -30,14 +30,6 @@ public class GetJobApplicationDetailQueryHandler
             throw new NotFoundException("Job application not found.");
         }
 
-        /*var isApplicant = _authenticatedUser.Id == application.ApplicantId;
-
-
-        if (!isApplicant)
-        {
-            throw new ForbiddenAccessException("Forbidden access to the job application");
-        }*/
-
         return new GetJobApplicationDetailResponse
         {
             Id = application.Id,
