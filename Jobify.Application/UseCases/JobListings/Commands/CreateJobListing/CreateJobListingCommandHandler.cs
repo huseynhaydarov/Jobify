@@ -6,8 +6,7 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
 
     public CreateJobListingCommandHandler(
         IApplicationDbContext dbContext,
-        IMapper mapper,
-        IAuthenticatedUser  authenticatedUser) : base(mapper, dbContext)
+        IAuthenticatedUser  authenticatedUser) : base(dbContext)
     {
         _authenticatedUser = authenticatedUser;
     }
@@ -23,12 +22,19 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
             throw new DomainException("Employer is not eligible to post!");
         }
 
-        var jobListing = _mapper.Map<JobListing>(request);
-
-        jobListing.PostedAt = DateTimeOffset.Now;
-        jobListing.Status = JobStatus.Open;
-        jobListing.EmployerId = employer.Id;
-        jobListing.CompanyId = request.CompanyId;
+        var jobListing = new JobListing
+        {
+            Id = Guid.NewGuid(),
+            Name = request.Name,
+            Description = request.Description,
+            Requirements = request.Requirements,
+            Location = request.Location,
+            Salary = request.Salary,
+            Currency =  request.Currency,
+            Status = JobStatus.Open,
+            CompanyId =  request.CompanyId,
+            PostedAt = DateTimeOffset.UtcNow
+        };
 
         await _dbContext.JobListings.AddAsync(jobListing, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);

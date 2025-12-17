@@ -4,10 +4,8 @@ public class JoinCompanyCommandHandler : BaseSetting, IRequestHandler<JoinCompan
 {
     private readonly IAuthenticatedUser _authenticatedUser;
 
-    public JoinCompanyCommandHandler(
-        IMapper mapper,
-        IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser) : base(mapper, dbContext)
+    public JoinCompanyCommandHandler(IApplicationDbContext dbContext,
+        IAuthenticatedUser authenticatedUser) : base(dbContext)
     {
         _authenticatedUser = authenticatedUser;
     }
@@ -38,11 +36,11 @@ public class JoinCompanyCommandHandler : BaseSetting, IRequestHandler<JoinCompan
             throw new BadRequestException("User is already associated with a company.");
         }
 
-        var employer = _mapper.Map<Employer>(request);
-
-        employer.UserId = user.Id;
-        employer.CompanyId = company.Id;
-        employer.JoinedAt = DateTimeOffset.UtcNow;
+        var employer = new Employer
+        {
+            UserId = user.Id,
+            CompanyId = company.Id
+        };
 
         await _dbContext.Employers.AddAsync(employer, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);

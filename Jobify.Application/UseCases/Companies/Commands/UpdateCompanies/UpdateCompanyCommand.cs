@@ -2,7 +2,7 @@
 
 public record UpdateCompanyCommand(
     Guid Id,
-    string? Name,
+    string Name,
     string? WebsiteUrl,
     string? Description,
     string? Industry ) : IRequest<Unit>;

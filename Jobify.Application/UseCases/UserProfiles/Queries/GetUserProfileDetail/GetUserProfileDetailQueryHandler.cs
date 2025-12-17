@@ -5,9 +5,8 @@ public class GetUserProfileDetailQueryHandler : BaseSetting, IRequestHandler<Get
     private readonly IAuthenticatedUser _authenticatedUser;
 
     public GetUserProfileDetailQueryHandler(
-        IMapper mapper,
         IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser) : base(mapper, dbContext)
+        IAuthenticatedUser authenticatedUser) : base(dbContext)
     {
         _authenticatedUser = authenticatedUser;
     }
@@ -17,7 +16,17 @@ public class GetUserProfileDetailQueryHandler : BaseSetting, IRequestHandler<Get
     {
         return await _dbContext.UserProfiles
                    .Where(j => j.Id == request.Id && j.UserId == _authenticatedUser.Id)
-                   .ProjectTo<GetUserProfileDetailResponse>(_mapper.ConfigurationProvider)
+                   .Select(p => new GetUserProfileDetailResponse
+                   {
+                       Id = p.Id,
+                       Bio =  p.Bio,
+                       Education =  p.Education,
+                       Experience =   p.Experience,
+                       FirstName = p.FirstName,
+                       LastName = p.LastName,
+                       Location =   p.Location,
+                       PhoneNumber =  p.PhoneNumber,
+                   })
                    .FirstOrDefaultAsync(cancellationToken)
                ?? throw new NotFoundException("Profile not found");
     }

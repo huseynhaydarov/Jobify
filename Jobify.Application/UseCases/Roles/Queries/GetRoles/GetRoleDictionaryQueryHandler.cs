@@ -1,16 +1,22 @@
 ﻿namespace Jobify.Application.UseCases.Roles.Queries.GetRoles;
 
-public class GetRoleDictionaryQueryHandler : BaseSetting, IRequestHandler<GetRoleDictionaryQuery, List<GetRoleDictionaryViewModel>>
+public class GetRoleDictionaryQueryHandler : BaseSetting, IRequestHandler<GetRoleDictionaryQuery, List<GetRoleDictionaryResponse>>
 {
-    public GetRoleDictionaryQueryHandler(IMapper mapper, IApplicationDbContext dbContext) : base(mapper, dbContext)
+    public GetRoleDictionaryQueryHandler(IApplicationDbContext dbContext) : base(dbContext)
     {
     }
 
-    public async Task<List<GetRoleDictionaryViewModel>> Handle(GetRoleDictionaryQuery request, CancellationToken cancellationToken)
+    public async Task<List<GetRoleDictionaryResponse>> Handle(GetRoleDictionaryQuery request, CancellationToken cancellationToken)
     {
         return await _dbContext.Roles
+            .AsNoTracking()
             .Where(c => c.IsActive)
             .OrderByDescending(c => c.CreatedAt)
-            .ProjectToListAsync<GetRoleDictionaryViewModel>(_mapper.ConfigurationProvider, cancellationToken);
+            .Select(r => new GetRoleDictionaryResponse
+            {
+                Id = r.Id,
+                Name = r.Name,
+            })
+            .ToListAsync(cancellationToken);
     }
 }

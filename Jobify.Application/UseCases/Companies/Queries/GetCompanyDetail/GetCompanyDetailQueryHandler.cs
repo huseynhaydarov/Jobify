@@ -1,13 +1,12 @@
 ﻿namespace Jobify.Application.UseCases.Companies.Queries.GetCompanyDetail;
 
-public class GetCompanyDetailQueryHandler : BaseSetting, IRequestHandler<GetCompanyDetailQuery, GetCompanyDetailResponse>
+public class GetCompanyDetailQueryHandler : BaseSetting,
+    IRequestHandler<GetCompanyDetailQuery, GetCompanyDetailResponse>
 {
     private readonly IAuthenticatedUser _authenticatedUser;
 
-    public GetCompanyDetailQueryHandler(
-        IMapper mapper,
-        IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser) : base(mapper, dbContext)
+    public GetCompanyDetailQueryHandler(IApplicationDbContext dbContext,
+        IAuthenticatedUser authenticatedUser) : base(dbContext)
     {
         _authenticatedUser = authenticatedUser;
     }
@@ -17,7 +16,14 @@ public class GetCompanyDetailQueryHandler : BaseSetting, IRequestHandler<GetComp
         return await _dbContext.Companies
             .AsNoTracking()
             .Where(c => c.Id == request.Id && c.CreatedById == _authenticatedUser.Id)
-            .ProjectTo<GetCompanyDetailResponse>(_mapper.ConfigurationProvider)
+            .Select(c => new GetCompanyDetailResponse
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Description =  c.Description,
+                Industry =  c.Industry,
+                WebsiteUrl =   c.WebsiteUrl,
+            })
             .FirstOrDefaultAsync(cancellationToken) ?? throw new NullDataException("Company not found");
     }
 }

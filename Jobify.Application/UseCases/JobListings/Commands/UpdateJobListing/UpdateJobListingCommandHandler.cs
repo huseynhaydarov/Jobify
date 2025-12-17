@@ -2,7 +2,7 @@
 
 public class UpdateJobListingCommandHandler : BaseSetting, IRequestHandler<UpdateJobListingCommand, Unit>
 {
-    public UpdateJobListingCommandHandler(IMapper mapper, IApplicationDbContext dbContext) : base(mapper, dbContext)
+    public UpdateJobListingCommandHandler(IApplicationDbContext dbContext) : base(dbContext)
     {
     }
 
@@ -13,7 +13,7 @@ public class UpdateJobListingCommandHandler : BaseSetting, IRequestHandler<Updat
                           .FirstOrDefaultAsync(cancellationToken)
                       ?? throw new NotFoundException("JobListing not found");
 
-        _mapper.Map(request, jobListing);
+        jobListing.MapFrom(request);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 

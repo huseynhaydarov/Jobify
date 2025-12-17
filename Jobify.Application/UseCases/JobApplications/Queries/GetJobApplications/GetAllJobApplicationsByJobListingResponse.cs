@@ -1,8 +1,8 @@
 ﻿namespace Jobify.Application.UseCases.JobApplications.Queries.GetJobApplications;
 
-public class GetAllJobApplicationsResponse
+public class GetAllJobApplicationsByJobListingResponse
 {
-    public Guid JobListingId { get; set; }
+    public Guid Id { get; set; }
     public string? JobTitle { get; set; }
 
     public string? CoverLetter { get; set; }

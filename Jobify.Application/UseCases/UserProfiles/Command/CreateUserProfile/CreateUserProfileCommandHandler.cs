@@ -5,19 +5,27 @@ public class CreateUserProfileCommandHandler : BaseSetting, IRequestHandler<Crea
     private readonly IAuthenticatedUser _authenticatedUser;
 
     public CreateUserProfileCommandHandler(
-        IMapper mapper,
         IApplicationDbContext dbContext,
         IAuthenticatedUser authenticatedUser)
-        : base(mapper, dbContext)
+        : base(dbContext)
     {
         _authenticatedUser = authenticatedUser;
     }
 
     public async Task<UserProfileDto> Handle(CreateUserProfileCommand request, CancellationToken cancellationToken)
     {
-        var userProfile = _mapper.Map<UserProfile>(request);
-
-        userProfile.UserId = _authenticatedUser.Id;
+        var userProfile = new UserProfile
+        {
+            Id = Guid.NewGuid(),
+            UserId = _authenticatedUser.Id,
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            PhoneNumber = request.PhoneNumber,
+            Location = request.Location,
+            Bio = request.Bio,
+            Education = request.Education,
+            Experience = request.Experience,
+        };
 
         await _dbContext.UserProfiles.AddAsync(userProfile, cancellationToken);
 

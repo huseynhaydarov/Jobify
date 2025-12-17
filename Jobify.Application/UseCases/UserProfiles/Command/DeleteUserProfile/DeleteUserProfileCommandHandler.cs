@@ -5,9 +5,8 @@ public class DeleteUserProfileCommandHandler : BaseSetting, IRequestHandler<Dele
     private readonly IAuthenticatedUser _authenticatedUser;
 
     public DeleteUserProfileCommandHandler(
-        IMapper mapper,
         IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser) : base(mapper, dbContext)
+        IAuthenticatedUser authenticatedUser) : base(dbContext)
     {
         _authenticatedUser = authenticatedUser;
     }

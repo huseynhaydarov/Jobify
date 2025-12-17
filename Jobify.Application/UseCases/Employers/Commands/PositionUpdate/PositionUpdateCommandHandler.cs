@@ -2,7 +2,7 @@
 
 public class PositionUpdateCommandHandler : BaseSetting, IRequestHandler<PositionUpdateCommand, Unit>
 {
-    public PositionUpdateCommandHandler(IMapper mapper, IApplicationDbContext dbContext) : base(mapper, dbContext)
+    public PositionUpdateCommandHandler(IApplicationDbContext dbContext) : base(dbContext)
     {
     }
 

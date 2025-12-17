@@ -5,9 +5,8 @@ public class UpdateUserProfileCommandHandler : BaseSetting, IRequestHandler<Upda
     private readonly IAuthenticatedUser _authenticatedUser;
 
     public UpdateUserProfileCommandHandler(
-        IMapper mapper,
         IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser) : base(mapper, dbContext)
+        IAuthenticatedUser authenticatedUser) : base(dbContext)
     {
         _authenticatedUser = authenticatedUser;
     }
@@ -19,7 +18,7 @@ public class UpdateUserProfileCommandHandler : BaseSetting, IRequestHandler<Upda
                 .FirstOrDefaultAsync(cancellationToken)
                       ?? throw new NotFoundException("Profile not found");
 
-        _mapper.Map(request, profile);
+        profile.MapTo(request);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 

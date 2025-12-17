@@ -22,7 +22,7 @@ public class JobListingsController : ControllerBase
 
     [HttpPut]
     [Authorize(Roles = UserRoles.Employer)]
-    public async Task<IActionResult> Update(UpdateJobListingCommand command)
+    public async Task<IActionResult> Update([FromBody] UpdateJobListingCommand command)
     {
         await _mediator.Send(command);
 
@@ -31,7 +31,7 @@ public class JobListingsController : ControllerBase
 
     [HttpGet("{id}")]
     [Authorize(Roles = UserRoles.EmployerOrJobSeeker)]
-    public async Task<ActionResult<JobListingDetailViewModel>> GetById(Guid id)
+    public async Task<ActionResult<JobListingDetailResponse>> GetById(Guid id)
     {
         var data = await _mediator.Send(new GetJobListingDetailQuery(id));
 

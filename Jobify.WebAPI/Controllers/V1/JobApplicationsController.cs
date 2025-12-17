@@ -30,12 +30,12 @@ public class JobApplicationsController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = UserRoles.Employer)]
-    public async Task<ActionResult<PaginatedList<GetAllJobApplicationsResponse>>> GetAll(
+    public async Task<ActionResult<GetAllJobApplicationsByJobListingResponse>> GetAll(
         [FromQuery] Guid? jobListingId,
         [FromQuery] PagingParameters paging)
     {
         var result = await _mediator.Send(
-            new GetAllJobApplicationsQuery(jobListingId, paging));
+            new GetAllJobApplicationsByJobListingQuery(jobListingId, paging));
 
         return Ok(result);
     }

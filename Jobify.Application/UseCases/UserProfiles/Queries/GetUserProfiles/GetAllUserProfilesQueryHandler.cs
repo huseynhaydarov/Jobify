@@ -1,18 +1,33 @@
 ﻿namespace Jobify.Application.UseCases.UserProfiles.Queries.GetUserProfiles;
 
 public class GetAllUserProfilesQueryHandler : BaseSetting, IRequestHandler<GetAllUserProfilesQuery,
-    PaginatedList<GetAllUserProfilesResponse>>
+    PaginatedResult<GetAllUserProfilesResponse>>
 {
-    public GetAllUserProfilesQueryHandler(IMapper mapper, IApplicationDbContext dbContext) : base(mapper, dbContext)
+    public GetAllUserProfilesQueryHandler(IApplicationDbContext dbContext) : base(dbContext)
     {
     }
 
-    public async Task<PaginatedList<GetAllUserProfilesResponse>> Handle(GetAllUserProfilesQuery request,
+    public async Task<PaginatedResult<GetAllUserProfilesResponse>> Handle(GetAllUserProfilesQuery request,
         CancellationToken cancellationToken)
     {
-        return await _dbContext.UserProfiles
+        var queryable = _dbContext.UserProfiles
             .OrderByDescending(x => x.CreatedAt)
-            .ProjectTo<GetAllUserProfilesResponse>(_mapper.ConfigurationProvider)
-            .PaginatedListAsync(request.PagingParameters.PageNumber, request.PagingParameters.PageSize, cancellationToken);
+            .Select(p => new GetAllUserProfilesResponse()
+            {
+                Id = p.Id,
+                FullName = p.FirstName + " " + p.LastName,
+                PhoneNumber = p.PhoneNumber,
+                Location = p.Location,
+                Bio = p.Bio,
+                Education = p.Education,
+                Experience = p.Experience,
+                CreatedAt = p.CreatedAt,
+                UpdatedAt = p.ModifiedAt
+            });
+
+        return await queryable.PaginatedListAsync(
+            request.PagingParameters.PageNumber,
+            request.PagingParameters.PageSize,
+            cancellationToken);
     }
 }

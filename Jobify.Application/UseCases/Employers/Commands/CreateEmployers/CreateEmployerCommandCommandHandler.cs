@@ -7,8 +7,7 @@ public class CreateEmployerCommandCommandHandler : BaseSetting, IRequestHandler<
     public CreateEmployerCommandCommandHandler(
         IApplicationDbContext dbContext,
         IPasswordHasherService hasherService,
-        IMapper mapper,
-        IMediator mediator) : base(mapper, dbContext)
+        IMediator mediator) : base(dbContext)
     {
         _hasherService = hasherService;
     }
@@ -34,15 +33,20 @@ public class CreateEmployerCommandCommandHandler : BaseSetting, IRequestHandler<
             throw new NotFoundException(nameof(Role));
         }
 
-        var user = _mapper.Map<User>(request);
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            Email = request.Email,
+            PasswordHash = request.Password,
+            IsActive = true,
 
-        user.IsActive = true;
+        };
 
         user.PasswordHash = await _hasherService.HashPasswordAsync(request.Password);
 
         await _dbContext.Users.AddAsync(user, cancellationToken);
 
-        var userRole = new UserRole()
+        var userRole = new UserRole
         {
             RoleId = role.Id,
             UserId = user.Id

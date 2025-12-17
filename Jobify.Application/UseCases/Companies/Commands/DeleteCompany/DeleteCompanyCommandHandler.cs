@@ -4,10 +4,8 @@ public class DeleteCompanyCommandHandler : BaseSetting, IRequestHandler<DeleteCo
 {
     private readonly IAuthenticatedUser _authenticatedUser;
 
-    public DeleteCompanyCommandHandler(
-        IMapper mapper,
-        IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser) : base(mapper, dbContext)
+    public DeleteCompanyCommandHandler(IApplicationDbContext dbContext,
+        IAuthenticatedUser authenticatedUser) : base(dbContext)
     {
         _authenticatedUser = authenticatedUser;
     }

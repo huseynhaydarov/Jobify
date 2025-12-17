@@ -5,7 +5,8 @@ public class UpdateCompanyCommandHandler : BaseSetting, IRequestHandler<UpdateCo
     private readonly IApplicationDbContext _dbContext;
     private readonly IAuthenticatedUser _authenticatedUser;
 
-    public UpdateCompanyCommandHandler(IMapper mapper, IApplicationDbContext dbContext, IAuthenticatedUser authenticatedUser) : base(mapper, dbContext)
+    public UpdateCompanyCommandHandler(IApplicationDbContext dbContext,
+        IAuthenticatedUser authenticatedUser) : base(dbContext)
     {
         _dbContext = dbContext;
         _authenticatedUser = authenticatedUser;
@@ -14,11 +15,11 @@ public class UpdateCompanyCommandHandler : BaseSetting, IRequestHandler<UpdateCo
     public async Task<Unit> Handle(UpdateCompanyCommand request, CancellationToken cancellationToken)
     {
         var company = await _dbContext.Companies
-            .FirstOrDefaultAsync(c => c.Id == request.Id
-                                      && c.CreatedById == _authenticatedUser.Id, cancellationToken)
+            .FirstOrDefaultAsync(c => c.Id == request.Id && c.CreatedById == _authenticatedUser.Id,
+                cancellationToken)
                       ?? throw new NotFoundException("Company not found");
 
-        _mapper.Map(request, company);
+        company.MapFrom(request);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 

@@ -1,16 +1,29 @@
 ﻿namespace Jobify.Application.UseCases.Companies.Queries.GetCompanies;
 
-public class GetAllCompaniesQueryHandler : BaseSetting, IRequestHandler<GetAllCompaniesQuery, PaginatedList<GetAllCompaniesViewModel>>
+public class GetAllCompaniesQueryHandler : BaseSetting,
+    IRequestHandler<GetAllCompaniesQuery, PaginatedResult<GetAllCompaniesResponse>>
 {
-    public GetAllCompaniesQueryHandler(IMapper mapper, IApplicationDbContext dbContext) : base(mapper, dbContext)
+    public GetAllCompaniesQueryHandler(IApplicationDbContext dbContext) : base(dbContext)
     {
     }
 
-    public async Task<PaginatedList<GetAllCompaniesViewModel>> Handle(GetAllCompaniesQuery request,
+    public async Task<PaginatedResult<GetAllCompaniesResponse>> Handle(GetAllCompaniesQuery request,
         CancellationToken cancellationToken)
     {
-        return await _dbContext.Companies
-            .ProjectTo<GetAllCompaniesViewModel>(_mapper.ConfigurationProvider)
-            .PaginatedListAsync(request.Parameters.PageNumber, request.Parameters.PageSize, cancellationToken);
+        var queryable = _dbContext.Companies
+            .AsNoTracking()
+            .Select(c => new GetAllCompaniesResponse
+            {
+                Id = c.Id,
+                Name = c.Name,
+                WebsiteUrl = c.WebsiteUrl,
+                Description = c.Description,
+                Industry = c.Industry,
+            });
+
+        return await queryable.PaginatedListAsync(
+            request.Parameters.PageNumber,
+            request.Parameters.PageSize,
+            cancellationToken);
     }
 }

@@ -4,18 +4,23 @@ public class CreateCompanyCommandHandler : BaseSetting, IRequestHandler<CreateCo
 {
     private readonly IAuthenticatedUser _authenticatedUser;
 
-    public CreateCompanyCommandHandler(IMapper mapper,
-        IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser) : base(mapper, dbContext)
+    public CreateCompanyCommandHandler(IApplicationDbContext dbContext,
+        IAuthenticatedUser authenticatedUser) : base(dbContext)
     {
         _authenticatedUser = authenticatedUser;
     }
 
     public async Task<CompanyDto> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
     {
-        var company = _mapper.Map<Company>(request);
-
-        company.CreatedById = _authenticatedUser.Id;
+        var company = new Company
+        {
+            Id = Guid.NewGuid(),
+            Name = request.Name,
+            Description = request.Description,
+            WebsiteUrl =  request.WebsiteUrl,
+            Industry =  request.Industry,
+            CreatedById = _authenticatedUser.Id,
+        };
 
         await _dbContext.Companies.AddAsync(company, cancellationToken);
 

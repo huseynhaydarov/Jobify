@@ -6,11 +6,11 @@ public class CreateJobApplicationCommandHandler : BaseSetting,
     private readonly IAuthenticatedUser _authenticatedUser;
     private readonly ILogger<CreateJobApplicationCommandHandler> _logger;
 
-    public CreateJobApplicationCommandHandler(IMapper mapper,
+    public CreateJobApplicationCommandHandler(
         IApplicationDbContext dbContext,
         IAuthenticatedUser authenticatedUser,
         ILogger<CreateJobApplicationCommandHandler> logger)
-        : base(mapper, dbContext)
+        : base(dbContext)
     {
         _authenticatedUser = authenticatedUser;
         _logger = logger;
@@ -36,10 +36,14 @@ public class CreateJobApplicationCommandHandler : BaseSetting,
             throw new NotFoundException("Job listing not found.");
         }
 
-        var application = _mapper.Map<JobApplication>(request);
-
-        application.ApplicantId = _authenticatedUser.Id;
-        application.AppliedAt = DateTimeOffset.UtcNow;
+        var application = new JobApplication
+        {
+            Id = Guid.NewGuid(),
+            JobListingId = request.JobListingId,
+            ApplicantId = _authenticatedUser.Id,
+            AppliedAt = DateTimeOffset.UtcNow,
+            ApplicationStatus = ApplicationStatus.Applied,
+        };
 
         await _dbContext.JobApplications.AddAsync(application, cancellationToken);
 

@@ -1,6 +1,6 @@
 ﻿namespace Jobify.Application.UseCases.JobListings.Queries.GetJobListingDetail;
 
-public class JobListingDetailViewModel
+public class JobListingDetailResponse
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

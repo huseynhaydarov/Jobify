@@ -3,16 +3,13 @@
 public class CreateJobSeekerCommandHandler : BaseSetting,  IRequestHandler<CreateJobSeekerCommand, JobSeekerDto>
 {
     private readonly IPasswordHasherService _hasherService;
-    private readonly IMediator _mediator;
 
     public CreateJobSeekerCommandHandler(
-        IMapper mapper,
         IApplicationDbContext dbContext,
         IPasswordHasherService hasherService,
-        IMediator mediator) : base(mapper, dbContext)
+        IMediator mediator) : base(dbContext)
     {
         _hasherService = hasherService;
-        _mediator = mediator;
     }
 
     public async Task<JobSeekerDto> Handle(CreateJobSeekerCommand request, CancellationToken cancellationToken)
@@ -35,9 +32,13 @@ public class CreateJobSeekerCommandHandler : BaseSetting,  IRequestHandler<Creat
             throw new NotFoundException(nameof(Role));
         }
 
-        var user = _mapper.Map<User>(request);
-
-        user.IsActive = true;
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            Email = request.Email,
+            PasswordHash = request.Password,
+            IsActive = true,
+        };
 
         user.PasswordHash = await _hasherService.HashPasswordAsync(request.Password);
 

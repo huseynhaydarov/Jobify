@@ -1,7 +1,8 @@
 ﻿namespace Jobify.Application.UseCases.Companies.Queries.GetCompanies;
 
-public class GetAllCompaniesViewModel
+public class GetAllCompaniesResponse
 {
+    public Guid Id { get; set; }
     public required string Name { get; set; }
     public string? WebsiteUrl { get; set; }
     public string? Description { get; set; }
