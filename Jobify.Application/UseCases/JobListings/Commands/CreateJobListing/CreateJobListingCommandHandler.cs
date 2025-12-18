@@ -3,12 +3,18 @@
 public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<CreateJobListingCommand, JobListingDto>
 {
     private readonly IAuthenticatedUser _authenticatedUser;
+    private readonly IDistributedCache _cache;
+    private readonly ILogger<CreateJobListingCommandHandler> _logger;
 
     public CreateJobListingCommandHandler(
         IApplicationDbContext dbContext,
-        IAuthenticatedUser  authenticatedUser) : base(dbContext)
+        IAuthenticatedUser  authenticatedUser,
+        IDistributedCache cache,
+        ILogger<CreateJobListingCommandHandler> logger) : base(dbContext)
     {
         _authenticatedUser = authenticatedUser;
+        _cache = cache;
+        _logger = logger;
     }
 
     public async Task<JobListingDto> Handle(CreateJobListingCommand request, CancellationToken cancellationToken)
@@ -38,6 +44,11 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
 
         await _dbContext.JobListings.AddAsync(jobListing, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
+
+        var cacheKey = "joblistings";
+        _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);
+        await _cache.RemoveAsync(cacheKey, cancellationToken);
+
 
         return new JobListingDto(jobListing.Id);
     }

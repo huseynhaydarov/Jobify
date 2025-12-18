@@ -1,4 +1,4 @@
-﻿namespace Jobify.Application.Common.Models;
+﻿namespace Jobify.Application.Common.Extensions;
 
 public static class IQueryableExtensions
 {
