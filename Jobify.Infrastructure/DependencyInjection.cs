@@ -12,10 +12,21 @@ public static class DependencyInjection
             options.UseNpgsql(connectionString);
         });
 
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration.GetConnectionString("Redis");
+            options.ConfigurationOptions = new StackExchange.Redis.ConfigurationOptions()
+            {
+                AbortOnConnectFail = true, EndPoints = { options.Configuration }
+            };
+
+        });
+
         services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 
         services.AddSingleton<IPasswordHasherService, PasswordHasherService>();
         services.AddScoped<ITokenService, TokenService>();
+
 
         return services;
     }
