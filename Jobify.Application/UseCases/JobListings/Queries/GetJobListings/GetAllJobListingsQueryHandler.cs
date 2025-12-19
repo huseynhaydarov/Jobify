@@ -55,7 +55,7 @@ public class GetAllJobListingsQueryHandler : BaseSetting,
 
         if (jobListings == null)
         {
-            throw new NullReferenceException("Retrieved data is null.");
+            throw new NullDataException("Retrieved data is null.");
         }
 
         return jobListings;

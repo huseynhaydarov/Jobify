@@ -49,7 +49,6 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
         _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);
         await _cache.RemoveAsync(cacheKey, cancellationToken);
 
-
         return new JobListingDto(jobListing.Id);
     }
 }

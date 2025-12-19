@@ -19,7 +19,6 @@ public class GetJobListingByIdQueryHandler : BaseSetting,
     public async Task<JobListingDetailResponse> Handle(GetJobListingDetailQuery request,
         CancellationToken cancellationToken)
     {
-
         var cacheKey = $"joblisting:{request.Id}";
         _logger.LogInformation("fetching data for key: {CacheKey} from cache.", cacheKey);
 
