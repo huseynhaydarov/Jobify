@@ -1,4 +1,11 @@
+using Jobify.Application.UseCases.JobListings.Dtos;
+using Microsoft.AspNetCore.OData;
+using Microsoft.OData.ModelBuilder;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var modelBuilder = new ODataConventionModelBuilder();
+modelBuilder.EntitySet<JobListingOdataDto>("JobListings");
 
 ConfigureServices(builder.Services, builder.Configuration);
 
@@ -19,7 +26,17 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
 
     services.AddOpenApi();
 
-    services.AddControllers();
+    services.AddControllers().AddOData(
+        options => options
+            .Select()
+            .Filter()
+            .OrderBy()
+            .Expand()
+            .Count()
+            .SetMaxTop(null)
+            .AddRouteComponents(
+            routePrefix: "odata",
+            model: modelBuilder.GetEdmModel()));
 
     services.AddHttpContextAccessor();
 
