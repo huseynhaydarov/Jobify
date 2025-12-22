@@ -4,18 +4,15 @@ public class CreateUserProfileCommandHandler : BaseSetting, IRequestHandler<Crea
 {
     private readonly IAuthenticatedUser _authenticatedUser;
     private readonly ILogger<CreateUserProfileCommandHandler> _logger;
-    private readonly IDistributedCache _cache;
 
     public CreateUserProfileCommandHandler(
         IApplicationDbContext dbContext,
         IAuthenticatedUser authenticatedUser,
-        ILogger<CreateUserProfileCommandHandler> logger,
-        IDistributedCache cache)
+        ILogger<CreateUserProfileCommandHandler> logger)
         : base(dbContext)
     {
         _authenticatedUser = authenticatedUser;
         _logger = logger;
-        _cache = cache;
     }
 
     public async Task<UserProfileDto> Handle(CreateUserProfileCommand request, CancellationToken cancellationToken)
@@ -36,10 +33,6 @@ public class CreateUserProfileCommandHandler : BaseSetting, IRequestHandler<Crea
 
         await _dbContext.UserProfiles.AddAsync(userProfile, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
-
-        var cacheKey = "userProfiles";
-        _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);
-        await _cache.RemoveAsync(cacheKey, cancellationToken);
 
         return new UserProfileDto(userProfile.Id);
     }
