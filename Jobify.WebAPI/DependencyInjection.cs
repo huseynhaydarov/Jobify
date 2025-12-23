@@ -53,8 +53,10 @@ public static class DependencyInjection
         {
             options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(UserRoles.Administrator));
 
-            options.AddPolicy("EmployerOrJobSeeker", policy =>
-                policy.RequireRole(UserRoles.Employer, UserRoles.Administrator));
+            options.AddPolicy(Policies.CanViewAll, policy =>
+                policy.RequireRole(UserRoles.Employer, UserRoles.Employer, UserRoles.Administrator));
+
+
 
         });
 

@@ -1,15 +1,16 @@
 ﻿namespace Jobify.Application.UseCases.JobApplications.Commands.CreateJobApplication;
 
-public class CreateJobApplicationCommandHandler : BaseSetting, IRequestHandler<CreateJobApplicationCommand, Guid>
+public class CreateJobApplicationCommandHandler : BaseSetting,
+    IRequestHandler<CreateJobApplicationCommand, Guid>
 {
     private readonly IAuthenticatedUser _authenticatedUser;
     private readonly ILogger<CreateJobApplicationCommandHandler> _logger;
 
-    public CreateJobApplicationCommandHandler(IMapper mapper,
+    public CreateJobApplicationCommandHandler(
         IApplicationDbContext dbContext,
         IAuthenticatedUser authenticatedUser,
         ILogger<CreateJobApplicationCommandHandler> logger)
-        : base(mapper, dbContext)
+        : base(dbContext)
     {
         _authenticatedUser = authenticatedUser;
         _logger = logger;
@@ -26,11 +27,23 @@ public class CreateJobApplicationCommandHandler : BaseSetting, IRequestHandler<C
             throw new DomainException("You have already applied to this job.");
         }
 
+        var jobListing = await _dbContext.JobListings
+            .Where(l => l.Id == request.JobListingId)
+            .FirstOrDefaultAsync(cancellationToken);
 
-        var application = _mapper.Map<JobApplication>(request);
+        if (jobListing == null)
+        {
+            throw new NotFoundException("Job listing not found.");
+        }
 
-        application.ApplicantId = _authenticatedUser.Id;
-        application.AppliedAt = DateTimeOffset.UtcNow;
+        var application = new JobApplication
+        {
+            Id = Guid.NewGuid(),
+            JobListingId = request.JobListingId,
+            ApplicantId = _authenticatedUser.Id,
+            AppliedAt = DateTimeOffset.UtcNow,
+            ApplicationStatus = ApplicationStatus.Applied,
+        };
 
         await _dbContext.JobApplications.AddAsync(application, cancellationToken);
 

@@ -2,13 +2,10 @@
 
 public class BaseSetting
 {
-    private protected readonly IMapper _mapper;
     private protected readonly IApplicationDbContext _dbContext;
 
-    public BaseSetting(IMapper mapper,
-        IApplicationDbContext dbContext)
+    public BaseSetting(IApplicationDbContext dbContext)
     {
-        _mapper = mapper;
         _dbContext = dbContext;
     }
 }

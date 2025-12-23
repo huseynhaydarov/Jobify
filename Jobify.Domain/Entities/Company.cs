@@ -7,6 +7,8 @@ public class Company : BaseAuditableEntity
     public string? Description { get; set; }
     public string? Industry { get; set; }
 
+    public bool IsDeleted { get; set; }
+
     public required Guid CreatedById { get; set; }
     public User? User { get; set; }
     public ICollection<Employer> Employers { get; set; } = new List<Employer>();
