@@ -27,22 +27,23 @@ public class GetJobListingByIdQueryHandler : BaseSetting,
             {
                 _logger.LogInformation("cache miss. fetching data for key: {CacheKey} from database.", cacheKey);
                  return await _dbContext.JobListings
-                                  .Where(j => j.Id == request.Id && j.Status == JobStatus.Open)
-                                  .Select(c => new JobListingDetailResponse
+                                .AsNoTracking()
+                                .Where(j => j.Id == request.Id && j.Status == JobStatus.Open)
+                                .Select(c => new JobListingDetailResponse
                                   {
-                                      Id = c.Id,
-                                      Name = c.Name,
-                                      Description = c.Description,
-                                      Salary = c.Salary,
-                                      Currency = c.Currency,
-                                      Location = c.Location,
-                                      Status = c.Status,
-                                      PostedAt = c.PostedAt,
-                                      Requirements = c.Requirements,
-                                      CompanyName = c.Company.Name,
-                                      EmployerEmail = c.Employer.User.Email,
-                                  })
-                                  .FirstOrDefaultAsync(cancellationToken)
+                                    Id = c.Id,
+                                    Name = c.Name,
+                                    Description = c.Description,
+                                    Salary = c.Salary,
+                                    Currency = c.Currency,
+                                    Location = c.Location,
+                                    Status = c.Status,
+                                    PostedAt = c.PostedAt,
+                                    Requirements = c.Requirements,
+                                    CompanyName = c.Company.Name,
+                                    EmployerEmail = c.Employer.User.Email,
+                              })
+                              .FirstOrDefaultAsync(cancellationToken)
                               ?? throw new NotFoundException("JobListing not found");
             });
 

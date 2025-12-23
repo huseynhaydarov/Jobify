@@ -10,7 +10,6 @@ public static class IQueryableExtensions
     {
         var totalCount = await queryable.CountAsync(cancellationToken);
 
-
         var items = await queryable
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)

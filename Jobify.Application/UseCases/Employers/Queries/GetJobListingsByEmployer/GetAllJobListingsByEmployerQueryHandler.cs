@@ -17,13 +17,13 @@ public class GetAllJobListingsByEmployerQueryHandler : BaseSetting,
         CancellationToken cancellationToken)
     {
         var employerCompanyId = await _dbContext.Employers
-            .IgnoreQueryFilters()
             .AsNoTracking()
             .Where(c => c.UserId == _authenticatedUser.Id)
             .Select(e => e.CompanyId)
             .FirstOrDefaultAsync(cancellationToken);
 
         var queryable = _dbContext.JobListings
+            .IgnoreQueryFilters()
             .Where(c => c.CompanyId == employerCompanyId)
             .AsNoTracking()
             .Select(c => new GetAllJobListingsByEmployerResponse

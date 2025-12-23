@@ -5,6 +5,7 @@ public class UpdateJobListingCommandHandler : BaseSetting, IRequestHandler<Updat
     private readonly ILogger<UpdateJobListingCommandHandler> _logger;
     private readonly IDistributedCache _cache;
 
+
     public UpdateJobListingCommandHandler(
         IApplicationDbContext dbContext,
         ILogger<UpdateJobListingCommandHandler> logger,
@@ -17,7 +18,8 @@ public class UpdateJobListingCommandHandler : BaseSetting, IRequestHandler<Updat
     public async Task<Unit> Handle(UpdateJobListingCommand request, CancellationToken cancellationToken)
     {
         var jobListing = await _dbContext.JobListings
-                          .Where(c => c.Id == request.Id)
+                          .Where(c => c.Id == request.Id
+                                      && c.CompanyId == request.CompanyId)
                           .FirstOrDefaultAsync(cancellationToken)
                       ?? throw new NotFoundException("JobListing not found");
 
