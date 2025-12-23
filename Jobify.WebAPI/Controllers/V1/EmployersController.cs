@@ -30,9 +30,9 @@ public class EmployersController : ControllerBase
         return Ok();
     }
 
-    [HttpPut("position")]
+    [HttpPatch("{Id}/position")]
     [Authorize(Roles = UserRoles.Administrator)]
-    public async Task<IActionResult> Update([FromBody] PositionUpdateCommand command)
+    public async Task<IActionResult> Update([FromRoute] Guid Id, [FromBody] PositionUpdateCommand command)
     {
         await _mediator.Send(command);
 

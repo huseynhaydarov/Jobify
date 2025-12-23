@@ -51,7 +51,7 @@ public class JobApplicationsController : ControllerBase
 
     [HttpPatch("{Id}/status")]
     [Authorize(Roles = UserRoles.Employer)]
-    public async Task<IActionResult> Update([FromRoute] Guid Id,  [FromBody] ApplicationStatusUpdateCommand command)
+    public async Task<IActionResult> Update([FromRoute] Guid Id, [FromBody] ApplicationStatusUpdateCommand command)
     {
         if (Id != command.applicationId)
         {
