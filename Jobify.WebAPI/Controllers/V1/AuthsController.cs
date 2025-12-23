@@ -1,6 +1,4 @@
-﻿using Jobify.Application.UseCases.Auths.ChangePassword.Commands;
-
-namespace Jobify.API.Controllers.V1;
+﻿namespace Jobify.API.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -14,7 +12,7 @@ public class AuthsController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Create([FromBody] LoginCommand command)
+    public async Task<IActionResult> Login([FromBody] LoginCommand command)
     {
         var data = await _mediator.Send(command);
 

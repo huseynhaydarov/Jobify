@@ -4,8 +4,8 @@ public class DeleteJobListingCommandHandler : BaseSetting, IRequestHandler<Delet
 {
     private readonly IAuthenticatedUser _authenticatedUser;
 
-    public DeleteJobListingCommandHandler(IMapper mapper, IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser) : base(mapper, dbContext)
+    public DeleteJobListingCommandHandler( IApplicationDbContext dbContext,
+        IAuthenticatedUser authenticatedUser) : base(dbContext)
     {
         _authenticatedUser = authenticatedUser;
     }
@@ -13,12 +13,8 @@ public class DeleteJobListingCommandHandler : BaseSetting, IRequestHandler<Delet
     public async Task<Unit> Handle(DeleteJobListingCommand request, CancellationToken cancellationToken)
     {
         var jobListing = await _dbContext.JobListings
-            .Include(x => x.Company)
-            .FirstOrDefaultAsync(x => x.Id == request.Id &&
-                                      x.Employer != null &&
-                                      x.Employer.UserId == _authenticatedUser.Id, cancellationToken)
-                         ?? throw new NotFoundException("JobListing not found", request.Id);
-
+            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken)
+                         ?? throw new NotFoundException("JobListing not found");
 
         jobListing.IsDeleted = true;
 

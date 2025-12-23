@@ -27,4 +27,24 @@ public class JobApplicationsController : ControllerBase
 
         return Ok(application);
     }
+
+    [HttpGet]
+    [Authorize(Roles = UserRoles.Employer)]
+    public async Task<ActionResult<GetAllJobApplicationsByJobListingResponse>> GetAll(
+        [FromQuery] Guid? jobListingId,
+        [FromQuery] PagingParameters paging)
+    {
+        var result = await _mediator.Send(
+            new GetAllJobApplicationsByJobListingQuery(jobListingId, paging));
+
+        return Ok(result);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<GetJobApplicationDetailResponse>> GetById([FromRoute] Guid id)
+    {
+        var result = await _mediator.Send(new GetJobApplicationDetailQuery(id));
+
+        return Ok(result);
+    }
 }

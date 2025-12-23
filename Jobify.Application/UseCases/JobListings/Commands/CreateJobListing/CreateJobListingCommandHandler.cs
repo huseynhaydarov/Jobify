@@ -1,33 +1,44 @@
 ﻿namespace Jobify.Application.UseCases.JobListings.Commands.CreateJobListing;
 
-public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<CreateJobListingCommand, Guid>
+public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<CreateJobListingCommand, JobListingDto>
 {
     private readonly IAuthenticatedUser _authenticatedUser;
 
     public CreateJobListingCommandHandler(
         IApplicationDbContext dbContext,
-        IMapper mapper,
-        IAuthenticatedUser  authenticatedUser) : base(mapper, dbContext)
+        IAuthenticatedUser  authenticatedUser) : base(dbContext)
     {
         _authenticatedUser = authenticatedUser;
     }
 
-    public async Task<Guid> Handle(CreateJobListingCommand request, CancellationToken cancellationToken)
+    public async Task<JobListingDto> Handle(CreateJobListingCommand request, CancellationToken cancellationToken)
     {
         var employer = await _dbContext.Employers
-            .FirstOrDefaultAsync(e => e.UserId == _authenticatedUser.Id, cancellationToken)
+            .FirstOrDefaultAsync(e => e.UserId != _authenticatedUser.Id, cancellationToken)
             ?? throw new NotFoundException("Employer not found.");
 
-        var jobListing = _mapper.Map<JobListing>(request);
+        if (employer.CompanyId != request.CompanyId)
+        {
+            throw new DomainException("Employer is not eligible to post!");
+        }
 
-        jobListing.PostedAt = DateTimeOffset.Now;
-        jobListing.Status = JobStatus.Open;
-        jobListing.EmployerId = employer.Id;
-        jobListing.CompanyId = request.CompanyId;
+        var jobListing = new JobListing
+        {
+            Id = Guid.NewGuid(),
+            Name = request.Name,
+            Description = request.Description,
+            Requirements = request.Requirements,
+            Location = request.Location,
+            Salary = request.Salary,
+            Currency =  request.Currency,
+            Status = JobStatus.Open,
+            CompanyId =  request.CompanyId,
+            PostedAt = DateTimeOffset.UtcNow
+        };
 
         await _dbContext.JobListings.AddAsync(jobListing, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return jobListing.Id;
+        return new JobListingDto(jobListing.Id);
     }
 }

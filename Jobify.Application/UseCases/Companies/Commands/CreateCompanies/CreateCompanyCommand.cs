@@ -4,4 +4,4 @@ public record CreateCompanyCommand(
     string Name,
     string? Description,
     string? WebsiteUrl,
-    string? Industry) : IRequest<Unit>;
+    string? Industry) : IRequest<CompanyDto>;

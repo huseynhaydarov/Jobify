@@ -3,7 +3,7 @@
 public enum EmployerPosition
 {
     CEO = 1,
-    HRManager = 3,
-    Recruiter = 4,
-    Other = 6
+    HRManager = 2,
+    Recruiter = 3,
+    Other = 4
 }

@@ -2,45 +2,46 @@
 
 public class CreateJobListingCommandValidator : AbstractValidator<CreateJobListingCommand>
 {
-    private readonly IApplicationDbContext _dbContext;
-    private readonly IAuthenticatedUser _authenticatedUser;
-
-
-
-    public CreateJobListingCommandValidator(IApplicationDbContext dbContext, IAuthenticatedUser authenticatedUser)
+    public CreateJobListingCommandValidator()
     {
-        _dbContext = dbContext;
-        _authenticatedUser = authenticatedUser;
-
         RuleFor(x => x.CompanyId)
             .NotEmpty()
-            .WithMessage("CompanyId is required.")
-            .DependentRules(() =>
-            {
-                RuleFor(x => x.CompanyId)
-                    .MustAsync(CanEmployerPost)
-                    .WithMessage("Employer is not eligible to post!");
-            });
+            .WithMessage("Company ID is required.");
 
         RuleFor(x => x.Name)
             .NotEmpty()
-            .MaximumLength(200);
+            .WithMessage("Job title is required.")
+            .MaximumLength(150)
+            .WithMessage("Job title cannot exceed 150 characters.");
 
         RuleFor(x => x.Description)
-            .MaximumLength(2000);
+            .MaximumLength(2000)
+            .WithMessage("Description cannot exceed 2000 characters.")
+            .When(x => !string.IsNullOrEmpty(x.Description));
+
+        RuleFor(x => x.Requirements)
+            .MaximumLength(2000)
+            .WithMessage("Requirements cannot exceed 2000 characters.")
+            .When(x => !string.IsNullOrEmpty(x.Requirements));
 
         RuleFor(x => x.Location)
-            .MaximumLength(200);
-    }
+            .MaximumLength(250)
+            .WithMessage("Location cannot exceed 250 characters.")
+            .When(x => !string.IsNullOrEmpty(x.Location));
 
+        RuleFor(x => x.Salary)
+            .GreaterThan(0)
+            .WithMessage("Salary must be greater than zero.")
+            .When(x => x.Salary.HasValue);
 
-    private async Task<bool> CanEmployerPost(Guid Id, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Companies
-            .AsNoTracking()
-            .Include(c => c.Employers)
-            .Select(c => c.Employers
-                .Where(e => e.Id == Id))
-            .AnyAsync(cancellationToken);
+        RuleFor(x => x.Currency)
+            .Length(3)
+            .WithMessage("Currency must be a 3-letter ISO code.")
+            .When(x => !string.IsNullOrEmpty(x.Currency));
+
+        RuleFor(x => x.ExpireDate)
+            .GreaterThan(DateTimeOffset.UtcNow)
+            .WithMessage("Expire date must be in the future.")
+            .When(x => x.ExpireDate.HasValue);
     }
 }

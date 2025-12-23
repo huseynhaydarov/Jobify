@@ -19,6 +19,9 @@ public class CompanyConfiguration : IEntityTypeConfiguration<Company>
         builder.Property(c => c.Industry)
             .HasMaxLength(100);
 
+        builder.Property(j => j.IsDeleted)
+            .HasDefaultValue(false);
+
         builder
             .HasOne(c => c.User)
             .WithMany()
