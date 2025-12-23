@@ -27,7 +27,7 @@ public class GetJobListingByIdQueryHandler : BaseSetting,
             {
                 _logger.LogInformation("cache miss. fetching data for key: {CacheKey} from database.", cacheKey);
                  return await _dbContext.JobListings
-                                  .Where(j => j.Id == request.Id)
+                                  .Where(j => j.Id == request.Id && j.Status == JobStatus.Open)
                                   .Select(c => new JobListingDetailResponse
                                   {
                                       Id = c.Id,

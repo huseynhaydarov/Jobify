@@ -17,7 +17,6 @@ public class CreateUserProfileCommandHandler : BaseSetting, IRequestHandler<Crea
 
     public async Task<UserProfileDto> Handle(CreateUserProfileCommand request, CancellationToken cancellationToken)
     {
-
         var userProfile = new UserProfile
         {
             Id = Guid.NewGuid(),

@@ -16,7 +16,7 @@ public class GetJobListingsOdataQueryHandler
     {
         var query = _context.JobListings
             .AsNoTracking()
-            .Where(x => !x.IsDeleted)
+            .Where(x => !x.IsDeleted && x.Status == JobStatus.Open)
             .Select(j => new JobListingOdataDto
             {
                 Id = j.Id,

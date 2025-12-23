@@ -29,6 +29,7 @@ public class GetUserProfileDetailQueryHandler : BaseSetting,
             {
                 _logger.LogInformation("cache miss. fetching data for key:  {CacheKey} from database.", cacheKey);
                 return await _dbContext.UserProfiles
+                           .AsNoTracking()
                            .Where(j => j.Id == request.Id && j.UserId == _authenticatedUser.Id)
                            .Select(p => new GetUserProfileDetailResponse
                            {

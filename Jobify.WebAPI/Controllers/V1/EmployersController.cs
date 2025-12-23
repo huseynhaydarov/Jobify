@@ -1,4 +1,6 @@
-﻿namespace Jobify.API.Controllers.V1;
+﻿using Jobify.Application.UseCases.Employers.Queries.GetJobListingsByEmployer;
+
+namespace Jobify.API.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -48,4 +50,14 @@ public class EmployersController : ControllerBase
         return Ok(data);
     }
 
+    [HttpGet("job-listings")]
+    [Authorize(Roles = UserRoles.Employer)]
+    public async Task<IActionResult> GetJobListingsByEmployer([FromQuery] PagingParameters parameters)
+    {
+        var query = new GetAllJobListingsByEmployerQuery(parameters);
+
+        var data = await _mediator.Send(query);
+
+        return Ok(data);
+    }
 }
