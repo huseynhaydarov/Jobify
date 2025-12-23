@@ -6,7 +6,6 @@ public interface IApplicationDbContext
     DbSet<JobApplication> JobApplications { get; }
     DbSet<Company> Companies { get; }
     DbSet<JobListing> JobListings { get; }
-    DbSet<Message> Messages { get; }
     DbSet<Role> Roles { get; }
     DbSet<UserRole> UsersRoles { get; }
     DbSet<Employer> Employers { get; }

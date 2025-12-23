@@ -59,10 +59,5 @@ public class JobListingConfiguration : IEntityTypeConfiguration<JobListing>
             .WithOne(j => j.JobListing)
             .HasForeignKey(j => j.JobListingId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        builder.HasMany(m => m.Messages)
-            .WithOne(j => j.JobListing)
-            .HasForeignKey(j => j.JobId)
-            .OnDelete(DeleteBehavior.Cascade);;
     }
 }
