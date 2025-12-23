@@ -26,16 +26,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey(u => u.ApplicantId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasMany(u => u.SentMessages)
-            .WithOne(m => m.Sender)
-            .HasForeignKey(m => m.SenderId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.HasMany(u => u.ReceivedMessages)
-            .WithOne(m => m.Receiver)
-            .HasForeignKey(m => m.ReceiverId)
-            .OnDelete(DeleteBehavior.Cascade);
-
         builder.HasOne(u => u.Employer)
             .WithOne(m => m.User)
             .HasForeignKey<Employer>(u => u.UserId)

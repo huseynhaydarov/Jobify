@@ -13,7 +13,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<JobApplication> JobApplications =>  Set<JobApplication>();
     public DbSet<Company> Companies => Set<Company>();
     public DbSet<JobListing> JobListings => Set<JobListing>();
-    public DbSet<Message> Messages => Set<Message>();
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<UserRole> UsersRoles => Set<UserRole>();
     public DbSet<Employer> Employers => Set<Employer>();

@@ -21,5 +21,4 @@ public class JobListing : BaseAuditableEntity
     public bool IsDeleted { get; set; }
 
     public ICollection<JobApplication> Applications { get; set; } = new List<JobApplication>();
-    public ICollection<Message> Messages { get; set; } = new List<Message>();
 }

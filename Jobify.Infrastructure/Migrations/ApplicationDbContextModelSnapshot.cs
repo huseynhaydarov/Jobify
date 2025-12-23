@@ -241,50 +241,6 @@ namespace Jobify.Infrastructure.Migrations
                     b.ToTable("JobListings", (string)null);
                 });
 
-            modelBuilder.Entity("Jobify.Domain.Entities.Message", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("JobId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("MessageText")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("Text");
-
-                    b.Property<DateTimeOffset?>("ModifiedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ReceiverId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("SenderId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobId");
-
-                    b.HasIndex("ReceiverId");
-
-                    b.HasIndex("SenderId");
-
-                    b.ToTable("Messages", (string)null);
-                });
-
             modelBuilder.Entity("Jobify.Domain.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -544,33 +500,6 @@ namespace Jobify.Infrastructure.Migrations
                     b.Navigation("Employer");
                 });
 
-            modelBuilder.Entity("Jobify.Domain.Entities.Message", b =>
-                {
-                    b.HasOne("Jobify.Domain.Entities.JobListing", "JobListing")
-                        .WithMany("Messages")
-                        .HasForeignKey("JobId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Jobify.Domain.Entities.User", "Receiver")
-                        .WithMany("ReceivedMessages")
-                        .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Jobify.Domain.Entities.User", "Sender")
-                        .WithMany("SentMessages")
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("JobListing");
-
-                    b.Navigation("Receiver");
-
-                    b.Navigation("Sender");
-                });
-
             modelBuilder.Entity("Jobify.Domain.Entities.UserProfile", b =>
                 {
                     b.HasOne("Jobify.Domain.Entities.User", "User")
@@ -616,8 +545,6 @@ namespace Jobify.Infrastructure.Migrations
             modelBuilder.Entity("Jobify.Domain.Entities.JobListing", b =>
                 {
                     b.Navigation("Applications");
-
-                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("Jobify.Domain.Entities.Role", b =>
@@ -632,10 +559,6 @@ namespace Jobify.Infrastructure.Migrations
                     b.Navigation("Employer");
 
                     b.Navigation("JobListings");
-
-                    b.Navigation("ReceivedMessages");
-
-                    b.Navigation("SentMessages");
 
                     b.Navigation("UserProfile");
 
