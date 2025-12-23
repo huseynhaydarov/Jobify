@@ -2,8 +2,16 @@
 
 public class UpdateJobListingCommandHandler : BaseSetting, IRequestHandler<UpdateJobListingCommand, Unit>
 {
-    public UpdateJobListingCommandHandler(IApplicationDbContext dbContext) : base(dbContext)
+    private readonly ILogger<UpdateJobListingCommandHandler> _logger;
+    private readonly IDistributedCache _cache;
+
+    public UpdateJobListingCommandHandler(
+        IApplicationDbContext dbContext,
+        ILogger<UpdateJobListingCommandHandler> logger,
+        IDistributedCache cache) : base(dbContext)
     {
+        _logger = logger;
+        _cache = cache;
     }
 
     public async Task<Unit> Handle(UpdateJobListingCommand request, CancellationToken cancellationToken)
@@ -16,6 +24,10 @@ public class UpdateJobListingCommandHandler : BaseSetting, IRequestHandler<Updat
         jobListing.MapFrom(request);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
+
+        var cacheKey = $"jobListing:{request.Id}";;
+        _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);
+        await _cache.RemoveAsync(cacheKey, cancellationToken);
 
         return Unit.Value;
     }
