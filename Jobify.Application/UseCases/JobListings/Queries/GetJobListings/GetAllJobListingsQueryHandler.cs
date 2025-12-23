@@ -17,6 +17,7 @@ public class GetAllJobListingsQueryHandler : BaseSetting,
         CancellationToken cancellationToken)
     {
         var queryable = _dbContext.JobListings
+            .Where(c => c.Status == JobStatus.Open)
             .AsNoTracking()
             .Select(c => new GetAllJobListingsResponse
             {

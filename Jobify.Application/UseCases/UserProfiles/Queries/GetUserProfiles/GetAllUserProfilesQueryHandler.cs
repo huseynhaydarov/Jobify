@@ -11,6 +11,7 @@ public class GetAllUserProfilesQueryHandler : BaseSetting, IRequestHandler<GetAl
         CancellationToken cancellationToken)
     {
         var queryable = _dbContext.UserProfiles
+            .AsNoTracking()
             .OrderByDescending(x => x.CreatedAt)
             .Select(p => new GetAllUserProfilesResponse()
             {
