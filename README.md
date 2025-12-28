@@ -1,5 +1,6 @@
 ﻿# Jobify
-
+Jobify is a job marketplace platform that connects job seekers with employers.
+It allows companies to create and manage job listings, while job seekers can browse jobs, apply, and track their applications.
 ## Build
 
 Run `dotnet build --tl` to build the solution.
