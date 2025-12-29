@@ -8,9 +8,9 @@ public class CreateCompanyCommandHandlerTests
     public void SetUp()
     {
         _fixture = new Fixture()
-            .Customize(new AutoNSubstituteCustomization { ConfigureMembers = true });
+            .Customize(new AutoNSubstituteCustomization());
 
-        _dbOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
+    _dbOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase("JobifyDb")
             .Options;
     }
