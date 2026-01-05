@@ -224,9 +224,6 @@ namespace Jobify.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid");
-
                     b.Property<int>("Views")
                         .HasColumnType("integer");
 
@@ -237,8 +234,6 @@ namespace Jobify.Infrastructure.Migrations
                     b.HasIndex("EmployerId");
 
                     b.HasIndex("IsDeleted");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("JobListings", (string)null);
                 });
@@ -496,10 +491,6 @@ namespace Jobify.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Jobify.Domain.Entities.User", null)
-                        .WithMany("JobListings")
-                        .HasForeignKey("UserId");
-
                     b.Navigation("Company");
 
                     b.Navigation("Employer");
@@ -562,8 +553,6 @@ namespace Jobify.Infrastructure.Migrations
                     b.Navigation("Applications");
 
                     b.Navigation("Employer");
-
-                    b.Navigation("JobListings");
 
                     b.Navigation("UserProfile");
 
