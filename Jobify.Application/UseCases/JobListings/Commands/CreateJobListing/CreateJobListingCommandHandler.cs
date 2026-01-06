@@ -13,11 +13,21 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
 
     public async Task<JobListingDto> Handle(CreateJobListingCommand request, CancellationToken cancellationToken)
     {
-        var employer = await _dbContext.Employers
-            .FirstOrDefaultAsync(e => e.UserId != _authenticatedUser.Id, cancellationToken)
-            ?? throw new NotFoundException("Employer not found.");
+        var companyId = await _dbContext.Companies
+            .Where(c => c.Employers.Any(e => e.UserId == _authenticatedUser.Id))
+            .Select(c => c.Id)
+            .FirstOrDefaultAsync(cancellationToken);
 
-        if (employer.CompanyId != request.CompanyId)
+        var employer = await _dbContext.Employers
+            .Select(e => new
+            {
+                e.Id,
+                e.CompanyId
+            })
+            .FirstOrDefaultAsync(cancellationToken) ??  throw new NotFoundException("Employer not found");
+
+
+        if (employer.CompanyId != companyId)
         {
             throw new DomainException("Employer is not eligible to post!");
         }
@@ -32,7 +42,7 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
             Salary = request.Salary,
             Currency =  request.Currency,
             Status = JobStatus.Open,
-            CompanyId =  request.CompanyId,
+            CompanyId =  companyId,
             PostedAt = DateTimeOffset.UtcNow
         };
 
