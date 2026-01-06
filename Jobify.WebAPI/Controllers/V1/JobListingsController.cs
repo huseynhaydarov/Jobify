@@ -24,13 +24,13 @@ public class JobListingsController : ControllerBase
     [Authorize(Roles = UserRoles.Employer)]
     public async Task<IActionResult> Update([FromBody] UpdateJobListingCommand command)
     {
-        await _mediator.Send(command);
+        var data = await _mediator.Send(command);
 
-        return NoContent();
+        return Ok(data);
     }
 
     [HttpGet("{id}")]
-    [Authorize(Roles = UserRoles.Employer)]
+    [Authorize(Roles = UserRoles.EmployerOrJobSeeker)]
     public async Task<ActionResult<JobListingDetailResponse>> GetDetail(Guid id)
     {
         var data = await _mediator.Send(new GetJobListingDetailQuery(id));
@@ -53,8 +53,8 @@ public class JobListingsController : ControllerBase
     [Authorize(Roles = UserRoles.Employer)]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
-        await _mediator.Send(new DeleteJobListingCommand(id));
+        var data = await _mediator.Send(new DeleteJobListingCommand(id));
 
-        return NoContent();
+        return Ok(data);
     }
 }

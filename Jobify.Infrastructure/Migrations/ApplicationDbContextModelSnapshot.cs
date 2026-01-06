@@ -166,6 +166,9 @@ namespace Jobify.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTimeOffset?>("ClosedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uuid");
 
@@ -223,9 +226,6 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("Views")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -410,8 +410,14 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTimeOffset?>("ModifiedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uuid");

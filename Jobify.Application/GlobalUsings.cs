@@ -20,6 +20,7 @@ global using Jobify.Application.Common.Models.Pagination;
 global using Jobify.Application.UseCases.Auths.AuthDtos;
 global using Jobify.Application.UseCases.Companies.Dtos;
 global using Jobify.Application.UseCases.Employers.Dtos;
+global using Jobify.Application.UseCases.JobApplications.Dtos;
 global using Jobify.Application.UseCases.JobListings.Dtos;
 global using Jobify.Application.UseCases.JobSeekers.Dtos;
 global using Jobify.Application.UseCases.UserProfiles.Dtos;

@@ -17,10 +17,13 @@ public class CreateUserProfileCommandHandler : BaseSetting, IRequestHandler<Crea
 
     public async Task<UserProfileDto> Handle(CreateUserProfileCommand request, CancellationToken cancellationToken)
     {
+        var userId = _authenticatedUser.Id
+                     ?? throw new UnauthorizedException("User is not authenticated");
+
         var userProfile = new UserProfile
         {
             Id = Guid.NewGuid(),
-            UserId = _authenticatedUser.Id,
+            UserId = userId,
             FirstName = request.FirstName,
             LastName = request.LastName,
             PhoneNumber = request.PhoneNumber,

@@ -9,7 +9,7 @@ public class Employer : BaseAuditableEntity
 
     public EmployerPosition? Position { get; set; }
 
-    public DateTimeOffset JoinedAt { get; set; }
+    public DateTimeOffset JoinedAt { get; set; } = DateTimeOffset.UtcNow;
 
     public ICollection<JobListing> JobListings { get; set; } = new List<JobListing>();
 }

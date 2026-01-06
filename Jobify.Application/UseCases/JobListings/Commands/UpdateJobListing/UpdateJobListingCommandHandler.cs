@@ -1,6 +1,6 @@
 ﻿namespace Jobify.Application.UseCases.JobListings.Commands.UpdateJobListing;
 
-public class UpdateJobListingCommandHandler : BaseSetting, IRequestHandler<UpdateJobListingCommand, Unit>
+public class UpdateJobListingCommandHandler : BaseSetting, IRequestHandler<UpdateJobListingCommand, UpdateJobListingResponse>
 {
     private readonly ILogger<UpdateJobListingCommandHandler> _logger;
     private readonly IDistributedCache _cache;
@@ -15,11 +15,10 @@ public class UpdateJobListingCommandHandler : BaseSetting, IRequestHandler<Updat
         _cache = cache;
     }
 
-    public async Task<Unit> Handle(UpdateJobListingCommand request, CancellationToken cancellationToken)
+    public async Task<UpdateJobListingResponse> Handle(UpdateJobListingCommand request, CancellationToken cancellationToken)
     {
         var jobListing = await _dbContext.JobListings
-                          .Where(c => c.Id == request.Id
-                                      && c.CompanyId == request.CompanyId)
+                          .Where(c => c.Id == request.Id)
                           .FirstOrDefaultAsync(cancellationToken)
                       ?? throw new NotFoundException("JobListing not found");
 
@@ -31,6 +30,9 @@ public class UpdateJobListingCommandHandler : BaseSetting, IRequestHandler<Updat
         _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);
         await _cache.RemoveAsync(cacheKey, cancellationToken);
 
-        return Unit.Value;
+        return new UpdateJobListingResponse(
+            jobListing.Id,
+            jobListing.Status,
+            jobListing.ModifiedAt);
     }
 }

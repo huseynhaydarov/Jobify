@@ -22,7 +22,13 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
             .FirstOrDefaultAsync(cancellationToken);
 
         var employer = await _dbContext.Employers
-            .FirstOrDefaultAsync(cancellationToken) ?? throw new NotFoundException("Employer not found");
+            .Select(e => new
+            {
+               e.Id,
+               e.CompanyId
+            })
+            .FirstOrDefaultAsync(cancellationToken)
+            ?? throw new NotFoundException("Employer not found");
 
         if (employer.CompanyId != companyId)
         {
@@ -31,7 +37,6 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
 
         var jobListing = new JobListing
         {
-            Id = Guid.NewGuid(),
             Name = request.Name,
             Description = request.Description,
             Requirements = request.Requirements,
@@ -40,12 +45,17 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
             Currency =  request.Currency,
             Status = JobStatus.Open,
             CompanyId =  companyId,
-            PostedAt = DateTimeOffset.UtcNow
+            EmployerId =  employer.Id,
+            PostedAt = DateTimeOffset.UtcNow,
+            ExpiresAt = request.ExpireDate
         };
 
         await _dbContext.JobListings.AddAsync(jobListing, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return new JobListingDto(jobListing.Id);
+        return new JobListingDto(
+                jobListing.Id,
+                jobListing.Status,
+                jobListing.PostedAt);
     }
 }

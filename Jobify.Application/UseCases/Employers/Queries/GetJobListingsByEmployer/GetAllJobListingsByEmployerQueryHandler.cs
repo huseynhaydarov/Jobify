@@ -36,8 +36,7 @@ public class GetAllJobListingsByEmployerQueryHandler : BaseSetting,
                 Salary = c.Salary,
                 Currency = c.Currency,
                 Status = c.Status,
-                PostedAt = c.PostedAt,
-                Views = c.Views,
+                PostedAt = c.PostedAt
             });
 
         return await queryable.PaginatedListAsync(

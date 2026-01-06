@@ -2,4 +2,4 @@
 
 public record CreateJobApplicationCommand(
     Guid JobListingId,
-    string? CoverLetter) : IRequest<Guid>;
+    string? CoverLetter) : IRequest<JobApplicationDto>;
