@@ -41,7 +41,7 @@ public class JobListingConfiguration : IEntityTypeConfiguration<JobListing>
 
         builder.Property(j => j.ExpiresAt);
 
-        builder.Property(j => j.Views);
+        builder.Property(j => j.ClosedAt);
 
         builder.Property(j => j.IsDeleted)
             .HasDefaultValue(false);

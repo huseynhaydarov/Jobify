@@ -46,6 +46,5 @@ public class JoinCompanyCommandHandler : BaseSetting, IRequestHandler<JoinCompan
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
-
     }
 }

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Jobify.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251123151238_FixedNullableJobListingTableColumnsRefactoring2")]
-    partial class FixedNullableJobListingTableColumnsRefactoring2
+    [Migration("20260105144552_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,6 +47,11 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<string>("Industry")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTimeOffset?>("ModifiedAt")
                         .HasColumnType("timestamp with time zone");
@@ -95,7 +100,6 @@ namespace Jobify.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Position")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
@@ -121,10 +125,11 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<Guid>("ApplicantId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("ApplicationStatus")
-                        .HasColumnType("integer");
+                    b.Property<string>("ApplicationStatus")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("AppliedAt")
+                    b.Property<DateTimeOffset>("AppliedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CoverLetter")
@@ -146,7 +151,7 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("WithdrawnAt")
+                    b.Property<DateTimeOffset?>("WithdrawnAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
@@ -187,6 +192,11 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<DateTimeOffset?>("ExpiresAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
                     b.Property<string>("Location")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
@@ -226,51 +236,9 @@ namespace Jobify.Infrastructure.Migrations
 
                     b.HasIndex("EmployerId");
 
+                    b.HasIndex("IsDeleted");
+
                     b.ToTable("JobListings", (string)null);
-                });
-
-            modelBuilder.Entity("Jobify.Domain.Entities.Message", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("JobId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("MessageText")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("Text");
-
-                    b.Property<DateTimeOffset?>("ModifiedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ReceiverId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("SenderId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobId");
-
-                    b.HasIndex("ReceiverId");
-
-                    b.HasIndex("SenderId");
-
-                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("Jobify.Domain.Entities.Role", b =>
@@ -369,7 +337,71 @@ namespace Jobify.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("Jobify.Domain.Entities.UserProfile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Bio")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Education")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Experience")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("ModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserProfiles", (string)null);
                 });
 
             modelBuilder.Entity("Jobify.Domain.Entities.UserRole", b =>
@@ -456,7 +488,7 @@ namespace Jobify.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Jobify.Domain.Entities.User", "User")
+                    b.HasOne("Jobify.Domain.Entities.Employer", "Employer")
                         .WithMany("JobListings")
                         .HasForeignKey("EmployerId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -464,34 +496,18 @@ namespace Jobify.Infrastructure.Migrations
 
                     b.Navigation("Company");
 
-                    b.Navigation("User");
+                    b.Navigation("Employer");
                 });
 
-            modelBuilder.Entity("Jobify.Domain.Entities.Message", b =>
+            modelBuilder.Entity("Jobify.Domain.Entities.UserProfile", b =>
                 {
-                    b.HasOne("Jobify.Domain.Entities.JobListing", "JobListing")
-                        .WithMany("Messages")
-                        .HasForeignKey("JobId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Jobify.Domain.Entities.User", "Receiver")
-                        .WithMany("ReceivedMessages")
-                        .HasForeignKey("ReceiverId")
+                    b.HasOne("Jobify.Domain.Entities.User", "User")
+                        .WithOne("UserProfile")
+                        .HasForeignKey("Jobify.Domain.Entities.UserProfile", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Jobify.Domain.Entities.User", "Sender")
-                        .WithMany("SentMessages")
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("JobListing");
-
-                    b.Navigation("Receiver");
-
-                    b.Navigation("Sender");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Jobify.Domain.Entities.UserRole", b =>
@@ -520,11 +536,14 @@ namespace Jobify.Infrastructure.Migrations
                     b.Navigation("JobListings");
                 });
 
+            modelBuilder.Entity("Jobify.Domain.Entities.Employer", b =>
+                {
+                    b.Navigation("JobListings");
+                });
+
             modelBuilder.Entity("Jobify.Domain.Entities.JobListing", b =>
                 {
                     b.Navigation("Applications");
-
-                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("Jobify.Domain.Entities.Role", b =>
@@ -538,11 +557,7 @@ namespace Jobify.Infrastructure.Migrations
 
                     b.Navigation("Employer");
 
-                    b.Navigation("JobListings");
-
-                    b.Navigation("ReceivedMessages");
-
-                    b.Navigation("SentMessages");
+                    b.Navigation("UserProfile");
 
                     b.Navigation("UserRoles");
                 });

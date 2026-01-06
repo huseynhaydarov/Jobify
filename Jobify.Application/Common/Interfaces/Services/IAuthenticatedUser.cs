@@ -2,6 +2,6 @@
 
 public interface IAuthenticatedUser
 {
-    Guid Id { get; }
+    Guid? Id { get; }
     List<string>? Roles { get; }
 }

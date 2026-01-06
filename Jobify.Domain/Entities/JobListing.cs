@@ -17,8 +17,8 @@ public class JobListing : BaseAuditableEntity
     public required JobStatus Status { get; set; } = JobStatus.Open;
     public required DateTimeOffset PostedAt { get; set; }
     public DateTimeOffset? ExpiresAt { get; set; }
-    public int Views { get; set; }
     public bool IsDeleted { get; set; }
+    public DateTimeOffset? ClosedAt { get; set; }
 
     public ICollection<JobApplication> Applications { get; set; } = new List<JobApplication>();
 }

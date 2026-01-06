@@ -1,7 +1,7 @@
 ﻿namespace Jobify.Application.UseCases.JobApplications.Commands.CreateJobApplication;
 
 public class CreateJobApplicationCommandHandler : BaseSetting,
-    IRequestHandler<CreateJobApplicationCommand, Guid>
+    IRequestHandler<CreateJobApplicationCommand, JobApplicationDto>
 {
     private readonly IAuthenticatedUser _authenticatedUser;
     private readonly ILogger<CreateJobApplicationCommandHandler> _logger;
@@ -16,8 +16,11 @@ public class CreateJobApplicationCommandHandler : BaseSetting,
         _logger = logger;
     }
 
-    public async Task<Guid> Handle(CreateJobApplicationCommand request, CancellationToken cancellationToken)
+    public async Task<JobApplicationDto> Handle(CreateJobApplicationCommand request, CancellationToken cancellationToken)
     {
+        var userId = _authenticatedUser.Id
+                     ?? throw new UnauthorizedException("User is not authenticated");
+
         var submittedApplication = await _dbContext.JobApplications
             .AnyAsync(a => a.JobListingId == request.JobListingId &&
                            a.ApplicantId == _authenticatedUser.Id, cancellationToken);
@@ -36,11 +39,16 @@ public class CreateJobApplicationCommandHandler : BaseSetting,
             throw new NotFoundException("Job listing not found.");
         }
 
+        if (jobListing.Status != JobStatus.Open)
+        {
+            throw new DomainException("Can apply only to open job.");
+        }
+
         var application = new JobApplication
         {
             Id = Guid.NewGuid(),
             JobListingId = request.JobListingId,
-            ApplicantId = _authenticatedUser.Id,
+            ApplicantId = userId,
             AppliedAt = DateTimeOffset.UtcNow,
             ApplicationStatus = ApplicationStatus.Applied,
         };
@@ -51,6 +59,6 @@ public class CreateJobApplicationCommandHandler : BaseSetting,
 
         _logger.LogInformation($"Created job application by user {application.ApplicantId}");
 
-        return application.Id;
+        return new JobApplicationDto(application.Id, JobStatus.Open);
     }
 }

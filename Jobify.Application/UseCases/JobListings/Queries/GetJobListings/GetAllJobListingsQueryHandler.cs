@@ -17,7 +17,7 @@ public class GetAllJobListingsQueryHandler : BaseSetting,
         CancellationToken cancellationToken)
     {
         var queryable = _dbContext.JobListings
-            .Where(c => !c.IsDeleted && c.Status == JobStatus.Open)
+            .Where(c => !c.IsDeleted)
             .AsNoTracking()
             .Select(c => new GetAllJobListingsResponse
             {
@@ -29,8 +29,7 @@ public class GetAllJobListingsQueryHandler : BaseSetting,
                 Salary = c.Salary,
                 Currency = c.Currency,
                 Status = c.Status,
-                PostedAt = c.PostedAt,
-                Views = c.Views,
+                PostedAt = c.PostedAt
             });
 
         return await queryable.PaginatedListAsync(

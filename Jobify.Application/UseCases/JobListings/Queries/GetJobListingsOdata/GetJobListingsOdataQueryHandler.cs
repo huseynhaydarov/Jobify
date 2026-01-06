@@ -29,7 +29,6 @@ public class GetJobListingsOdataQueryHandler
                 Status = j.Status,
                 PostedAt = j.PostedAt,
                 ExpiresAt = j.ExpiresAt,
-                Views = j.Views,
                 Company = new CompanyOdataDto
                 {
                     Id = j.Company!.Id,

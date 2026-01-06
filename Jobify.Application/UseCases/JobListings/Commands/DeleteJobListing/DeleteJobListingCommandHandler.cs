@@ -1,6 +1,6 @@
 namespace Jobify.Application.UseCases.JobListings.Commands.DeleteJobListing;
 
-public class DeleteJobListingCommandHandler : BaseSetting, IRequestHandler<DeleteJobListingCommand, Unit>
+public class DeleteJobListingCommandHandler : BaseSetting, IRequestHandler<DeleteJobListingCommand, CloseJobListingResponse>
 {
     private readonly IAuthenticatedUser _authenticatedUser;
     private readonly ILogger<DeleteJobListingCommandHandler> _logger;
@@ -15,7 +15,7 @@ public class DeleteJobListingCommandHandler : BaseSetting, IRequestHandler<Delet
         _logger = logger;
     }
 
-    public async Task<Unit> Handle(DeleteJobListingCommand request, CancellationToken cancellationToken)
+    public async Task<CloseJobListingResponse> Handle(DeleteJobListingCommand request, CancellationToken cancellationToken)
     {
         var jobListing = await _dbContext.JobListings
             .FirstOrDefaultAsync(x => x.Id == request.Id
@@ -23,6 +23,7 @@ public class DeleteJobListingCommandHandler : BaseSetting, IRequestHandler<Delet
                          ?? throw new NotFoundException("JobListing not found");
 
         jobListing.IsDeleted = true;
+        jobListing.ClosedAt = DateTimeOffset.UtcNow;
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
@@ -30,6 +31,9 @@ public class DeleteJobListingCommandHandler : BaseSetting, IRequestHandler<Delet
         _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);
         await _cache.RemoveAsync(cacheKey, cancellationToken);
 
-        return Unit.Value;
+        return new CloseJobListingResponse(
+            jobListing.Id,
+            JobStatus.Closed,
+            jobListing.ClosedAt);
     }
 }

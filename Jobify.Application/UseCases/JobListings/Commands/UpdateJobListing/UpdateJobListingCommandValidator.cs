@@ -9,10 +9,6 @@ public class UpdateJobListingCommandValidator : AbstractValidator<UpdateJobListi
             .NotEmpty()
             .WithMessage("Job listing ID is required.");
 
-        RuleFor(x => x.CompanyId)
-            .NotEmpty()
-            .WithMessage("Company ID is required.");
-
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage("Job title is required.")
@@ -48,5 +44,8 @@ public class UpdateJobListingCommandValidator : AbstractValidator<UpdateJobListi
             .GreaterThan(DateTimeOffset.UtcNow)
             .WithMessage("Expire date must be in the future.")
             .When(x => x.ExpireDate.HasValue);
+
+        RuleFor(x => x.Status)
+            .NotEmpty();
     }
 }

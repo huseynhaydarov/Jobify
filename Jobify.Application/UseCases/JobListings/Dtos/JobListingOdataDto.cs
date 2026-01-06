@@ -17,8 +17,6 @@ public record JobListingOdataDto
     public DateTimeOffset PostedAt { get; init; }
     public DateTimeOffset? ExpiresAt { get; init; }
 
-    public int Views { get; init; }
-
     public CompanyOdataDto Company { get; init; } = default!;
     public EmployerOdataDto Employer { get; init; } = default!;
 }

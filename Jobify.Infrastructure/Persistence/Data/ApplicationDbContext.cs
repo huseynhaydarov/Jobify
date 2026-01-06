@@ -23,31 +23,29 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         builder.Entity<UserProfile>()
             .HasQueryFilter(x => !x.IsDeleted);
 
-        builder.Ignore<BaseAuditableEntity>();
-        builder.Ignore<BaseEntity>();
-
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
+        var userId = _authenticatedUser.Id;
+
         foreach (var entry in ChangeTracker.Entries<BaseAuditableEntity>())
         {
-            switch (entry.State)
+            if (entry.State == EntityState.Added)
             {
-                case EntityState.Added:
-                    entry.Entity.CreatedAt = DateTimeOffset.UtcNow;;
-                    entry.Entity.CreatedBy = _authenticatedUser.Id;
-                    break;
-                case EntityState.Modified:
-                    entry.Entity.ModifiedAt = DateTimeOffset.UtcNow;
-                    entry.Entity.ModifiedBy = _authenticatedUser.Id;
-                    break;
+                entry.Entity.CreatedBy = userId;
+                entry.Entity.CreatedAt = DateTimeOffset.UtcNow;
+            }
+
+            if (entry.State == EntityState.Modified)
+            {
+                entry.Entity.ModifiedBy = userId;
+                entry.Entity.ModifiedAt = DateTimeOffset.UtcNow;
             }
         }
 
-        return base.SaveChangesAsync(cancellationToken);
+        return await base.SaveChangesAsync(cancellationToken);
     }
-
 }

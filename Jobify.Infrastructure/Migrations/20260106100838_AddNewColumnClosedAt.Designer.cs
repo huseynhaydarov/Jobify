@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Jobify.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251225045908_addedIndexOnJobListingTable")]
-    partial class addedIndexOnJobListingTable
+    [Migration("20260106100838_AddNewColumnClosedAt")]
+    partial class AddNewColumnClosedAt
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -169,6 +169,9 @@ namespace Jobify.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTimeOffset?>("ClosedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uuid");
 
@@ -227,9 +230,6 @@ namespace Jobify.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid");
-
                     b.Property<int>("Views")
                         .HasColumnType("integer");
 
@@ -240,8 +240,6 @@ namespace Jobify.Infrastructure.Migrations
                     b.HasIndex("EmployerId");
 
                     b.HasIndex("IsDeleted");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("JobListings", (string)null);
                 });
@@ -418,8 +416,14 @@ namespace Jobify.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTimeOffset?>("ModifiedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uuid");
@@ -499,10 +503,6 @@ namespace Jobify.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Jobify.Domain.Entities.User", null)
-                        .WithMany("JobListings")
-                        .HasForeignKey("UserId");
-
                     b.Navigation("Company");
 
                     b.Navigation("Employer");
@@ -565,8 +565,6 @@ namespace Jobify.Infrastructure.Migrations
                     b.Navigation("Applications");
 
                     b.Navigation("Employer");
-
-                    b.Navigation("JobListings");
 
                     b.Navigation("UserProfile");
 

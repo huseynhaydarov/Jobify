@@ -11,5 +11,4 @@ public class GetAllJobListingsResponse
     public string? Currency { get; set; }
     public required JobStatus Status { get; set; } = JobStatus.Open;
     public required DateTimeOffset PostedAt { get; set; }
-    public int Views { get; set; }
 }

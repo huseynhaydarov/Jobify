@@ -1,6 +1,6 @@
 ﻿namespace Jobify.Domain.Entities;
 
-public class UserRole : BaseEntity
+public class UserRole : BaseAuditableEntity
 {
     public Guid UserId { get; set; }
     public User? User { get; set; }

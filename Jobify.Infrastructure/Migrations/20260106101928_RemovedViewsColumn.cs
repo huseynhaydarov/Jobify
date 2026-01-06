@@ -5,23 +5,25 @@
 namespace Jobify.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class addedIndexOnJobListingTable : Migration
+    public partial class RemovedViewsColumn : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateIndex(
-                name: "IX_JobListings_IsDeleted",
-                table: "JobListings",
-                column: "IsDeleted");
+            migrationBuilder.DropColumn(
+                name: "Views",
+                table: "JobListings");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropIndex(
-                name: "IX_JobListings_IsDeleted",
-                table: "JobListings");
+            migrationBuilder.AddColumn<int>(
+                name: "Views",
+                table: "JobListings",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0);
         }
     }
 }

@@ -1,28 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Jobify.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddNewColumnIsDeleted : Migration
+    public partial class AddNewColumnClosedAt : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "IsDeleted",
+            migrationBuilder.AddColumn<DateTimeOffset>(
+                name: "ClosedAt",
                 table: "JobListings",
-                type: "boolean",
-                nullable: false,
-                defaultValue: false);
+                type: "timestamp with time zone",
+                nullable: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "IsDeleted",
+                name: "ClosedAt",
                 table: "JobListings");
         }
     }

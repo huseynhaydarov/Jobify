@@ -9,13 +9,19 @@ public class AuthenticatedUser : IAuthenticatedUser
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public Guid  Id
+    public Guid? Id
     {
         get
         {
-            string? userIdString = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return Guid.TryParse(userIdString, out var userId) ? userId : Guid.Empty;
+            var userIdString =
+                _httpContextAccessor.HttpContext?.User
+                    .FindFirstValue(ClaimTypes.NameIdentifier);
+
+            return Guid.TryParse(userIdString, out var userId)
+                ? userId
+                : null;
         }
     }
+
     public List<string>? Roles => _httpContextAccessor.HttpContext?.User.FindAll(ClaimTypes.Role).Select(x => x.Value).ToList();
 }

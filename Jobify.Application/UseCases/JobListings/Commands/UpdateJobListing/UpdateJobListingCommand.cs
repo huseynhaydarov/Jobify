@@ -2,11 +2,11 @@
 
 public record UpdateJobListingCommand(
     Guid Id,
-    Guid CompanyId,
     string Name,
     string? Description,
     string? Requirements,
     string? Location,
     decimal? Salary,
+    JobStatus Status,
     string? Currency,
-    DateTimeOffset? ExpireDate) : IRequest<Unit>;
+    DateTimeOffset? ExpireDate) : IRequest<UpdateJobListingResponse>;

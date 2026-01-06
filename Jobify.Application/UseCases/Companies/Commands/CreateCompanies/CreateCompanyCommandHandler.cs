@@ -12,14 +12,16 @@ public class CreateCompanyCommandHandler : BaseSetting, IRequestHandler<CreateCo
 
     public async Task<CompanyDto> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
     {
+        var userId = _authenticatedUser.Id
+                     ?? throw new UnauthorizedException("User is not authenticated");
+
         var company = new Company
         {
-            Id = Guid.NewGuid(),
             Name = request.Name,
             Description = request.Description,
             WebsiteUrl =  request.WebsiteUrl,
             Industry =  request.Industry,
-            CreatedById = _authenticatedUser.Id,
+            CreatedById = userId,
         };
 
         await _dbContext.Companies.AddAsync(company, cancellationToken);
