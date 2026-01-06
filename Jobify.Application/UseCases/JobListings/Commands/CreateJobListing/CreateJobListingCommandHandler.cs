@@ -3,12 +3,15 @@
 public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<CreateJobListingCommand, JobListingDto>
 {
     private readonly IAuthenticatedUser _authenticatedUser;
+    private readonly ILogger<CreateJobListingCommandHandler> _logger;
 
     public CreateJobListingCommandHandler(
         IApplicationDbContext dbContext,
-        IAuthenticatedUser  authenticatedUser) : base(dbContext)
+        IAuthenticatedUser  authenticatedUser,
+        ILogger<CreateJobListingCommandHandler> logger) : base(dbContext)
     {
         _authenticatedUser = authenticatedUser;
+        _logger = logger;
     }
 
     public async Task<JobListingDto> Handle(CreateJobListingCommand request, CancellationToken cancellationToken)
@@ -19,13 +22,7 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
             .FirstOrDefaultAsync(cancellationToken);
 
         var employer = await _dbContext.Employers
-            .Select(e => new
-            {
-                e.Id,
-                e.CompanyId
-            })
-            .FirstOrDefaultAsync(cancellationToken) ??  throw new NotFoundException("Employer not found");
-
+            .FirstOrDefaultAsync(cancellationToken) ?? throw new NotFoundException("Employer not found");
 
         if (employer.CompanyId != companyId)
         {

@@ -7,7 +7,6 @@ public class User : BaseAuditableEntity
     public required bool IsActive { get; set; }
 
     public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
-    public ICollection<JobListing> JobListings { get; set; } = new List<JobListing>();
     public ICollection<JobApplication>  Applications { get; set; } = new List<JobApplication>();
 
     public Employer? Employer { get; set; }

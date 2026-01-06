@@ -1,4 +1,4 @@
-﻿namespace Jobify.Application.Common.Models;
+﻿namespace Jobify.Application.Common.Extensions;
 
 public static class IQueryableExtensions
 {
@@ -9,7 +9,6 @@ public static class IQueryableExtensions
         CancellationToken cancellationToken)
     {
         var totalCount = await queryable.CountAsync(cancellationToken);
-
 
         var items = await queryable
             .Skip((pageNumber - 1) * pageSize)

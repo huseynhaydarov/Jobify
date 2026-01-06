@@ -4,10 +4,6 @@ public class CreateJobListingCommandValidator : AbstractValidator<CreateJobListi
 {
     public CreateJobListingCommandValidator()
     {
-        RuleFor(x => x.CompanyId)
-            .NotEmpty()
-            .WithMessage("Company ID is required.");
-
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage("Job title is required.")
