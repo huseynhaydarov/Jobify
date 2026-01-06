@@ -3,14 +3,21 @@
 public class GetAllJobListingsQueryHandler : BaseSetting,
     IRequestHandler<GetAllJobListingsQuery, PaginatedResult<GetAllJobListingsResponse>>
 {
-    public GetAllJobListingsQueryHandler(IApplicationDbContext dbContext) : base(dbContext)
+    private readonly ILogger<GetAllJobListingsQueryHandler> _logger;
+
+    public GetAllJobListingsQueryHandler(
+        IApplicationDbContext dbContext,
+        ILogger<GetAllJobListingsQueryHandler> logger)
+        : base(dbContext)
     {
+        _logger = logger;
     }
 
     public async Task<PaginatedResult<GetAllJobListingsResponse>> Handle(GetAllJobListingsQuery request,
         CancellationToken cancellationToken)
     {
         var queryable = _dbContext.JobListings
+            .Where(c => !c.IsDeleted && c.Status == JobStatus.Open)
             .AsNoTracking()
             .Select(c => new GetAllJobListingsResponse
             {
@@ -20,10 +27,10 @@ public class GetAllJobListingsQueryHandler : BaseSetting,
                 Requirements = c.Requirements,
                 Location = c.Location,
                 Salary = c.Salary,
-                Currency =  c.Currency,
-                Status =  c.Status,
-                PostedAt =  c.PostedAt,
-                Views =  c.Views,
+                Currency = c.Currency,
+                Status = c.Status,
+                PostedAt = c.PostedAt,
+                Views = c.Views,
             });
 
         return await queryable.PaginatedListAsync(
@@ -32,3 +39,4 @@ public class GetAllJobListingsQueryHandler : BaseSetting,
             cancellationToken);
     }
 }
+

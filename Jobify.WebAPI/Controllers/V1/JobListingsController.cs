@@ -30,8 +30,8 @@ public class JobListingsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize(Roles = UserRoles.EmployerOrJobSeeker)]
-    public async Task<ActionResult<JobListingDetailResponse>> GetById(Guid id)
+    [Authorize(Roles = UserRoles.Employer)]
+    public async Task<ActionResult<JobListingDetailResponse>> GetDetail(Guid id)
     {
         var data = await _mediator.Send(new GetJobListingDetailQuery(id));
 

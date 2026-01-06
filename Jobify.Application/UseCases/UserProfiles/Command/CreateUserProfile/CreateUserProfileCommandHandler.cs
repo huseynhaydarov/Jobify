@@ -3,13 +3,16 @@
 public class CreateUserProfileCommandHandler : BaseSetting, IRequestHandler<CreateUserProfileCommand, UserProfileDto>
 {
     private readonly IAuthenticatedUser _authenticatedUser;
+    private readonly ILogger<CreateUserProfileCommandHandler> _logger;
 
     public CreateUserProfileCommandHandler(
         IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser)
+        IAuthenticatedUser authenticatedUser,
+        ILogger<CreateUserProfileCommandHandler> logger)
         : base(dbContext)
     {
         _authenticatedUser = authenticatedUser;
+        _logger = logger;
     }
 
     public async Task<UserProfileDto> Handle(CreateUserProfileCommand request, CancellationToken cancellationToken)
@@ -28,7 +31,6 @@ public class CreateUserProfileCommandHandler : BaseSetting, IRequestHandler<Crea
         };
 
         await _dbContext.UserProfiles.AddAsync(userProfile, cancellationToken);
-
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return new UserProfileDto(userProfile.Id);

@@ -11,8 +11,9 @@ public class GetAllUserProfilesQueryHandler : BaseSetting, IRequestHandler<GetAl
         CancellationToken cancellationToken)
     {
         var queryable = _dbContext.UserProfiles
+            .AsNoTracking()
             .OrderByDescending(x => x.CreatedAt)
-            .Select(p => new GetAllUserProfilesResponse()
+            .Select(p => new GetAllUserProfilesResponse
             {
                 Id = p.Id,
                 FullName = p.FirstName + " " + p.LastName,

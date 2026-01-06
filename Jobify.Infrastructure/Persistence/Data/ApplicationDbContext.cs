@@ -23,9 +23,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         builder.Entity<UserProfile>()
             .HasQueryFilter(x => !x.IsDeleted);
 
-        builder.Ignore<BaseAuditableEntity>();
-        builder.Ignore<BaseEntity>();
-
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }

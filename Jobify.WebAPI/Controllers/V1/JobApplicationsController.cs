@@ -1,4 +1,6 @@
-﻿namespace Jobify.API.Controllers.V1;
+﻿using Jobify.Application.UseCases.JobApplications.Commands.UpdateJobApplicationStatus;
+
+namespace Jobify.API.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -28,14 +30,13 @@ public class JobApplicationsController : ControllerBase
         return Ok(application);
     }
 
-    [HttpGet]
+    [HttpGet("jobListing")]
     [Authorize(Roles = UserRoles.Employer)]
     public async Task<ActionResult<GetAllJobApplicationsByJobListingResponse>> GetAll(
         [FromQuery] Guid? jobListingId,
         [FromQuery] PagingParameters paging)
     {
-        var result = await _mediator.Send(
-            new GetAllJobApplicationsByJobListingQuery(jobListingId, paging));
+        var result = await _mediator.Send(new GetAllJobApplicationsByJobListingQuery(jobListingId, paging));
 
         return Ok(result);
     }
@@ -46,5 +47,19 @@ public class JobApplicationsController : ControllerBase
         var result = await _mediator.Send(new GetJobApplicationDetailQuery(id));
 
         return Ok(result);
+    }
+
+    [HttpPatch("{Id}/status")]
+    [Authorize(Roles = UserRoles.Employer)]
+    public async Task<IActionResult> Update([FromRoute] Guid Id, [FromBody] ApplicationStatusUpdateCommand command)
+    {
+        if (Id != command.applicationId)
+        {
+            return BadRequest();
+        }
+
+        await _mediator.Send(command);
+
+        return Ok();
     }
 }

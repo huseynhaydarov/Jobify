@@ -35,6 +35,8 @@ public class JobListingConfiguration : IEntityTypeConfiguration<JobListing>
             .HasConversion<string>()
             .IsRequired();
 
+        builder.HasIndex(j => j.IsDeleted);
+
         builder.Property(j => j.PostedAt);
 
         builder.Property(j => j.ExpiresAt);
@@ -43,6 +45,8 @@ public class JobListingConfiguration : IEntityTypeConfiguration<JobListing>
 
         builder.Property(j => j.IsDeleted)
             .HasDefaultValue(false);
+
+        builder.HasIndex(j => j.IsDeleted);
 
         builder.HasOne(j => j.Company)
             .WithMany(c => c.JobListings)

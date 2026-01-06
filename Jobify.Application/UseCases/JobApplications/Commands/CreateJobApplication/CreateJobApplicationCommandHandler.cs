@@ -28,7 +28,7 @@ public class CreateJobApplicationCommandHandler : BaseSetting,
         }
 
         var jobListing = await _dbContext.JobListings
-            .Where(l => l.Id == request.JobListingId)
+            .Where(l => l.Id == request.JobListingId && !l.IsDeleted)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (jobListing == null)

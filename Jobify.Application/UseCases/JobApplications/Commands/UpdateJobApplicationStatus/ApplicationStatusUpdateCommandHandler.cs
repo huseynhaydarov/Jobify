@@ -14,24 +14,17 @@ public class ApplicationStatusUpdateCommandHandler
         _authenticatedUser = authenticatedUser;
     }
 
-    public async Task<Unit> Handle(
-        ApplicationStatusUpdateCommand request,
-        CancellationToken cancellationToken)
+    public async Task<Unit> Handle(ApplicationStatusUpdateCommand request, CancellationToken cancellationToken)
     {
-        if (_authenticatedUser.Roles != null && !_authenticatedUser.Roles.Contains(UserRoles.Employer))
-        {
-            throw new ForbiddenAccessException("Forbidden access to the application.");
-        }
-
         var application = await _dbContext.JobApplications
-            .Include(x => x.JobListing)
-            .FirstOrDefaultAsync(x => x.Id == request.applicationId, cancellationToken);
+            .Where(x => x.Id == request.applicationId
+                        && x.ApplicationStatus != (ApplicationStatus)request.status)
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (application is null)
         {
             throw new NotFoundException("Job application not found.");
         }
-
 
         var newStatus = (ApplicationStatus)request.status;
 
