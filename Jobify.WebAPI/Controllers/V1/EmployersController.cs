@@ -1,6 +1,4 @@
-﻿using Jobify.Application.UseCases.Employers.Queries.GetJobListingsByEmployer;
-
-namespace Jobify.API.Controllers.V1;
+﻿namespace Jobify.WebAPI.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]

@@ -1,4 +1,4 @@
-﻿namespace Jobify.API.Middlewares;
+﻿namespace Jobify.WebAPI.Middlewares;
 
 public class CustomExceptionHandlerMiddleware(
     RequestDelegate next,
