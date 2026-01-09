@@ -15,7 +15,10 @@ WebApplication app = builder.Build();
 
 ConfigureMiddleware(app);
 
-await ApplyMigrationsAsync(app);
+if (app.Environment.IsDevelopment())
+{
+    await ApplyMigrationsAsync(app);
+}
 
 void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 {
