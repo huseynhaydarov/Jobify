@@ -1,4 +1,4 @@
-﻿namespace Jobify.API.Services;
+﻿namespace Jobify.WebAPI.Services;
 
 public class AuthenticatedUser : IAuthenticatedUser
 {
