@@ -27,7 +27,7 @@ public sealed class CustomWebApplicationFactory<TEntryPoint>
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var hasher = scope.ServiceProvider.GetRequiredService<IPasswordHasherService>();
 
-        // await dbContext.Database.MigrateAsync();
+        await dbContext.Database.MigrateAsync();
 
         await DatabaseSeeder.SeedTestUsersAsync(dbContext,  hasher);
     }
