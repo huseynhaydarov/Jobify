@@ -1,4 +1,6 @@
 using Jobify.Application.UseCases.JobListings.Dtos;
+using Jobify.WebAPI;
+using Jobify.WebAPI.Middlewares;
 using Microsoft.AspNetCore.OData;
 using Microsoft.OData.ModelBuilder;
 

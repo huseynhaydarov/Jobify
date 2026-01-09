@@ -1,4 +1,6 @@
-﻿namespace Jobify.API;
+﻿using Jobify.WebAPI.Filters;
+
+namespace Jobify.WebAPI;
 
 public static class DependencyInjection
 {

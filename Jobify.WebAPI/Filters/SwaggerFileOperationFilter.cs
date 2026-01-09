@@ -1,4 +1,4 @@
-﻿namespace Jobify.API.Filters;
+﻿namespace Jobify.WebAPI.Filters;
 
 public class SwaggerFileOperationFilter : IOperationFilter
 {
