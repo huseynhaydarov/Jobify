@@ -27,7 +27,7 @@
       <ProjectReference Include="..\..\src\Jobify.Application\Jobify.Application.csproj" />
       <ProjectReference Include="..\..\src\Jobify.Domain\Jobify.Domain.csproj" />
       <ProjectReference Include="..\..\src\Jobify.WebAPI\Jobify.WebAPI.csproj" />
-      <ProjectReference Include="..\Jobify.WebAPI\Jobify.WebAPI.csproj" />
+      <ProjectReference Include="..\..\src\Jobify.Infrastructure\Jobify.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
