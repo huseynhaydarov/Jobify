@@ -26,13 +26,13 @@ public sealed class CustomWebApplicationFactory<TEntryPoint>
         using var scope = Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var hasher = scope.ServiceProvider.GetRequiredService<IPasswordHasherService>();
-        /*await dbContext.Database.MigrateAsync();*/
+        await dbContext.Database.MigrateAsync();
         await DatabaseSeeder.SeedTestUsersAsync(dbContext,  hasher);
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.UseEnvironment("Development");
+        /*builder.UseEnvironment("Development");*/
         //builder.UseEnvironment("Test");
 
         builder.UseSetting(
