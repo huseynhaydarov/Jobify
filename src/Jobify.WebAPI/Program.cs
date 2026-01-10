@@ -14,11 +14,7 @@ ConfigureServices(builder.Services, builder.Configuration);
 WebApplication app = builder.Build();
 
 ConfigureMiddleware(app);
-
-if (app.Environment.IsDevelopment())
-{
-    await ApplyMigrationsAsync(app);
-}
+await ApplyMigrationsAsync(app);
 
 void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 {
@@ -94,3 +90,7 @@ async Task ApplyMigrationsAsync(WebApplication app)
 }
 
 app.Run();
+
+public partial class Program
+{
+}

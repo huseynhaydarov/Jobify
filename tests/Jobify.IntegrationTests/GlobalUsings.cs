@@ -6,8 +6,6 @@ global using Jobify.Domain.Constants;
 global using Jobify.Domain.Entities;
 global using Jobify.Infrastructure.Persistence.Data;
 global using Jobify.Infrastructure.Services;
-global using Jobify.IntegrationTests.Common;
-global using Jobify.IntegrationTests.Infrastructure;
 global using Jobify.WebAPI;
 global using Microsoft.AspNetCore.Authentication;
 global using Microsoft.AspNetCore.Hosting;
