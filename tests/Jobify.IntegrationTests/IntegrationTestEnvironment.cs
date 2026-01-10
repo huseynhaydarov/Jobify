@@ -18,12 +18,21 @@ using Testcontainers.Redis;
 public class IntegrationTestEnvironment
 {
     private readonly PostgreSqlContainer _postgresSqlContainer = new PostgreSqlBuilder("postgres:15-alpine")
+#if !DEBUG
+            .WithDockerEndpoint("tcp://docker:2375")
+#endif
         .Build();
 
     private readonly RedisContainer _redisContainer = new RedisBuilder("redis:7.0")
+#if !DEBUG
+            .WithDockerEndpoint("tcp://docker:2375")
+#endif
         .Build();
 
     private readonly RabbitMqContainer _rabbitMqContainer = new RabbitMqBuilder("rabbitmq:3.11")
+#if !DEBUG
+            .WithDockerEndpoint("tcp://docker:2375")
+#endif
         .Build();
 
     public static string PostgresConnectionString { get; private set; } = string.Empty;
