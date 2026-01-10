@@ -14,9 +14,11 @@
         <PackageReference Include="NUnit" Version="4.2.2"/>
         <PackageReference Include="NUnit.Analyzers" Version="4.4.0"/>
         <PackageReference Include="NUnit3TestAdapter" Version="4.6.0"/>
+        <PackageReference Include="Respawn" Version="7.0.0" />
         <PackageReference Include="Shouldly" Version="4.3.0" />
         <PackageReference Include="Testcontainers.PostgreSql" Version="4.10.0" />
         <PackageReference Include="Testcontainers.Redis" Version="4.10.0" />
+        <PackageReference Include="Testcontainers.RabbitMq" Version="4.10.0" />
     </ItemGroup>
 
     <ItemGroup>
