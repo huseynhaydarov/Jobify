@@ -1,4 +1,7 @@
 ﻿using System.Net;
+using System.Net.Http.Json;
+using Jobify.Application.UseCases.Companies.Commands.CreateCompanies;
+using Shouldly;
 
 namespace Jobify.IntegrationTests.Features;
 
