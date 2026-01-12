@@ -13,7 +13,7 @@ public class PositionUpdateCommandHandler : BaseSetting, IRequestHandler<Positio
                                 .FirstOrDefaultAsync(cancellationToken)
                             ?? throw new NotFoundException("Employer not found");
 
-        if (!Enum.TryParse<EmployerPosition>(request.position.ToString(), out EmployerPosition enumValue))
+        if (!Enum.TryParse(request.position.ToString(), out EmployerPosition enumValue))
         {
             throw new ArgumentException("Invalid employer position");
         }

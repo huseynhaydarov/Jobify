@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace Jobify.Infrastructure.Migrations
 {
     /// <inheritdoc />
@@ -237,16 +235,6 @@ namespace Jobify.Infrastructure.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.InsertData(
-                table: "Roles",
-                columns: new[] { "Id", "CreatedAt", "CreatedBy", "Description", "IsActive", "ModifiedAt", "ModifiedBy", "Name" },
-                values: new object[,]
-                {
-                    { new Guid("2a9abd5b-36c2-4dad-abac-953b6b4b03be"), new DateTimeOffset(new DateTime(2025, 10, 28, 12, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 5, 0, 0, 0)), null, "JobSeeker of the System", true, null, null, "JobSeeker" },
-                    { new Guid("bb176f73-41a2-4b9d-b85c-3805e8d8ee12"), new DateTimeOffset(new DateTime(2025, 10, 28, 12, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 5, 0, 0, 0)), null, "Employer of the system", true, null, null, "Employer" },
-                    { new Guid("cdb9e288-36c7-4ae0-b517-476d9cd0224b"), new DateTimeOffset(new DateTime(2025, 10, 28, 12, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 5, 0, 0, 0)), null, "Administrator of the system", true, null, null, "Administrator" }
                 });
 
             migrationBuilder.CreateIndex(
