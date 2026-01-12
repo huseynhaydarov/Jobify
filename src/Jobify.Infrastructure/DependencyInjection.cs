@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Options;
+﻿using Jobify.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using StackExchange.Redis;
 
 namespace Jobify.Infrastructure;
@@ -22,8 +22,7 @@ public static class DependencyInjection
             options.Configuration = configuration.GetConnectionString("Redis");
             options.ConfigurationOptions = new ConfigurationOptions
             {
-                AbortOnConnectFail = true,
-                EndPoints = { options.Configuration }
+                AbortOnConnectFail = true, EndPoints = { options.Configuration }
             };
         });
 
@@ -31,7 +30,6 @@ public static class DependencyInjection
 
         services.AddSingleton<IPasswordHasherService, PasswordHasherService>();
         services.AddScoped<ITokenService, TokenService>();
-
 
         return services;
     }

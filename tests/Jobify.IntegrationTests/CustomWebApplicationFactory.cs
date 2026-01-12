@@ -11,7 +11,7 @@ public sealed class CustomWebApplicationFactory
         builder.UseEnvironment("Testing");
         builder.ConfigureHostConfiguration(c =>
         {
-            var settings = new Dictionary<string, string?>
+            Dictionary<string, string?> settings = new()
             {
                 // Connection strings
                 ["ConnectionStrings:Postgres"] = IntegrationTestEnvironment.PostgresConnectionString,
@@ -19,11 +19,11 @@ public sealed class CustomWebApplicationFactory
                 ["ConnectionStrings:RabbitMq"] = IntegrationTestEnvironment.RabbitMqConnectionString,
 
                 // JWT settings
-                ["JwtSettings:SecretKey"] = "YourDevelopmentSecretKeyHere",
-                ["JwtSettings:Issuer"] = "JobifyDevIssuer",
-                ["JwtSettings:Audience"] = "JobifyDevAudience",
-                ["JwtSettings:ExpirationInMinutes"] = "60",
-                ["JwtSettings:RefreshTokenExpirationInDays"] = "7"
+                ["JwtSettings:SecretKey"] = JwtTokenTestSettings.SecretKey,
+                ["JwtSettings:Issuer"] = JwtTokenTestSettings.Issuer,
+                ["JwtSettings:Audience"] = JwtTokenTestSettings.Audience,
+                ["JwtSettings:ExpirationMinutes"] = JwtTokenTestSettings.ExpirationMinutes.ToString(),
+                ["JwtSettings:RefreshTokenExpirationDays"] = JwtTokenTestSettings.RefreshTokenExpirationDays.ToString()
             };
             c.AddInMemoryCollection(settings);
         });

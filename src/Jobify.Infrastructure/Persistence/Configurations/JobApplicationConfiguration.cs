@@ -1,4 +1,4 @@
-﻿namespace Jobify.Infrastructure.Persistence.Data.Configurations;
+﻿namespace Jobify.Infrastructure.Persistence.Configurations;
 
 public class JobApplicationConfiguration : IEntityTypeConfiguration<JobApplication>
 {

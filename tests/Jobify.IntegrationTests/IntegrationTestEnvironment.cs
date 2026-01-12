@@ -1,14 +1,9 @@
-// Licensed to the.NET Foundation under one or more agreements.
-// The.NET Foundation licenses this file to you under the MIT license.
-
 using System.Diagnostics.CodeAnalysis;
-
-namespace Jobify.IntegrationTests;
-
-using NUnit.Framework;
 using Testcontainers.PostgreSql;
 using Testcontainers.RabbitMq;
 using Testcontainers.Redis;
+
+namespace Jobify.IntegrationTests;
 
 [SuppressMessage(
     "NUnit",
@@ -23,13 +18,13 @@ public class IntegrationTestEnvironment
 #endif
         .Build();
 
-    private readonly RedisContainer _redisContainer = new RedisBuilder("redis:7.0")
+    private readonly RabbitMqContainer _rabbitMqContainer = new RabbitMqBuilder("rabbitmq:3.11")
 #if !DEBUG
             .WithDockerEndpoint("tcp://docker:2375")
 #endif
         .Build();
 
-    private readonly RabbitMqContainer _rabbitMqContainer = new RabbitMqBuilder("rabbitmq:3.11")
+    private readonly RedisContainer _redisContainer = new RedisBuilder("redis:7.0")
 #if !DEBUG
             .WithDockerEndpoint("tcp://docker:2375")
 #endif
@@ -50,16 +45,15 @@ public class IntegrationTestEnvironment
 
         PostgresConnectionString = _postgresSqlContainer.GetConnectionString();
         RedisConnectionString = _redisContainer.GetConnectionString();
-        RabbitMqConnectionString = $"{_rabbitMqContainer.Hostname}:{_rabbitMqContainer.GetMappedPublicPort(5672)}";
+        RabbitMqConnectionString = $"{_rabbitMqContainer.Hostname}:" +
+                                   $"{_rabbitMqContainer.GetMappedPublicPort(5672)}";
     }
 
     [OneTimeTearDown]
-    public async Task GlobalTeardown()
-    {
+    public async Task GlobalTeardown() =>
         await Task.WhenAll(
             _postgresSqlContainer.DisposeAsync().AsTask(),
             _redisContainer.DisposeAsync().AsTask(),
             _rabbitMqContainer.DisposeAsync().AsTask()
         );
-    }
 }
