@@ -1,0 +1,36 @@
+﻿using Jobify.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using StackExchange.Redis;
+
+namespace Jobify.Infrastructure;
+
+public static class DependencyInjection
+{
+    public static IServiceCollection AddInfrastructureServices(
+        this IServiceCollection services, IConfiguration configuration)
+    {
+        string? connectionString = configuration.GetConnectionString("Postgres");
+
+        services.AddDbContext<ApplicationDbContext>((db, options) =>
+        {
+            options.UseNpgsql(connectionString);
+            options.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
+        });
+
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration.GetConnectionString("Redis");
+            options.ConfigurationOptions = new ConfigurationOptions
+            {
+                AbortOnConnectFail = true, EndPoints = { options.Configuration }
+            };
+        });
+
+        services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+
+        services.AddSingleton<IPasswordHasherService, PasswordHasherService>();
+        services.AddScoped<ITokenService, TokenService>();
+
+        return services;
+    }
+}
