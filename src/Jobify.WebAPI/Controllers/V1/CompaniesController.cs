@@ -29,7 +29,7 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize(Roles = UserRoles.Administrator)]
+    [Authorize(Policy = Policies.CanViewAll)]
     public async Task<ActionResult<GetCompanyDetailResponse>> GetDetail([FromRoute] Guid id)
     {
         GetCompanyDetailResponse data = await _mediator.Send(new GetCompanyDetailQuery(id));
@@ -50,7 +50,6 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles = UserRoles.Administrator)]
     [Authorize(Policy = Policies.CanPurge)]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {

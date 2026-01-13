@@ -10,10 +10,17 @@ public class GetAllEmployersQueryHandler : BaseSetting,
     public async Task<PaginatedResult<GetAllEmployersResponse>> Handle(GetAllEmployersQuery request,
         CancellationToken cancellationToken)
     {
-        IQueryable<GetAllEmployersResponse> queryable = _dbContext.Users
-            .AsNoTracking()
-            .OrderByDescending(c => c.CreatedAt)
-            .Select(e => new GetAllEmployersResponse { Id = e.Id, Email = e.Email });
+        IQueryable<GetAllEmployersResponse> queryable =
+            _dbContext.Users
+                .AsNoTracking()
+                .Where(u =>
+                    u.UserRoles.Any(ur => ur.Role != null && ur.Role.Name == UserRoles.Employer))
+                .OrderByDescending(u => u.CreatedAt)
+                .Select(u => new GetAllEmployersResponse
+                {
+                    Id = u.Id,
+                    Email = u.Email
+                });
 
         return await queryable.PaginatedListAsync(
             request.PagingParameters.PageNumber,

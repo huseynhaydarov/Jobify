@@ -8,7 +8,7 @@ public class AuthsController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public AuthsController(IMediator mediator, ITokenService tokenService) => _mediator = mediator;
+    public AuthsController(IMediator mediator) => _mediator = mediator;
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginCommand command)

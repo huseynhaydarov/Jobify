@@ -22,7 +22,6 @@ public class CreateUserProfileCommandHandler : BaseSetting, IRequestHandler<Crea
 
         UserProfile userProfile = new()
         {
-            Id = Guid.NewGuid(),
             UserId = userId,
             FirstName = request.FirstName,
             LastName = request.LastName,

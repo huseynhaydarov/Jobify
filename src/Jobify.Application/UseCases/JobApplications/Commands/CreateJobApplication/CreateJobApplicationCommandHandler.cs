@@ -24,7 +24,7 @@ public class CreateJobApplicationCommandHandler : BaseSetting,
 
         bool submittedApplication = await _dbContext.JobApplications
             .AnyAsync(a => a.JobListingId == request.JobListingId &&
-                           a.ApplicantId == _authenticatedUser.Id, cancellationToken);
+                           a.ApplicantId == userId, cancellationToken);
 
         if (submittedApplication)
         {
@@ -47,7 +47,6 @@ public class CreateJobApplicationCommandHandler : BaseSetting,
 
         JobApplication application = new()
         {
-            Id = Guid.NewGuid(),
             JobListingId = request.JobListingId,
             ApplicantId = userId,
             AppliedAt = DateTimeOffset.UtcNow,
