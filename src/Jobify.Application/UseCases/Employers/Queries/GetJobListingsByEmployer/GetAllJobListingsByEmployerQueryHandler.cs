@@ -23,7 +23,7 @@ public class GetAllJobListingsByEmployerQueryHandler : BaseSetting,
 
         IQueryable<GetAllJobListingsByEmployerResponse> queryable = _dbContext.JobListings
             .IgnoreQueryFilters()
-            .Where(c => c.CompanyId == employerCompanyId)
+            .Where(c => c.CompanyId == employerCompanyId && c.CreatedBy == _authenticatedUser.Id)
             .AsNoTracking()
             .Select(c => new GetAllJobListingsByEmployerResponse
             {

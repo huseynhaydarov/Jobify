@@ -20,9 +20,10 @@ public class JobApplicationsController : ControllerBase
     }
 
     [HttpPost("cancel")]
+    [Authorize(Roles = UserRoles.JobSeeker)]
     public async Task<IActionResult> Cancel([FromBody] CancelJobApplicationCommand command)
     {
-        Unit application = await _mediator.Send(command);
+        var application = await _mediator.Send(command);
 
         return Ok(application);
     }
@@ -40,6 +41,7 @@ public class JobApplicationsController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Policy = Policies.CanViewAll)]
     public async Task<ActionResult<GetJobApplicationDetailResponse>> GetById([FromRoute] Guid id)
     {
         GetJobApplicationDetailResponse result = await _mediator.Send(new GetJobApplicationDetailQuery(id));

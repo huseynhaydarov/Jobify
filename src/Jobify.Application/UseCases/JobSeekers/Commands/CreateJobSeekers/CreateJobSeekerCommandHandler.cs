@@ -32,7 +32,7 @@ public class CreateJobSeekerCommandHandler : BaseSetting, IRequestHandler<Create
 
         User user = new()
         {
-            Id = Guid.NewGuid(), Email = request.Email, PasswordHash = request.Password, IsActive = true
+            Email = request.Email, PasswordHash = request.Password, IsActive = true
         };
 
         user.PasswordHash = await _hasherService.HashPasswordAsync(request.Password);

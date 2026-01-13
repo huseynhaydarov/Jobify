@@ -29,7 +29,7 @@ public class JobListingsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize(Roles = UserRoles.EmployerOrJobSeeker)]
+    [Authorize(Policy = Policies.CanViewAll)]
     public async Task<ActionResult<JobListingDetailResponse>> GetDetail(Guid id)
     {
         JobListingDetailResponse data = await _mediator.Send(new GetJobListingDetailQuery(id));

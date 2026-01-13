@@ -22,7 +22,7 @@ public class GetJobListingByIdQueryHandler : BaseSetting,
         string cacheKey = $"joblisting:{request.Id}";
         _logger.LogInformation("fetching data for key: {CacheKey} from cache.", cacheKey);
 
-        JobListingDetailResponse? jobListing = await _cache.GetOrSetAsync(cacheKey,
+         JobListingDetailResponse? jobListing = await _cache.GetOrSetAsync(cacheKey,
             async () =>
             {
                 _logger.LogInformation("cache miss. fetching data for key: {CacheKey} from database.", cacheKey);

@@ -3,12 +3,17 @@
 public class CreateEmployerCommandCommandHandler : BaseSetting, IRequestHandler<CreateEmployerCommand, EmployerDto>
 {
     private readonly IPasswordHasherService _hasherService;
+    private readonly IAuthenticatedUser _authenticatedUser;
 
     public CreateEmployerCommandCommandHandler(
         IApplicationDbContext dbContext,
         IPasswordHasherService hasherService,
-        IMediator mediator) : base(dbContext) =>
+        IMediator mediator,
+        IAuthenticatedUser authenticatedUser) : base(dbContext)
+    {
         _hasherService = hasherService;
+        _authenticatedUser = authenticatedUser;
+    }
 
     public async Task<EmployerDto> Handle(CreateEmployerCommand request, CancellationToken cancellationToken)
     {
@@ -33,7 +38,9 @@ public class CreateEmployerCommandCommandHandler : BaseSetting, IRequestHandler<
 
         User user = new()
         {
-            Id = Guid.NewGuid(), Email = request.Email, PasswordHash = request.Password, IsActive = true
+            Email = request.Email,
+            PasswordHash = request.Password,
+            IsActive = true
         };
 
         user.PasswordHash = await _hasherService.HashPasswordAsync(request.Password);
