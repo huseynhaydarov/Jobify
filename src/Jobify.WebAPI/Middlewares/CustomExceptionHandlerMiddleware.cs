@@ -23,11 +23,6 @@ public class CustomExceptionHandlerMiddleware(
 
         (string detail, string title, int statusCode) = exception switch
         {
-            ValidationException validationEx => (
-                "One or more validation errors occurred.",
-                "Validation Error",
-                StatusCodes.Status400BadRequest
-            ),
             BadRequestException => (
                 exception.Message,
                 "Bad Request",
@@ -71,11 +66,6 @@ public class CustomExceptionHandlerMiddleware(
         };
 
         problemDetails.Extensions["traceId"] = httpContext.TraceIdentifier;
-
-        if (exception is ValidationException validationException)
-        {
-            problemDetails.Extensions["ValidationErrors"] = validationException.Errors;
-        }
 
         string response = env.IsDevelopment()
             ? JsonSerializer.Serialize(problemDetails, new JsonSerializerOptions { WriteIndented = true })

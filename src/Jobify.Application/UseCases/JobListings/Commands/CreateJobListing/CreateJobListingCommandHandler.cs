@@ -1,17 +1,20 @@
-﻿namespace Jobify.Application.UseCases.JobListings.Commands.CreateJobListing;
+﻿using Jobify.Application.UseCases.JobListings.Events;
+using MassTransit;
+
+namespace Jobify.Application.UseCases.JobListings.Commands.CreateJobListing;
 
 public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<CreateJobListingCommand, JobListingDto>
 {
     private readonly IAuthenticatedUserService _authenticatedUserService;
-    private readonly ILogger<CreateJobListingCommandHandler> _logger;
+    private readonly IPublishEndpoint _publishEndpoint;
 
     public CreateJobListingCommandHandler(
         IApplicationDbContext dbContext,
         IAuthenticatedUserService authenticatedUserService,
-        ILogger<CreateJobListingCommandHandler> logger) : base(dbContext)
+        ILogger<CreateJobListingCommandHandler> logger, IPublishEndpoint publishEndpoint) : base(dbContext)
     {
         _authenticatedUserService = authenticatedUserService;
-        _logger = logger;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task<JobListingDto> Handle(CreateJobListingCommand request, CancellationToken cancellationToken)
@@ -31,7 +34,7 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
             throw new DomainException("Employer is not eligible to post!");
         }
 
-        JobListing jobListing = new()
+        var jobListing = new JobListing
         {
             Name = request.Name,
             Description = request.Description,
@@ -48,6 +51,14 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
 
         await _dbContext.JobListings.AddAsync(jobListing, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
+
+        var jobListingAddedEvent = new JobListingChangedEvent()
+        {
+            Id = jobListing.Id,
+            Action = ActionType.Added
+        };
+
+        await _publishEndpoint.Publish(jobListingAddedEvent, cancellationToken);
 
         return new JobListingDto(
             jobListing.Id,
