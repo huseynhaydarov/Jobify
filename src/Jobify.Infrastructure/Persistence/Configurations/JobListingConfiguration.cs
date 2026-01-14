@@ -1,0 +1,67 @@
+﻿namespace Jobify.Infrastructure.Persistence.Configurations;
+
+public class JobListingConfiguration : IEntityTypeConfiguration<JobListing>
+{
+    public void Configure(EntityTypeBuilder<JobListing> builder)
+    {
+        builder.ToTable("JobListings");
+
+        builder.Property(j => j.CompanyId)
+            .IsRequired();
+
+        builder.Property(j => j.EmployerId)
+            .IsRequired();
+
+        builder.Property(j => j.Name)
+            .HasMaxLength(100)
+            .IsRequired();
+
+        builder.Property(j => j.Description)
+            .HasMaxLength(500);
+
+        builder.Property(j => j.Requirements)
+            .HasMaxLength(500);
+
+        builder.Property(j => j.Location)
+            .HasMaxLength(100);
+
+        builder.Property(j => j.Salary)
+            .HasPrecision(14, 2);
+
+        builder.Property(j => j.Currency)
+            .HasMaxLength(3);
+
+        builder.Property(j => j.Status)
+            .HasConversion<string>()
+            .IsRequired();
+
+        builder.HasIndex(j => j.IsDeleted);
+
+        builder.Property(j => j.PostedAt);
+
+        builder.Property(j => j.ExpiresAt);
+
+        builder.Property(j => j.ClosedAt);
+
+        builder.Property(j => j.IsDeleted)
+            .HasDefaultValue(false);
+
+        builder.HasIndex(j => j.IsDeleted);
+
+        builder.HasOne(j => j.Company)
+            .WithMany(c => c.JobListings)
+            .HasForeignKey(j => j.CompanyId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(j => j.Employer)
+            .WithMany(e => e.JobListings)
+            .HasForeignKey(j => j.EmployerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+
+        builder.HasMany(m => m.Applications)
+            .WithOne(j => j.JobListing)
+            .HasForeignKey(j => j.JobListingId)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
+}
