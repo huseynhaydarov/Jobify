@@ -2,17 +2,17 @@
 
 public class UpdateUserProfileCommandHandler : BaseSetting, IRequestHandler<UpdateUserProfileCommand, Unit>
 {
-    private readonly IAuthenticatedUser _authenticatedUser;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
     private readonly IDistributedCache _cache;
     private readonly ILogger<UpdateUserProfileCommandHandler> _logger;
 
     public UpdateUserProfileCommandHandler(
         IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser,
+        IAuthenticatedUserService authenticatedUserService,
         IDistributedCache cache, ILogger<UpdateUserProfileCommandHandler> logger)
         : base(dbContext)
     {
-        _authenticatedUser = authenticatedUser;
+        _authenticatedUserService = authenticatedUserService;
         _cache = cache;
         _logger = logger;
     }
@@ -20,7 +20,7 @@ public class UpdateUserProfileCommandHandler : BaseSetting, IRequestHandler<Upda
     public async Task<Unit> Handle(UpdateUserProfileCommand request, CancellationToken cancellationToken)
     {
         UserProfile profile = await _dbContext.UserProfiles
-                                  .Where(c => c.Id == request.Id && c.UserId == _authenticatedUser.Id)
+                                  .Where(c => c.Id == request.Id && c.UserId == _authenticatedUserService.Id)
                                   .FirstOrDefaultAsync(cancellationToken)
                               ?? throw new NotFoundException("Profile not found");
 

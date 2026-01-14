@@ -3,13 +3,13 @@
 public class GetAllJobListingsByEmployerQueryHandler : BaseSetting,
     IRequestHandler<GetAllJobListingsByEmployerQuery, PaginatedResult<GetAllJobListingsByEmployerResponse>>
 {
-    private readonly IAuthenticatedUser _authenticatedUser;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
 
     public GetAllJobListingsByEmployerQueryHandler(
         IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser)
+        IAuthenticatedUserService authenticatedUserService)
         : base(dbContext) =>
-        _authenticatedUser = authenticatedUser;
+        _authenticatedUserService = authenticatedUserService;
 
     public async Task<PaginatedResult<GetAllJobListingsByEmployerResponse>> Handle(
         GetAllJobListingsByEmployerQuery request,
@@ -17,13 +17,13 @@ public class GetAllJobListingsByEmployerQueryHandler : BaseSetting,
     {
         Guid employerCompanyId = await _dbContext.Employers
             .AsNoTracking()
-            .Where(c => c.UserId == _authenticatedUser.Id)
+            .Where(c => c.UserId == _authenticatedUserService.Id)
             .Select(e => e.CompanyId)
             .FirstOrDefaultAsync(cancellationToken);
 
         IQueryable<GetAllJobListingsByEmployerResponse> queryable = _dbContext.JobListings
             .IgnoreQueryFilters()
-            .Where(c => c.CompanyId == employerCompanyId && c.CreatedBy == _authenticatedUser.Id)
+            .Where(c => c.CompanyId == employerCompanyId && c.CreatedBy == _authenticatedUserService.Id)
             .AsNoTracking()
             .Select(c => new GetAllJobListingsByEmployerResponse
             {

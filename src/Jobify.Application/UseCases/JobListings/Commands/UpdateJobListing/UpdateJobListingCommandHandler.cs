@@ -5,17 +5,17 @@ public class UpdateJobListingCommandHandler : BaseSetting,
 {
     private readonly IDistributedCache _cache;
     private readonly ILogger<UpdateJobListingCommandHandler> _logger;
-    private readonly IAuthenticatedUser _authenticatedUser;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
 
     public UpdateJobListingCommandHandler(
         IApplicationDbContext dbContext,
         ILogger<UpdateJobListingCommandHandler> logger,
         IDistributedCache cache,
-        IAuthenticatedUser authenticatedUser) : base(dbContext)
+        IAuthenticatedUserService authenticatedUserService) : base(dbContext)
     {
         _logger = logger;
         _cache = cache;
-        _authenticatedUser = authenticatedUser;
+        _authenticatedUserService = authenticatedUserService;
     }
 
     public async Task<UpdateJobListingResponse> Handle(UpdateJobListingCommand request,
@@ -23,7 +23,7 @@ public class UpdateJobListingCommandHandler : BaseSetting,
     {
         JobListing jobListing = await _dbContext.JobListings
                                     .Where(c => c.Id == request.Id &&
-                                                c.CreatedBy == _authenticatedUser.Id)
+                                                c.CreatedBy == _authenticatedUserService.Id)
                                     .FirstOrDefaultAsync(cancellationToken)
                                 ?? throw new NotFoundException("JobListing not found");
 

@@ -2,22 +2,22 @@
 
 public class CreateUserProfileCommandHandler : BaseSetting, IRequestHandler<CreateUserProfileCommand, UserProfileDto>
 {
-    private readonly IAuthenticatedUser _authenticatedUser;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
     private readonly ILogger<CreateUserProfileCommandHandler> _logger;
 
     public CreateUserProfileCommandHandler(
         IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser,
+        IAuthenticatedUserService authenticatedUserService,
         ILogger<CreateUserProfileCommandHandler> logger)
         : base(dbContext)
     {
-        _authenticatedUser = authenticatedUser;
+        _authenticatedUserService = authenticatedUserService;
         _logger = logger;
     }
 
     public async Task<UserProfileDto> Handle(CreateUserProfileCommand request, CancellationToken cancellationToken)
     {
-        Guid userId = _authenticatedUser.Id
+        Guid userId = _authenticatedUserService.Id
                       ?? throw new UnauthorizedException("User is not authenticated");
 
         UserProfile userProfile = new()

@@ -2,22 +2,22 @@
 
 public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<CreateJobListingCommand, JobListingDto>
 {
-    private readonly IAuthenticatedUser _authenticatedUser;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
     private readonly ILogger<CreateJobListingCommandHandler> _logger;
 
     public CreateJobListingCommandHandler(
         IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser,
+        IAuthenticatedUserService authenticatedUserService,
         ILogger<CreateJobListingCommandHandler> logger) : base(dbContext)
     {
-        _authenticatedUser = authenticatedUser;
+        _authenticatedUserService = authenticatedUserService;
         _logger = logger;
     }
 
     public async Task<JobListingDto> Handle(CreateJobListingCommand request, CancellationToken cancellationToken)
     {
         Guid companyId = await _dbContext.Companies
-            .Where(c => c.Employers.Any(e => e.UserId == _authenticatedUser.Id))
+            .Where(c => c.Employers.Any(e => e.UserId == _authenticatedUserService.Id))
             .Select(c => c.Id)
             .FirstOrDefaultAsync(cancellationToken);
 

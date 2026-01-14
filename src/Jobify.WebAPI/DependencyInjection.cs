@@ -86,7 +86,7 @@ public static class DependencyInjection
             c.OperationFilter<SwaggerFileOperationFilter>();
         });
 
-        services.AddScoped<IAuthenticatedUser, AuthenticatedUser>();
+        services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
 
         return services;
     }

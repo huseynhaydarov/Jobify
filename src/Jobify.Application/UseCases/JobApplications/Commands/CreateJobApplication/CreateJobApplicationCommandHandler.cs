@@ -3,23 +3,23 @@
 public class CreateJobApplicationCommandHandler : BaseSetting,
     IRequestHandler<CreateJobApplicationCommand, JobApplicationDto>
 {
-    private readonly IAuthenticatedUser _authenticatedUser;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
     private readonly ILogger<CreateJobApplicationCommandHandler> _logger;
 
     public CreateJobApplicationCommandHandler(
         IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser,
+        IAuthenticatedUserService authenticatedUserService,
         ILogger<CreateJobApplicationCommandHandler> logger)
         : base(dbContext)
     {
-        _authenticatedUser = authenticatedUser;
+        _authenticatedUserService = authenticatedUserService;
         _logger = logger;
     }
 
     public async Task<JobApplicationDto> Handle(CreateJobApplicationCommand request,
         CancellationToken cancellationToken)
     {
-        Guid userId = _authenticatedUser.Id
+        Guid userId = _authenticatedUserService.Id
                       ?? throw new UnauthorizedException("User is not authenticated");
 
         bool submittedApplication = await _dbContext.JobApplications

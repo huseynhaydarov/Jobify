@@ -1,10 +1,10 @@
 ﻿namespace Jobify.WebAPI.Services;
 
-public class AuthenticatedUser : IAuthenticatedUser
+public class AuthenticatedUserService : IAuthenticatedUserService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public AuthenticatedUser(IHttpContextAccessor httpContextAccessor) => _httpContextAccessor = httpContextAccessor;
+    public AuthenticatedUserService(IHttpContextAccessor httpContextAccessor) => _httpContextAccessor = httpContextAccessor;
 
     public Guid? Id
     {

@@ -2,25 +2,25 @@
 
 public class DeleteUserProfileCommandHandler : BaseSetting, IRequestHandler<DeleteUserProfileCommand, Unit>
 {
-    private readonly IAuthenticatedUser _authenticatedUser;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
     private readonly IDistributedCache _cache;
     private readonly ILogger<DeleteUserProfileCommandHandler> _logger;
 
 
     public DeleteUserProfileCommandHandler(
         IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser,
+        IAuthenticatedUserService authenticatedUserService,
         ILogger<DeleteUserProfileCommandHandler> logger,
         IDistributedCache cache) : base(dbContext)
     {
-        _authenticatedUser = authenticatedUser;
+        _authenticatedUserService = authenticatedUserService;
         _logger = logger;
     }
 
     public async Task<Unit> Handle(DeleteUserProfileCommand request, CancellationToken cancellationToken)
     {
         UserProfile userProfile = await _dbContext.UserProfiles
-                                      .Where(u => u.Id == request.Id && u.UserId == _authenticatedUser.Id)
+                                      .Where(u => u.Id == request.Id && u.UserId == _authenticatedUserService.Id)
                                       .FirstOrDefaultAsync(cancellationToken)
                                   ?? throw new NotFoundException("Profile not found");
 
