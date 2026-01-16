@@ -2,20 +2,23 @@
 
 public class PaginatedResult<T>
 {
-    public PaginatedResult(IReadOnlyList<T> items, int totalCount, int pageNumber, int pageSize)
+    public PaginatedResult(
+        IReadOnlyList<T> items,
+        int pageNumber,
+        int pageSize,
+        bool hasNext)
     {
         Items = items;
-        TotalCount = totalCount;
         PageNumber = pageNumber;
         PageSize = pageSize;
+        HasNext = hasNext;
     }
 
-    public IReadOnlyList<T> Items { get; init; }
-    public int TotalCount { get; init; }
-    public int PageNumber { get; init; }
-    public int PageSize { get; init; }
-    public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+    public IReadOnlyList<T> Items { get; }
+    public int PageNumber { get; }
+    public int PageSize { get; }
 
     public bool HasPrevious => PageNumber > 1;
-    public bool HasNext => PageNumber < TotalPages;
+    public bool HasNext { get; }
 }
+

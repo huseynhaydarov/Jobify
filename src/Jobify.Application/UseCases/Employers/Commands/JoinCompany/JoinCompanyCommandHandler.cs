@@ -2,16 +2,16 @@
 
 public class JoinCompanyCommandHandler : BaseSetting, IRequestHandler<JoinCompanyCommand, Unit>
 {
-    private readonly IAuthenticatedUser _authenticatedUser;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
 
     public JoinCompanyCommandHandler(IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser) : base(dbContext) =>
-        _authenticatedUser = authenticatedUser;
+        IAuthenticatedUserService authenticatedUserService) : base(dbContext) =>
+        _authenticatedUserService = authenticatedUserService;
 
     public async Task<Unit> Handle(JoinCompanyCommand request, CancellationToken cancellationToken)
     {
         User? user = await _dbContext.Users
-            .FirstOrDefaultAsync(u => u.Id == _authenticatedUser.Id, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Id == _authenticatedUserService.Id, cancellationToken);
 
         if (user == null)
         {
@@ -27,7 +27,7 @@ public class JoinCompanyCommandHandler : BaseSetting, IRequestHandler<JoinCompan
         }
 
         Employer? existingEmployer = await _dbContext.Employers
-            .FirstOrDefaultAsync(e => e.UserId == _authenticatedUser.Id, cancellationToken);
+            .FirstOrDefaultAsync(e => e.UserId == _authenticatedUserService.Id, cancellationToken);
 
         if (existingEmployer != null)
         {

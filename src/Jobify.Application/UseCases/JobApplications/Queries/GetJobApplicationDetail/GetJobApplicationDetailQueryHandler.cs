@@ -3,15 +3,15 @@
 public class GetJobApplicationDetailQueryHandler
     : IRequestHandler<GetJobApplicationDetailQuery, GetJobApplicationDetailResponse>
 {
-    private readonly IAuthenticatedUser _authenticatedUser;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
     private readonly IApplicationDbContext _dbContext;
 
     public GetJobApplicationDetailQueryHandler(
         IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser)
+        IAuthenticatedUserService authenticatedUserService)
     {
         _dbContext = dbContext;
-        _authenticatedUser = authenticatedUser;
+        _authenticatedUserService = authenticatedUserService;
     }
 
     public async Task<GetJobApplicationDetailResponse> Handle(GetJobApplicationDetailQuery request,

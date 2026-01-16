@@ -26,6 +26,9 @@ public static class DependencyInjection
             };
         });
 
+        services.AddSingleton<IConnectionMultiplexer>(
+            ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis")));
+
         services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 
         services.AddSingleton<IPasswordHasherService, PasswordHasherService>();

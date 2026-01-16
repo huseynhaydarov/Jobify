@@ -2,15 +2,15 @@
 
 public class CreateCompanyCommandHandler : BaseSetting, IRequestHandler<CreateCompanyCommand, CompanyDto>
 {
-    private readonly IAuthenticatedUser _authenticatedUser;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
 
     public CreateCompanyCommandHandler(IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser) : base(dbContext) =>
-        _authenticatedUser = authenticatedUser;
+        IAuthenticatedUserService authenticatedUserService) : base(dbContext) =>
+        _authenticatedUserService = authenticatedUserService;
 
     public async Task<CompanyDto> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
     {
-        Guid userId = _authenticatedUser.Id
+        Guid userId = _authenticatedUserService.Id
                       ?? throw new UnauthorizedException("User is not authenticated");
 
         Company company = new()

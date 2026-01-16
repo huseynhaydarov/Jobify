@@ -3,15 +3,15 @@
 public class ApplicationStatusUpdateCommandHandler
     : IRequestHandler<ApplicationStatusUpdateCommand, Unit>
 {
-    private readonly IAuthenticatedUser _authenticatedUser;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
     private readonly IApplicationDbContext _dbContext;
 
     public ApplicationStatusUpdateCommandHandler(
         IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser)
+        IAuthenticatedUserService authenticatedUserService)
     {
         _dbContext = dbContext;
-        _authenticatedUser = authenticatedUser;
+        _authenticatedUserService = authenticatedUserService;
     }
 
     public async Task<Unit> Handle(ApplicationStatusUpdateCommand request, CancellationToken cancellationToken)

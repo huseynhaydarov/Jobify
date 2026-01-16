@@ -18,13 +18,20 @@ public sealed class CustomWebApplicationFactory
                 ["ConnectionStrings:Redis"] = IntegrationTestEnvironment.RedisConnectionString,
                 ["ConnectionStrings:RabbitMq"] = IntegrationTestEnvironment.RabbitMqConnectionString,
 
-                // JWT settings
+                // JWT
                 ["JwtSettings:SecretKey"] = JwtTokenTestSettings.SecretKey,
                 ["JwtSettings:Issuer"] = JwtTokenTestSettings.Issuer,
                 ["JwtSettings:Audience"] = JwtTokenTestSettings.Audience,
                 ["JwtSettings:ExpirationMinutes"] = JwtTokenTestSettings.ExpirationMinutes.ToString(),
-                ["JwtSettings:RefreshTokenExpirationDays"] = JwtTokenTestSettings.RefreshTokenExpirationDays.ToString()
+                ["JwtSettings:RefreshTokenExpirationDays"] = JwtTokenTestSettings.RefreshTokenExpirationDays.ToString(),
+
+                // MassTransit
+                ["MassTransit:Url"] = "localhost",
+                ["MassTransit:Host"] = "/",
+                ["MassTransit:Username"] = "guest",
+                ["MassTransit:Password"] = "guest"
             };
+
             c.AddInMemoryCollection(settings);
         });
 

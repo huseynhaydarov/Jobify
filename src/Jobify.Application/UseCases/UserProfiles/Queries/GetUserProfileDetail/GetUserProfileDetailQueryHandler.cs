@@ -3,17 +3,17 @@
 public class GetUserProfileDetailQueryHandler : BaseSetting,
     IRequestHandler<GetUserProfileDetailQuery, GetUserProfileDetailResponse>
 {
-    private readonly IAuthenticatedUser _authenticatedUser;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
     private readonly IDistributedCache _cache;
     private readonly ILogger<GetUserProfileDetailQueryHandler> _logger;
 
     public GetUserProfileDetailQueryHandler(
         IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser,
+        IAuthenticatedUserService authenticatedUserService,
         IDistributedCache cache,
         ILogger<GetUserProfileDetailQueryHandler> logger) : base(dbContext)
     {
-        _authenticatedUser = authenticatedUser;
+        _authenticatedUserService = authenticatedUserService;
         _cache = cache;
         _logger = logger;
     }
@@ -30,7 +30,7 @@ public class GetUserProfileDetailQueryHandler : BaseSetting,
                 _logger.LogInformation("cache miss. fetching data for key:  {CacheKey} from database.", cacheKey);
                 return await _dbContext.UserProfiles
                            .AsNoTracking()
-                           .Where(j => j.Id == request.Id && j.UserId == _authenticatedUser.Id)
+                           .Where(j => j.Id == request.Id && j.UserId == _authenticatedUserService.Id)
                            .Select(p => new GetUserProfileDetailResponse
                            {
                                Id = p.Id,

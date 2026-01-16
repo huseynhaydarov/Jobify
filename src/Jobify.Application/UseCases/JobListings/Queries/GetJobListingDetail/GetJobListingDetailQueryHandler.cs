@@ -19,7 +19,7 @@ public class GetJobListingByIdQueryHandler : BaseSetting,
     public async Task<JobListingDetailResponse> Handle(GetJobListingDetailQuery request,
         CancellationToken cancellationToken)
     {
-        string cacheKey = $"joblisting:{request.Id}";
+        string cacheKey = $"jobListing:{request.Id}";
         _logger.LogInformation("fetching data for key: {CacheKey} from cache.", cacheKey);
 
          JobListingDetailResponse? jobListing = await _cache.GetOrSetAsync(cacheKey,
@@ -51,8 +51,6 @@ public class GetJobListingByIdQueryHandler : BaseSetting,
         {
             throw new NullDataException("Retrieved data is null");
         }
-
-        ;
 
         return jobListing;
     }

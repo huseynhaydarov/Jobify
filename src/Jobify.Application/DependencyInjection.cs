@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application;
+﻿using Jobify.Application.UseCases.JobApplications.Commands.CreateJobApplication;
+
+namespace Jobify.Application;
 
 public static class DependencyInjection
 {
@@ -10,11 +12,10 @@ public static class DependencyInjection
             config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
             config.AddOpenBehavior(typeof(UnhandledExceptionBehaviour<,>));
             config.AddOpenRequestPreProcessor(typeof(LoggingBehaviour<>));
-            config.AddOpenBehavior(typeof(ValidationBehaviour<,>));
             config.AddOpenBehavior(typeof(PerformanceBehaviour<,>));
         });
 
-        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+        services.AddValidatorsFromAssembly(typeof(CreateJobApplicationCommandValidator).Assembly);
 
         return services;
     }

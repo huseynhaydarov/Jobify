@@ -2,24 +2,24 @@
 
 public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand, Unit>
 {
-    private readonly IAuthenticatedUser _authenticatedUser;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
     private readonly IApplicationDbContext _dnContext;
     private readonly IPasswordHasherService _passwordHasher;
 
     public ChangePasswordCommandHandler(
         IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser,
+        IAuthenticatedUserService authenticatedUserService,
         IPasswordHasherService passwordHasher)
     {
         _dnContext = dbContext;
-        _authenticatedUser = authenticatedUser;
+        _authenticatedUserService = authenticatedUserService;
         _passwordHasher = passwordHasher;
     }
 
     public async Task<Unit> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
         User? user = await _dnContext.Users
-            .Where(c => c.Id == _authenticatedUser.Id)
+            .Where(c => c.Id == _authenticatedUserService.Id)
             .SingleOrDefaultAsync(cancellationToken);
 
         if (user == null)

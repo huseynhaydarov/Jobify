@@ -2,20 +2,20 @@
 
 public class UpdateCompanyCommandHandler : BaseSetting, IRequestHandler<UpdateCompanyCommand, Unit>
 {
-    private readonly IAuthenticatedUser _authenticatedUser;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
     private readonly IApplicationDbContext _dbContext;
 
     public UpdateCompanyCommandHandler(IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser) : base(dbContext)
+        IAuthenticatedUserService authenticatedUserService) : base(dbContext)
     {
         _dbContext = dbContext;
-        _authenticatedUser = authenticatedUser;
+        _authenticatedUserService = authenticatedUserService;
     }
 
     public async Task<Unit> Handle(UpdateCompanyCommand request, CancellationToken cancellationToken)
     {
         Company company = await _dbContext.Companies
-                              .FirstOrDefaultAsync(c => c.Id == request.Id && c.CreatedById == _authenticatedUser.Id,
+                              .FirstOrDefaultAsync(c => c.Id == request.Id && c.CreatedById == _authenticatedUserService.Id,
                                   cancellationToken)
                           ?? throw new NotFoundException("Company not found");
 

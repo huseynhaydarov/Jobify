@@ -2,16 +2,16 @@
 
 public class CancelJobApplicationCommandHandler : IRequestHandler<CancelJobApplicationCommand, CancelJobApplicationResponse>
 {
-    private readonly IAuthenticatedUser _authenticatedUser;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
     private readonly IApplicationDbContext _dbContext;
     private readonly ILogger<CancelJobApplicationCommandHandler> _logger;
 
     public CancelJobApplicationCommandHandler(IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser,
+        IAuthenticatedUserService authenticatedUserService,
         ILogger<CancelJobApplicationCommandHandler> logger)
     {
         _dbContext = dbContext;
-        _authenticatedUser = authenticatedUser;
+        _authenticatedUserService = authenticatedUserService;
         _logger = logger;
     }
 
@@ -25,7 +25,7 @@ public class CancelJobApplicationCommandHandler : IRequestHandler<CancelJobAppli
             throw new NotFoundException("Application not found");
         }
 
-        if (application.ApplicantId != _authenticatedUser.Id)
+        if (application.ApplicantId != _authenticatedUserService.Id)
         {
             throw new ForbiddenAccessException("You can only cancel your own application");
         }

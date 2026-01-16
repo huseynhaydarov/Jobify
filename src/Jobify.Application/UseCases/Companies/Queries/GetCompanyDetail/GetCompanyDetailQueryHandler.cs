@@ -3,17 +3,17 @@
 public class GetCompanyDetailQueryHandler : BaseSetting,
     IRequestHandler<GetCompanyDetailQuery, GetCompanyDetailResponse>
 {
-    private readonly IAuthenticatedUser _authenticatedUser;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
 
     public GetCompanyDetailQueryHandler(IApplicationDbContext dbContext,
-        IAuthenticatedUser authenticatedUser) : base(dbContext) =>
-        _authenticatedUser = authenticatedUser;
+        IAuthenticatedUserService authenticatedUserService) : base(dbContext) =>
+        _authenticatedUserService = authenticatedUserService;
 
     public async Task<GetCompanyDetailResponse> Handle(GetCompanyDetailQuery request,
         CancellationToken cancellationToken) =>
         await _dbContext.Companies
             .AsNoTracking()
-            .Where(c => c.Id == request.Id && c.CreatedById == _authenticatedUser.Id)
+            .Where(c => c.Id == request.Id && c.CreatedById == _authenticatedUserService.Id)
             .Select(c => new GetCompanyDetailResponse
             {
                 Id = c.Id,

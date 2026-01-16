@@ -10,10 +10,6 @@ public static class DistributedCacheExtensions
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
     };
 
-    public static Task SetAsync<T>(this IDistributedCache cache, string key, T value) =>
-        cache.SetAsync(key, value, new DistributedCacheEntryOptions()
-            .SetSlidingExpiration(TimeSpan.FromMinutes(30))
-            .SetAbsoluteExpiration(TimeSpan.FromHours(1)));
 
     public static Task SetAsync<T>(this IDistributedCache cache,
         string key,

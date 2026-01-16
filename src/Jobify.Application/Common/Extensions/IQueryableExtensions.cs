@@ -8,13 +8,23 @@ public static class IQueryableExtensions
         int pageSize,
         CancellationToken cancellationToken)
     {
-        int totalCount = await queryable.CountAsync(cancellationToken);
-
         List<T> items = await queryable
             .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
+            .Take(pageSize + 1)
             .ToListAsync(cancellationToken);
 
-        return new PaginatedResult<T>(items, totalCount, pageNumber, pageSize);
+        bool hasNext = items.Count > pageSize;
+
+        if (hasNext)
+        {
+            items.RemoveAt(pageSize);
+        }
+
+        return new PaginatedResult<T>(
+            items,
+            pageNumber,
+            pageSize,
+            hasNext
+        );
     }
 }

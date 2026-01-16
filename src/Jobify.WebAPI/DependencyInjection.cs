@@ -1,4 +1,7 @@
-﻿namespace Jobify.WebAPI;
+﻿using Jobify.WebAPI.Extensions;
+using MassTransit;
+
+namespace Jobify.WebAPI;
 
 public static class DependencyInjection
 {
@@ -86,7 +89,9 @@ public static class DependencyInjection
             c.OperationFilter<SwaggerFileOperationFilter>();
         });
 
-        services.AddScoped<IAuthenticatedUser, AuthenticatedUser>();
+        services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
+
+        services.AddMassTransit(configuration);
 
         return services;
     }

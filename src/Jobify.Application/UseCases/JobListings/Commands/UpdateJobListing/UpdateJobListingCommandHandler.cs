@@ -1,21 +1,26 @@
-﻿namespace Jobify.Application.UseCases.JobListings.Commands.UpdateJobListing;
+﻿using Jobify.Application.UseCases.JobListings.Events;
+using MassTransit;
+
+namespace Jobify.Application.UseCases.JobListings.Commands.UpdateJobListing;
 
 public class UpdateJobListingCommandHandler : BaseSetting,
     IRequestHandler<UpdateJobListingCommand, UpdateJobListingResponse>
 {
     private readonly IDistributedCache _cache;
     private readonly ILogger<UpdateJobListingCommandHandler> _logger;
-    private readonly IAuthenticatedUser _authenticatedUser;
+    private readonly IAuthenticatedUserService _authenticatedUserService;
+    private readonly IPublishEndpoint _publishEndpoint;
 
     public UpdateJobListingCommandHandler(
         IApplicationDbContext dbContext,
         ILogger<UpdateJobListingCommandHandler> logger,
         IDistributedCache cache,
-        IAuthenticatedUser authenticatedUser) : base(dbContext)
+        IAuthenticatedUserService authenticatedUserService, IPublishEndpoint publishEndpoint) : base(dbContext)
     {
         _logger = logger;
         _cache = cache;
-        _authenticatedUser = authenticatedUser;
+        _authenticatedUserService = authenticatedUserService;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task<UpdateJobListingResponse> Handle(UpdateJobListingCommand request,
@@ -23,7 +28,7 @@ public class UpdateJobListingCommandHandler : BaseSetting,
     {
         JobListing jobListing = await _dbContext.JobListings
                                     .Where(c => c.Id == request.Id &&
-                                                c.CreatedBy == _authenticatedUser.Id)
+                                                c.CreatedBy == _authenticatedUserService.Id)
                                     .FirstOrDefaultAsync(cancellationToken)
                                 ?? throw new NotFoundException("JobListing not found");
 
@@ -31,8 +36,15 @@ public class UpdateJobListingCommandHandler : BaseSetting,
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
+        var jobListingUpdatedEvent = new JobListingChangedEvent()
+        {
+            Id = jobListing.Id,
+            Action = ActionType.Updated
+        };
+
+        await _publishEndpoint.Publish(jobListingUpdatedEvent, cancellationToken);
+
         string cacheKey = $"jobListing:{request.Id}";
-        ;
         _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);
         await _cache.RemoveAsync(cacheKey, cancellationToken);
 
