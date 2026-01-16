@@ -1,4 +1,5 @@
-﻿using Jobify.WebAPI.Extensions;
+﻿using Jobify.Infrastructure.Services;
+using Jobify.WebAPI.Extensions;
 using MassTransit;
 
 namespace Jobify.WebAPI;
@@ -92,6 +93,13 @@ public static class DependencyInjection
         services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
 
         services.AddMassTransit(configuration);
+
+        services.AddHttpClient<IJobSearchClientService, JobSearchClient>(
+            client =>
+            {
+                client.BaseAddress = new Uri(
+                    configuration["SearchService:BaseUrl"]!);
+            });
 
         return services;
     }
