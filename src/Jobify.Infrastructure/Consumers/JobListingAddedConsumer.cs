@@ -25,12 +25,18 @@ public class JobListingAddedConsumer : IConsumer<JobListingChangedEvent>
 
         var db = _redis.GetDatabase();
 
-        var keys = await db.SetMembersAsync(JobListingsCacheKeys.Registry);
+        var fields = await db.HashKeysAsync(JobListingsCacheKeys.Registry);
 
-        foreach (var key in keys)
+        if (fields.Length == 0)
         {
-            await db.KeyDeleteAsync(key.ToString());
+            _logger.LogInformation("No cached pages to invalidate.");
+            return;
         }
+
+        var deleteTasks = fields
+            .Select(key => db.KeyDeleteAsync(key.ToString()));
+
+        await Task.WhenAll(deleteTasks);
 
         await db.KeyDeleteAsync(JobListingsCacheKeys.Registry);
     }

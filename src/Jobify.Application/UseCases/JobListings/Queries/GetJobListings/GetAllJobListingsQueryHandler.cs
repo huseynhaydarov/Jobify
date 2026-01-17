@@ -1,4 +1,5 @@
-﻿using Jobify.Application.Common.Models.Caching;
+﻿using System.Globalization;
+using Jobify.Application.Common.Models.Caching;
 using StackExchange.Redis;
 
 namespace Jobify.Application.UseCases.JobListings.Queries.GetJobListings;
@@ -49,7 +50,11 @@ public class GetAllJobListingsQueryHandler : BaseSetting,
                         });
 
                 var db = _redis.GetDatabase();
-                await db.SetAddAsync(JobListingsCacheKeys.Registry, cacheKey);
+                await db.HashSetAsync(
+                    JobListingsCacheKeys.Registry,
+                    cacheKey,
+                    DateTime.UtcNow.ToString(CultureInfo.InvariantCulture));
+
 
                 return await queryable.PaginatedListAsync(
                     request.Parameters.PageNumber,
