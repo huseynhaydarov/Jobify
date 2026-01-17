@@ -24,8 +24,17 @@ public class SearchJobListingsQueryHandler
             request.SearchTerm,
             cancellationToken);
 
+        if (ids.Count == 0)
+        {
+            return new PaginatedResult<GetAllJobListingsResponse>(
+                items: new List<GetAllJobListingsResponse>(),
+                request.Parameters.PageNumber,
+                request.Parameters.PageSize,
+                hasNext: false
+            );
+        }
+
         var queryable = _context.JobListings
-            .AsNoTracking()
             .Where(c => !c.IsDeleted && ids.Contains(c.Id))
             .Select(c => new GetAllJobListingsResponse
             {
