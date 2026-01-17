@@ -1,6 +1,5 @@
 ﻿using Jobify.Infrastructure.Services;
 using Jobify.WebAPI.Extensions;
-using MassTransit;
 
 namespace Jobify.WebAPI;
 
@@ -89,6 +88,8 @@ public static class DependencyInjection
 
             c.OperationFilter<SwaggerFileOperationFilter>();
         });
+
+        services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
 
         services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
 
