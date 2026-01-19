@@ -1,30 +1,31 @@
 ﻿using Jobify.Application.UseCases.JobListings.Queries.GetJobListings;
+using Refit;
+using SearchService.ApiClient;
 
 namespace Jobify.Application.UseCases.JobListings.Queries.SearchJobListings;
 
 public class SearchJobListingsQueryHandler
     : IRequestHandler<SearchJobListingsQuery, PaginatedResult<GetAllJobListingsResponse>>
 {
-    private readonly IJobSearchClientService _searchClient;
     private readonly IApplicationDbContext _context;
+    private readonly IConfiguration _configuration;
 
     public SearchJobListingsQueryHandler(
-        IJobSearchClientService searchClient,
-        IApplicationDbContext context)
+        IApplicationDbContext context, IConfiguration configuration)
     {
-        _searchClient = searchClient;
         _context = context;
+        _configuration = configuration;
     }
 
     public async Task<PaginatedResult<GetAllJobListingsResponse>> Handle(
         SearchJobListingsQuery request,
         CancellationToken cancellationToken)
     {
-        var ids = await _searchClient.SearchAsync(
-            request.SearchTerm,
-            cancellationToken);
+        var searchApi = RestService.For<IJobSearchApi>(_configuration["SearchService:BaseUrl"]);
 
-        if (ids.Count == 0)
+        var response = await searchApi.SearchAsync(request.SearchTerm, cancellationToken);
+
+        if (response.Ids.Count == 0)
         {
             return new PaginatedResult<GetAllJobListingsResponse>(
                 items: new List<GetAllJobListingsResponse>(),
@@ -35,7 +36,7 @@ public class SearchJobListingsQueryHandler
         }
 
         var queryable = _context.JobListings
-            .Where(c => !c.IsDeleted && ids.Contains(c.Id))
+            .Where(c => !c.IsDeleted && response.Ids.Contains(c.Id))
             .Select(c => new GetAllJobListingsResponse
             {
                 Id = c.Id,

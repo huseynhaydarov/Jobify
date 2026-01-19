@@ -1,4 +1,5 @@
 ﻿using Jobify.Application.UseCases.JobListings.Events;
+using Jobify.Contracts.JobListings.IntegrationEvents;
 using MassTransit;
 
 namespace Jobify.Application.UseCases.JobListings.Commands.CreateJobListing;
@@ -59,6 +60,16 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
         };
 
         await _publishEndpoint.Publish(jobListingAddedEvent, cancellationToken);
+
+        await _publishEndpoint.Publish(new JobListingCreated
+        {
+            Id= jobListing.Id,
+            Name = jobListing.Name,
+            Description = jobListing.Description,
+            Requirements = jobListing.Requirements,
+            Location = jobListing.Location,
+            PostedAt = jobListing.PostedAt,
+        }, cancellationToken);
 
         return new JobListingDto(
             jobListing.Id,

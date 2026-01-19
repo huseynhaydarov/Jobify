@@ -1,4 +1,5 @@
 ﻿using Jobify.Application.UseCases.JobListings.Events;
+using Jobify.Contracts.JobListings.IntegrationEvents;
 using MassTransit;
 
 namespace Jobify.Application.UseCases.JobListings.Commands.UpdateJobListing;
@@ -43,6 +44,17 @@ public class UpdateJobListingCommandHandler : BaseSetting,
         };
 
         await _publishEndpoint.Publish(jobListingUpdatedEvent, cancellationToken);
+
+        await _publishEndpoint.Publish(new JobListingUpdated
+        {
+            Id= jobListing.Id,
+            Name = jobListing.Name,
+            Description = jobListing.Description,
+            Requirements = jobListing.Requirements,
+            Location = jobListing.Location,
+            Salary =  jobListing.Salary,
+            Status = jobListing.Status.ToString(),
+        }, cancellationToken);
 
         string cacheKey = $"jobListing:{request.Id}";
         _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);

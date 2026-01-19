@@ -1,4 +1,5 @@
 using Jobify.Application.UseCases.JobListings.Events;
+using Jobify.Contracts.JobListings.IntegrationEvents;
 using MassTransit;
 
 namespace Jobify.Application.UseCases.JobListings.Commands.DeleteJobListing;
@@ -43,6 +44,11 @@ public class DeleteJobListingCommandHandler : BaseSetting,
         };
 
         await _publishEndpoint.Publish(jobListingDeletedEvent, cancellationToken);
+
+        await _publishEndpoint.Publish(new JobListingDeleted
+        {
+            Id= jobListing.Id
+        }, cancellationToken);
 
         string cacheKey = $"jobListing:{request.Id}";
         _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);
