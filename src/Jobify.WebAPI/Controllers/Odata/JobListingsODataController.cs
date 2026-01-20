@@ -1,6 +1,4 @@
-﻿using Jobify.Application.UseCases.JobListings.Dtos;
-
-namespace Jobify.WebAPI.Controllers.Odata;
+﻿namespace Jobify.WebAPI.Controllers.Odata;
 
 [Route("odata/JobListings")]
 public class JobListingsODataController : ControllerBase

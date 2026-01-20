@@ -8,8 +8,8 @@ namespace Jobify.Infrastructure.Consumers;
 
 public class JobListingAddedConsumer : IConsumer<JobListingChangedEvent>
 {
-    private readonly IConnectionMultiplexer _redis;
     private readonly ILogger<JobListingAddedConsumer> _logger;
+    private readonly IConnectionMultiplexer _redis;
 
     public JobListingAddedConsumer(
         IConnectionMultiplexer redis,

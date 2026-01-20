@@ -7,8 +7,8 @@ namespace Jobify.Application.UseCases.JobListings.Queries.GetJobListings;
 public class GetAllJobListingsQueryHandler : BaseSetting,
     IRequestHandler<GetAllJobListingsQuery, PaginatedResult<GetAllJobListingsResponse>>
 {
-    private readonly ILogger<GetAllJobListingsQueryHandler> _logger;
     private readonly IDistributedCache _cache;
+    private readonly ILogger<GetAllJobListingsQueryHandler> _logger;
     private readonly IConnectionMultiplexer _redis;
 
     public GetAllJobListingsQueryHandler(

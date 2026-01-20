@@ -7,8 +7,8 @@ namespace Jobify.Application.UseCases.JobListings.Queries.SearchJobListings;
 public class SearchJobListingsQueryHandler
     : IRequestHandler<SearchJobListingsQuery, PaginatedResult<GetAllJobListingsResponse>>
 {
-    private readonly IApplicationDbContext _context;
     private readonly IConfiguration _configuration;
+    private readonly IApplicationDbContext _context;
 
     public SearchJobListingsQueryHandler(
         IApplicationDbContext context, IConfiguration configuration)

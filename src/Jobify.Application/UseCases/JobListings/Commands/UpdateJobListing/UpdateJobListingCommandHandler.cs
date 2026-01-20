@@ -7,9 +7,9 @@ namespace Jobify.Application.UseCases.JobListings.Commands.UpdateJobListing;
 public class UpdateJobListingCommandHandler : BaseSetting,
     IRequestHandler<UpdateJobListingCommand, UpdateJobListingResponse>
 {
+    private readonly IAuthenticatedUserService _authenticatedUserService;
     private readonly IDistributedCache _cache;
     private readonly ILogger<UpdateJobListingCommandHandler> _logger;
-    private readonly IAuthenticatedUserService _authenticatedUserService;
     private readonly IPublishEndpoint _publishEndpoint;
 
     public UpdateJobListingCommandHandler(
