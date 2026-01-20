@@ -16,13 +16,13 @@ public static class DistributedCacheExtensions
         T value,
         DistributedCacheEntryOptions options)
     {
-        byte[] bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(value, serializerOptions));
+        var bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(value, serializerOptions));
         return cache.SetAsync(key, bytes, options);
     }
 
     public static bool TryGetValue<T>(this IDistributedCache cache, string key, out T? value)
     {
-        byte[]? val = cache.Get(key);
+        var val = cache.Get(key);
         value = default;
 
         if (val == null)

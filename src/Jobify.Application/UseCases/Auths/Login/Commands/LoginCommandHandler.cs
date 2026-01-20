@@ -17,7 +17,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponse>
 
     public async Task<AuthResponse> Handle(LoginCommand command, CancellationToken cancellationToken)
     {
-        User? user = await _dbContext.Users
+        var user = await _dbContext.Users
             .Include(u => u.UserRoles)
             .ThenInclude(r => r.Role)
             .FirstOrDefaultAsync(u => u.Email == command.Email, cancellationToken);
@@ -44,9 +44,9 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponse>
             return UnauthorizedResponse("Account is not active");
         }
 
-        string token = _tokenService.GenerateJwtToken(user);
+        var token = _tokenService.GenerateJwtToken(user);
 
-        string refreshToken = _tokenService.GenerateRefreshToken();
+        var refreshToken = _tokenService.GenerateRefreshToken();
 
         return new AuthResponse(
             true,

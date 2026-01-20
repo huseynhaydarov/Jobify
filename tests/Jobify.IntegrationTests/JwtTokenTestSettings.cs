@@ -18,7 +18,7 @@ public class JwtTokenTestSettings
     private static readonly SymmetricSecurityKey s_secretKey = new(
         Encoding.UTF8.GetBytes(settings.SecretKey!));
 
-    public static readonly  SigningCredentials Credentials = new(
+    public static readonly SigningCredentials Credentials = new(
         s_secretKey,
         SecurityAlgorithms.HmacSha256);
 

@@ -1,6 +1,7 @@
 ﻿namespace Jobify.Application.UseCases.JobApplications.Commands.CancelJobApplication;
 
-public class CancelJobApplicationCommandHandler : IRequestHandler<CancelJobApplicationCommand, CancelJobApplicationResponse>
+public class
+    CancelJobApplicationCommandHandler : IRequestHandler<CancelJobApplicationCommand, CancelJobApplicationResponse>
 {
     private readonly IAuthenticatedUserService _authenticatedUserService;
     private readonly IApplicationDbContext _dbContext;
@@ -15,9 +16,10 @@ public class CancelJobApplicationCommandHandler : IRequestHandler<CancelJobAppli
         _logger = logger;
     }
 
-    public async Task<CancelJobApplicationResponse> Handle(CancelJobApplicationCommand request, CancellationToken cancellationToken)
+    public async Task<CancelJobApplicationResponse> Handle(CancelJobApplicationCommand request,
+        CancellationToken cancellationToken)
     {
-        JobApplication? application = await _dbContext.JobApplications
+        var application = await _dbContext.JobApplications
             .FirstOrDefaultAsync(x => x.Id == request.ApplicationId, cancellationToken);
 
         if (application == null)
@@ -42,6 +44,6 @@ public class CancelJobApplicationCommandHandler : IRequestHandler<CancelJobAppli
 
         _logger.LogInformation($"Cancelled job application by user {application.ApplicantId}");
 
-        return new  CancelJobApplicationResponse(application.Id, application.WithdrawnAt);
+        return new CancelJobApplicationResponse(application.Id, application.WithdrawnAt);
     }
 }

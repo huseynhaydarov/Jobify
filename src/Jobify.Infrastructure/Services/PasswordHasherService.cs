@@ -10,9 +10,9 @@ public sealed class PasswordHasherService : IPasswordHasherService
 
     public async Task<string> HashPasswordAsync(string password)
     {
-        byte[] salt = RandomNumberGenerator.GetBytes(SaltSize);
+        var salt = RandomNumberGenerator.GetBytes(SaltSize);
 
-        byte[] hash = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, Algorithm, HashSize);
+        var hash = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, Algorithm, HashSize);
 
         return await Task.FromResult($"{Convert.ToHexString(hash)}-{Convert.ToHexString(salt)}");
     }
@@ -24,7 +24,7 @@ public sealed class PasswordHasherService : IPasswordHasherService
             throw new ArgumentException("Invalid hashed password format.", nameof(hashedPassword));
         }
 
-        string[] parts = hashedPassword.Split('-');
+        var parts = hashedPassword.Split('-');
 
         if (parts.Length != 2)
         {
@@ -33,10 +33,10 @@ public sealed class PasswordHasherService : IPasswordHasherService
 
         try
         {
-            byte[] hash = Convert.FromHexString(parts[0]);
-            byte[] salt = Convert.FromHexString(parts[1]);
+            var hash = Convert.FromHexString(parts[0]);
+            var salt = Convert.FromHexString(parts[1]);
 
-            byte[] inputHash = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, Algorithm, HashSize);
+            var inputHash = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, Algorithm, HashSize);
 
             return Task.FromResult(CryptographicOperations.FixedTimeEquals(inputHash, hash));
         }

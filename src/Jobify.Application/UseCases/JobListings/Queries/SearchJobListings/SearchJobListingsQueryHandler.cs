@@ -28,10 +28,10 @@ public class SearchJobListingsQueryHandler
         if (response.Ids.Count == 0)
         {
             return new PaginatedResult<GetAllJobListingsResponse>(
-                items: new List<GetAllJobListingsResponse>(),
+                new List<GetAllJobListingsResponse>(),
                 request.PageNumber,
                 request.PageSize,
-                hasNext: false
+                false
             );
         }
 

@@ -19,10 +19,10 @@ public class GetJobListingByIdQueryHandler : BaseSetting,
     public async Task<JobListingDetailResponse> Handle(GetJobListingDetailQuery request,
         CancellationToken cancellationToken)
     {
-        string cacheKey = $"jobListing:{request.Id}";
+        var cacheKey = $"jobListing:{request.Id}";
         _logger.LogInformation("fetching data for key: {CacheKey} from cache.", cacheKey);
 
-         JobListingDetailResponse? jobListing = await _cache.GetOrSetAsync(cacheKey,
+        var jobListing = await _cache.GetOrSetAsync(cacheKey,
             async () =>
             {
                 _logger.LogInformation("cache miss. fetching data for key: {CacheKey} from database.", cacheKey);

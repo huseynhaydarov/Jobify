@@ -15,10 +15,7 @@ public static class DatabaseReset
             new RespawnerOptions
             {
                 DbAdapter = DbAdapter.Postgres,
-                SchemasToInclude = new[]
-                {
-                    "public"
-                },
+                SchemasToInclude = new[] { "public" },
                 TablesToIgnore =
                 [
                     "__EFMigrationsHistory"

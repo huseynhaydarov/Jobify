@@ -14,10 +14,10 @@ public class UpdateCompanyCommandHandler : BaseSetting, IRequestHandler<UpdateCo
 
     public async Task<Unit> Handle(UpdateCompanyCommand request, CancellationToken cancellationToken)
     {
-        Company company = await _dbContext.Companies
-                              .FirstOrDefaultAsync(c => c.Id == request.Id && c.CreatedById == _authenticatedUserService.Id,
-                                  cancellationToken)
-                          ?? throw new NotFoundException("Company not found");
+        var company = await _dbContext.Companies
+                          .FirstOrDefaultAsync(c => c.Id == request.Id && c.CreatedById == _authenticatedUserService.Id,
+                              cancellationToken)
+                      ?? throw new NotFoundException("Company not found");
 
         company.MapFrom(request);
 

@@ -19,16 +19,16 @@ public class DeleteUserProfileCommandHandler : BaseSetting, IRequestHandler<Dele
 
     public async Task<Unit> Handle(DeleteUserProfileCommand request, CancellationToken cancellationToken)
     {
-        UserProfile userProfile = await _dbContext.UserProfiles
-                                      .Where(u => u.Id == request.Id && u.UserId == _authenticatedUserService.Id)
-                                      .FirstOrDefaultAsync(cancellationToken)
-                                  ?? throw new NotFoundException("Profile not found");
+        var userProfile = await _dbContext.UserProfiles
+                              .Where(u => u.Id == request.Id && u.UserId == _authenticatedUserService.Id)
+                              .FirstOrDefaultAsync(cancellationToken)
+                          ?? throw new NotFoundException("Profile not found");
 
         userProfile.IsDeleted = true;
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        string cacheKey = $"userProfile:{request.Id}";
+        var cacheKey = $"userProfile:{request.Id}";
         _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);
         await _cache.RemoveAsync(cacheKey, cancellationToken);
 

@@ -1,6 +1,4 @@
-﻿using Jobify.Application.UseCases.Companies.Dtos;
-
-namespace Jobify.WebAPI.Controllers.V1;
+﻿namespace Jobify.WebAPI.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -14,7 +12,7 @@ public class CompaniesController : ControllerBase
     [Authorize(Roles = UserRoles.Administrator)]
     public async Task<IActionResult> Create([FromBody] CreateCompanyCommand command)
     {
-        CompanyDto data = await _mediator.Send(command);
+        var data = await _mediator.Send(command);
 
         return Ok(data);
     }
@@ -32,7 +30,7 @@ public class CompaniesController : ControllerBase
     [Authorize(Policy = Policies.CanViewAll)]
     public async Task<ActionResult<GetCompanyDetailResponse>> GetDetail([FromRoute] Guid id)
     {
-        GetCompanyDetailResponse data = await _mediator.Send(new GetCompanyDetailQuery(id));
+        var data = await _mediator.Send(new GetCompanyDetailQuery(id));
 
         return Ok(data);
     }
@@ -44,7 +42,7 @@ public class CompaniesController : ControllerBase
     {
         GetAllCompaniesQuery query = new(parameters);
 
-        PaginatedResult<GetAllCompaniesResponse> data = await _mediator.Send(query, cancellationToken);
+        var data = await _mediator.Send(query, cancellationToken);
 
         return Ok(data);
     }

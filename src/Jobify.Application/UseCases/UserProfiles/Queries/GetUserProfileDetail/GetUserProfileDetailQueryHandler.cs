@@ -21,10 +21,10 @@ public class GetUserProfileDetailQueryHandler : BaseSetting,
     public async Task<GetUserProfileDetailResponse> Handle(GetUserProfileDetailQuery request,
         CancellationToken cancellationToken)
     {
-        string cacheKey = $"userProfile:{request.Id}";
+        var cacheKey = $"userProfile:{request.Id}";
         _logger.LogInformation("fetching data for key: {cacheKey} from cache.", cacheKey);
 
-        GetUserProfileDetailResponse? userProfile = await _cache.GetOrSetAsync(cacheKey,
+        var userProfile = await _cache.GetOrSetAsync(cacheKey,
             async () =>
             {
                 _logger.LogInformation("cache miss. fetching data for key:  {CacheKey} from database.", cacheKey);

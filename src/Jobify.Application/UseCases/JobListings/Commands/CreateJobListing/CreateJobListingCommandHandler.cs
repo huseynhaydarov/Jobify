@@ -20,7 +20,7 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
 
     public async Task<JobListingDto> Handle(CreateJobListingCommand request, CancellationToken cancellationToken)
     {
-        Guid companyId = await _dbContext.Companies
+        var companyId = await _dbContext.Companies
             .Where(c => c.Employers.Any(e => e.UserId == _authenticatedUserService.Id))
             .Select(c => c.Id)
             .FirstOrDefaultAsync(cancellationToken);
@@ -53,23 +53,20 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
         await _dbContext.JobListings.AddAsync(jobListing, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        var jobListingAddedEvent = new JobListingChangedEvent()
-        {
-            Id = jobListing.Id,
-            Action = ActionType.Added
-        };
+        var jobListingAddedEvent = new JobListingChangedEvent { Id = jobListing.Id, Action = ActionType.Added };
 
         await _publishEndpoint.Publish(jobListingAddedEvent, cancellationToken);
 
-        await _publishEndpoint.Publish(new JobListingCreated
-        {
-            Id= jobListing.Id,
-            Name = jobListing.Name,
-            Description = jobListing.Description,
-            Requirements = jobListing.Requirements,
-            Location = jobListing.Location,
-            PostedAt = jobListing.PostedAt,
-        }, cancellationToken);
+        await _publishEndpoint.Publish(
+            new JobListingCreated
+            {
+                Id = jobListing.Id,
+                Name = jobListing.Name,
+                Description = jobListing.Description,
+                Requirements = jobListing.Requirements,
+                Location = jobListing.Location,
+                PostedAt = jobListing.PostedAt
+            }, cancellationToken);
 
         return new JobListingDto(
             jobListing.Id,

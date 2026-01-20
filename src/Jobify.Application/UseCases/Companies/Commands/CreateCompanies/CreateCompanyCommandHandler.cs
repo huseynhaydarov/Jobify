@@ -10,8 +10,8 @@ public class CreateCompanyCommandHandler : BaseSetting, IRequestHandler<CreateCo
 
     public async Task<CompanyDto> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
     {
-        Guid userId = _authenticatedUserService.Id
-                      ?? throw new UnauthorizedException("User is not authenticated");
+        var userId = _authenticatedUserService.Id
+                     ?? throw new UnauthorizedException("User is not authenticated");
 
         Company company = new()
         {

@@ -21,4 +21,3 @@ public class PaginatedResult<T>
     public bool HasPrevious => PageNumber > 1;
     public bool HasNext { get; }
 }
-

@@ -17,7 +17,7 @@ public class GetAllJobApplicationsByJobListingQueryHandler
             throw new BadRequestException("Id is required.");
         }
 
-        IQueryable<GetAllJobApplicationsByJobListingResponse> queryable = _dbContext.JobApplications
+        var queryable = _dbContext.JobApplications
             .AsNoTracking()
             .OrderByDescending(c => c.AppliedAt)
             .Select(x => new GetAllJobApplicationsByJobListingResponse

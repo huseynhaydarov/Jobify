@@ -10,7 +10,7 @@ public class GetAllUserProfilesQueryHandler : BaseSetting, IRequestHandler<GetAl
     public async Task<PaginatedResult<GetAllUserProfilesResponse>> Handle(GetAllUserProfilesQuery request,
         CancellationToken cancellationToken)
     {
-        IQueryable<GetAllUserProfilesResponse> queryable = _dbContext.UserProfiles
+        var queryable = _dbContext.UserProfiles
             .AsNoTracking()
             .OrderByDescending(x => x.CreatedAt)
             .Select(p => new GetAllUserProfilesResponse

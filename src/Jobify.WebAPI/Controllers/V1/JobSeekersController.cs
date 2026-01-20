@@ -1,6 +1,4 @@
-﻿using Jobify.Application.UseCases.JobSeekers.Dtos;
-
-namespace Jobify.WebAPI.Controllers.V1;
+﻿namespace Jobify.WebAPI.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -13,7 +11,7 @@ public class JobSeekersController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateJobSeekerCommand command)
     {
-        JobSeekerDto data = await _mediator.Send(command);
+        var data = await _mediator.Send(command);
 
         return Ok(data);
     }
@@ -24,7 +22,7 @@ public class JobSeekersController : ControllerBase
     {
         GetAllJobSeekersQuery query = new(parameters);
 
-        PaginatedResult<GetAllJobSeekersResponse> data = await _mediator.Send(query);
+        var data = await _mediator.Send(query);
 
         return Ok(data);
     }

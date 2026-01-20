@@ -1,6 +1,4 @@
-﻿using Jobify.Application.UseCases.Employers.Dtos;
-
-namespace Jobify.WebAPI.Controllers.V1;
+﻿namespace Jobify.WebAPI.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -13,7 +11,7 @@ public class EmployersController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateEmployerCommand command)
     {
-        EmployerDto data = await _mediator.Send(command);
+        var data = await _mediator.Send(command);
 
         return Ok(data);
     }
@@ -42,7 +40,7 @@ public class EmployersController : ControllerBase
     {
         GetAllEmployersQuery query = new(parameters);
 
-        PaginatedResult<GetAllEmployersResponse> data = await _mediator.Send(query);
+        var data = await _mediator.Send(query);
 
         return Ok(data);
     }
@@ -53,7 +51,7 @@ public class EmployersController : ControllerBase
     {
         GetAllJobListingsByEmployerQuery query = new(parameters);
 
-        PaginatedResult<GetAllJobListingsByEmployerResponse> data = await _mediator.Send(query);
+        var data = await _mediator.Send(query);
 
         return Ok(data);
     }

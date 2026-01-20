@@ -8,14 +8,12 @@ public class CreateEmployerCommandCommandHandler : BaseSetting, IRequestHandler<
         IApplicationDbContext dbContext,
         IPasswordHasherService hasherService,
         IMediator mediator,
-        IAuthenticatedUserService authenticatedUserService) : base(dbContext)
-    {
+        IAuthenticatedUserService authenticatedUserService) : base(dbContext) =>
         _hasherService = hasherService;
-    }
 
     public async Task<EmployerDto> Handle(CreateEmployerCommand request, CancellationToken cancellationToken)
     {
-        User? existingUser = await _dbContext.Users
+        var existingUser = await _dbContext.Users
             .Where(x => x.Email == request.Email)
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -24,7 +22,7 @@ public class CreateEmployerCommandCommandHandler : BaseSetting, IRequestHandler<
             throw new DomainException("The email address is already in use.");
         }
 
-        Role? role = await _dbContext.Roles
+        var role = await _dbContext.Roles
             .Where(x => x.Name == UserRoles.Employer)
             .FirstAsync(cancellationToken);
 
@@ -34,12 +32,7 @@ public class CreateEmployerCommandCommandHandler : BaseSetting, IRequestHandler<
             throw new NotFoundException(nameof(Role));
         }
 
-        User user = new()
-        {
-            Email = request.Email,
-            PasswordHash = request.Password,
-            IsActive = true
-        };
+        User user = new() { Email = request.Email, PasswordHash = request.Password, IsActive = true };
 
         user.PasswordHash = await _hasherService.HashPasswordAsync(request.Password);
 

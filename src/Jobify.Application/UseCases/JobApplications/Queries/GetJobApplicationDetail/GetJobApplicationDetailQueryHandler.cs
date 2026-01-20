@@ -17,7 +17,7 @@ public class GetJobApplicationDetailQueryHandler
     public async Task<GetJobApplicationDetailResponse> Handle(GetJobApplicationDetailQuery request,
         CancellationToken cancellationToken)
     {
-        JobApplication? application = await _dbContext.JobApplications
+        var application = await _dbContext.JobApplications
             .AsNoTracking()
             .Include(x => x.JobListing)
             .ThenInclude(j => j.Company)

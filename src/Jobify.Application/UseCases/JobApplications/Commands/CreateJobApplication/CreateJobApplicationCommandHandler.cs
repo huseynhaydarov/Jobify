@@ -19,10 +19,10 @@ public class CreateJobApplicationCommandHandler : BaseSetting,
     public async Task<JobApplicationDto> Handle(CreateJobApplicationCommand request,
         CancellationToken cancellationToken)
     {
-        Guid userId = _authenticatedUserService.Id
-                      ?? throw new UnauthorizedException("User is not authenticated");
+        var userId = _authenticatedUserService.Id
+                     ?? throw new UnauthorizedException("User is not authenticated");
 
-        bool submittedApplication = await _dbContext.JobApplications
+        var submittedApplication = await _dbContext.JobApplications
             .AnyAsync(a => a.JobListingId == request.JobListingId &&
                            a.ApplicantId == userId, cancellationToken);
 
@@ -31,7 +31,7 @@ public class CreateJobApplicationCommandHandler : BaseSetting,
             throw new DomainException("You have already applied to this job.");
         }
 
-        JobListing? jobListing = await _dbContext.JobListings
+        var jobListing = await _dbContext.JobListings
             .Where(l => l.Id == request.JobListingId && !l.IsDeleted)
             .FirstOrDefaultAsync(cancellationToken);
 

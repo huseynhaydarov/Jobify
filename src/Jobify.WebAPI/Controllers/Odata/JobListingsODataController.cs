@@ -14,7 +14,7 @@ public class JobListingsODataController : ControllerBase
     [Authorize(Roles = UserRoles.JobSeeker)]
     public async Task<IActionResult> Get()
     {
-        IQueryable<JobListingOdataDto> query = await _mediator.Send(new GetAllJobListingsOdataQuery());
+        var query = await _mediator.Send(new GetAllJobListingsOdataQuery());
 
         return Ok(query);
     }

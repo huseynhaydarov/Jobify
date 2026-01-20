@@ -8,10 +8,10 @@ public class PositionUpdateCommandHandler : BaseSetting, IRequestHandler<Positio
 
     public async Task<Unit> Handle(PositionUpdateCommand request, CancellationToken cancellationToken)
     {
-        Employer employer = await _dbContext.Employers
-                                .Where(e => e.Id == request.employerId)
-                                .FirstOrDefaultAsync(cancellationToken)
-                            ?? throw new NotFoundException("Employer not found");
+        var employer = await _dbContext.Employers
+                           .Where(e => e.Id == request.employerId)
+                           .FirstOrDefaultAsync(cancellationToken)
+                       ?? throw new NotFoundException("Employer not found");
 
         if (!Enum.TryParse(request.position.ToString(), out EmployerPosition enumValue))
         {

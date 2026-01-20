@@ -21,7 +21,7 @@ public class CustomExceptionHandlerMiddleware(
     {
         logger.LogError(exception, "Unhandled exception occurred. TraceId: {TraceId}", httpContext.TraceIdentifier);
 
-        (string detail, string title, int statusCode) = exception switch
+        var (detail, title, statusCode) = exception switch
         {
             BadRequestException => (
                 exception.Message,
@@ -67,7 +67,7 @@ public class CustomExceptionHandlerMiddleware(
 
         problemDetails.Extensions["traceId"] = httpContext.TraceIdentifier;
 
-        string response = env.IsDevelopment()
+        var response = env.IsDevelopment()
             ? JsonSerializer.Serialize(problemDetails, new JsonSerializerOptions { WriteIndented = true })
             : JsonSerializer.Serialize(new
             {

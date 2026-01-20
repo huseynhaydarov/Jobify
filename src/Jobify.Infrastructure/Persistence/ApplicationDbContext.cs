@@ -1,12 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
-
-namespace Jobify.Infrastructure.Persistence;
+﻿namespace Jobify.Infrastructure.Persistence;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     private readonly IAuthenticatedUserService _authenticatedUserService;
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IAuthenticatedUserService authenticatedUserService) :
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
+        IAuthenticatedUserService authenticatedUserService) :
         base(options) => _authenticatedUserService = authenticatedUserService;
 
     public DbSet<User> Users => Set<User>();
@@ -20,9 +19,9 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        Guid? userId = _authenticatedUserService.Id;
+        var userId = _authenticatedUserService.Id;
 
-        foreach (EntityEntry<BaseAuditableEntity> entry in ChangeTracker.Entries<BaseAuditableEntity>())
+        foreach (var entry in ChangeTracker.Entries<BaseAuditableEntity>())
         {
             if (entry.State == EntityState.Added)
             {

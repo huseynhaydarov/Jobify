@@ -1,6 +1,4 @@
-﻿using Jobify.Application.UseCases.UserProfiles.Dtos;
-
-namespace Jobify.WebAPI.Controllers.V1;
+﻿namespace Jobify.WebAPI.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -14,7 +12,7 @@ public class UserProfilesController : ControllerBase
     [Authorize(Roles = UserRoles.EmployerOrJobSeeker)]
     public async Task<IActionResult> Create([FromBody] CreateUserProfileCommand command)
     {
-        UserProfileDto userProfile = await _mediator.Send(command);
+        var userProfile = await _mediator.Send(command);
 
         return Ok(userProfile);
     }
@@ -32,7 +30,7 @@ public class UserProfilesController : ControllerBase
     [Authorize(Roles = UserRoles.EmployerOrJobSeeker)]
     public async Task<IActionResult> GetDetail([FromRoute] Guid id)
     {
-        GetUserProfileDetailResponse data = await _mediator.Send(new GetUserProfileDetailQuery(id));
+        var data = await _mediator.Send(new GetUserProfileDetailQuery(id));
 
         return Ok(data);
     }
@@ -43,7 +41,7 @@ public class UserProfilesController : ControllerBase
     {
         GetAllUserProfilesQuery query = new(parameters);
 
-        PaginatedResult<GetAllUserProfilesResponse> data = await _mediator.Send(query);
+        var data = await _mediator.Send(query);
 
         return Ok(data);
     }

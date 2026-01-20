@@ -20,10 +20,10 @@ public class CompanyTests : IntegrationTestBase
         var token = await GetJwtTokenByRoleAsync(UserRoles.Administrator);
 
         var createCommand = new CreateCompanyCommand(
-            Name: "Test Company",
-            Description: "Test Description",
-            WebsiteUrl: "https://api-test.com",
-            Industry: "IT"
+            "Test Company",
+            "Test Description",
+            "https://api-test.com",
+            "IT"
         );
 
         // Act
@@ -40,13 +40,12 @@ public class CompanyTests : IntegrationTestBase
     [Test]
     public async Task CreateCompany_UnAuthorizedUser_Returns401Test()
     {
-
         // Arrange
         var createCommand = new CreateCompanyCommand(
-            Name: "Test Company",
-            Description: "Test Description",
-            WebsiteUrl: "https://api-test.com",
-            Industry: "IT"
+            "Test Company",
+            "Test Description",
+            "https://api-test.com",
+            "IT"
         );
 
         // Act

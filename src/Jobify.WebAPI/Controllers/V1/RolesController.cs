@@ -12,7 +12,7 @@ public class RolesController : ControllerBase
     [Authorize(Roles = UserRoles.Administrator)]
     public async Task<ActionResult> GetDictionary([FromQuery] GetRoleDictionaryQuery query)
     {
-        List<GetRoleDictionaryResponse> data = await _mediator.Send(query);
+        var data = await _mediator.Send(query);
 
         return Ok(data);
     }

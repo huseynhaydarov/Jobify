@@ -19,16 +19,16 @@ public class UpdateUserProfileCommandHandler : BaseSetting, IRequestHandler<Upda
 
     public async Task<Unit> Handle(UpdateUserProfileCommand request, CancellationToken cancellationToken)
     {
-        UserProfile profile = await _dbContext.UserProfiles
-                                  .Where(c => c.Id == request.Id && c.UserId == _authenticatedUserService.Id)
-                                  .FirstOrDefaultAsync(cancellationToken)
-                              ?? throw new NotFoundException("Profile not found");
+        var profile = await _dbContext.UserProfiles
+                          .Where(c => c.Id == request.Id && c.UserId == _authenticatedUserService.Id)
+                          .FirstOrDefaultAsync(cancellationToken)
+                      ?? throw new NotFoundException("Profile not found");
 
         profile.MapTo(request);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        string cacheKey = $"userProfile:{request.Id}";
+        var cacheKey = $"userProfile:{request.Id}";
         ;
         _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);
         await _cache.RemoveAsync(cacheKey, cancellationToken);

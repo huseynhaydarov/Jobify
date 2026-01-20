@@ -17,10 +17,10 @@ public class RoleAuthorizationPolicyProvider : IAuthorizationPolicyProvider
 
     public async Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
     {
-        using IServiceScope scope = _scopeFactory.CreateScope();
-        IApplicationDbContext dbContext = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
+        using var scope = _scopeFactory.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
 
-        Role? role = await dbContext.Roles
+        var role = await dbContext.Roles
             .AsNoTracking()
             .FirstOrDefaultAsync(r =>
                 r.IsActive &&
@@ -28,7 +28,7 @@ public class RoleAuthorizationPolicyProvider : IAuthorizationPolicyProvider
 
         if (role != null)
         {
-            AuthorizationPolicy policy = new AuthorizationPolicyBuilder()
+            var policy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .RequireRole(role.Name)
                 .Build();

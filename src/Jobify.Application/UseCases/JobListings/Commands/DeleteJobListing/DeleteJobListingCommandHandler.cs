@@ -25,11 +25,11 @@ public class DeleteJobListingCommandHandler : BaseSetting,
     public async Task<CloseJobListingResponse> Handle(DeleteJobListingCommand request,
         CancellationToken cancellationToken)
     {
-        JobListing jobListing = await _dbContext.JobListings
-                                    .FirstOrDefaultAsync(x => x.Id == request.Id
-                                                              && x.CreatedBy == _authenticatedUserService.Id,
-                                        cancellationToken)
-                                ?? throw new NotFoundException("JobListing not found");
+        var jobListing = await _dbContext.JobListings
+                             .FirstOrDefaultAsync(x => x.Id == request.Id
+                                                       && x.CreatedBy == _authenticatedUserService.Id,
+                                 cancellationToken)
+                         ?? throw new NotFoundException("JobListing not found");
 
         jobListing.IsDeleted = true;
         jobListing.Status = JobStatus.Closed;
@@ -37,20 +37,13 @@ public class DeleteJobListingCommandHandler : BaseSetting,
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        var jobListingDeletedEvent = new JobListingChangedEvent()
-        {
-            Id = jobListing.Id,
-            Action = ActionType.Deleted
-        };
+        var jobListingDeletedEvent = new JobListingChangedEvent { Id = jobListing.Id, Action = ActionType.Deleted };
 
         await _publishEndpoint.Publish(jobListingDeletedEvent, cancellationToken);
 
-        await _publishEndpoint.Publish(new JobListingDeleted
-        {
-            Id= jobListing.Id
-        }, cancellationToken);
+        await _publishEndpoint.Publish(new JobListingDeleted { Id = jobListing.Id }, cancellationToken);
 
-        string cacheKey = $"jobListing:{request.Id}";
+        var cacheKey = $"jobListing:{request.Id}";
         _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);
         await _cache.RemoveAsync(cacheKey, cancellationToken);
 

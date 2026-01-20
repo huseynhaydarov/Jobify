@@ -16,7 +16,7 @@ public class ApplicationStatusUpdateCommandHandler
 
     public async Task<Unit> Handle(ApplicationStatusUpdateCommand request, CancellationToken cancellationToken)
     {
-        JobApplication? application = await _dbContext.JobApplications
+        var application = await _dbContext.JobApplications
             .Where(x => x.Id == request.applicationId
                         && x.ApplicationStatus != (ApplicationStatus)request.status)
             .FirstOrDefaultAsync(cancellationToken);
@@ -26,7 +26,7 @@ public class ApplicationStatusUpdateCommandHandler
             throw new NotFoundException("Job application not found.");
         }
 
-        ApplicationStatus newStatus = (ApplicationStatus)request.status;
+        var newStatus = (ApplicationStatus)request.status;
 
         ValidateStatusTransition(application.ApplicationStatus, newStatus);
 

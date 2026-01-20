@@ -10,7 +10,7 @@ public class GetAllCompaniesQueryHandler : BaseSetting,
     public async Task<PaginatedResult<GetAllCompaniesResponse>> Handle(GetAllCompaniesQuery request,
         CancellationToken cancellationToken)
     {
-        IQueryable<GetAllCompaniesResponse> queryable = _dbContext.Companies
+        var queryable = _dbContext.Companies
             .AsNoTracking()
             .Select(c => new GetAllCompaniesResponse
             {

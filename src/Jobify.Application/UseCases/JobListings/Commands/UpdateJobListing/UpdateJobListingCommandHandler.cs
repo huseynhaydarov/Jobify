@@ -27,36 +27,33 @@ public class UpdateJobListingCommandHandler : BaseSetting,
     public async Task<UpdateJobListingResponse> Handle(UpdateJobListingCommand request,
         CancellationToken cancellationToken)
     {
-        JobListing jobListing = await _dbContext.JobListings
-                                    .Where(c => c.Id == request.Id &&
-                                                c.CreatedBy == _authenticatedUserService.Id)
-                                    .FirstOrDefaultAsync(cancellationToken)
-                                ?? throw new NotFoundException("JobListing not found");
+        var jobListing = await _dbContext.JobListings
+                             .Where(c => c.Id == request.Id &&
+                                         c.CreatedBy == _authenticatedUserService.Id)
+                             .FirstOrDefaultAsync(cancellationToken)
+                         ?? throw new NotFoundException("JobListing not found");
 
         jobListing.MapFrom(request);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        var jobListingUpdatedEvent = new JobListingChangedEvent()
-        {
-            Id = jobListing.Id,
-            Action = ActionType.Updated
-        };
+        var jobListingUpdatedEvent = new JobListingChangedEvent { Id = jobListing.Id, Action = ActionType.Updated };
 
         await _publishEndpoint.Publish(jobListingUpdatedEvent, cancellationToken);
 
-        await _publishEndpoint.Publish(new JobListingUpdated
-        {
-            Id= jobListing.Id,
-            Name = jobListing.Name,
-            Description = jobListing.Description,
-            Requirements = jobListing.Requirements,
-            Location = jobListing.Location,
-            Salary =  jobListing.Salary,
-            Status = jobListing.Status.ToString(),
-        }, cancellationToken);
+        await _publishEndpoint.Publish(
+            new JobListingUpdated
+            {
+                Id = jobListing.Id,
+                Name = jobListing.Name,
+                Description = jobListing.Description,
+                Requirements = jobListing.Requirements,
+                Location = jobListing.Location,
+                Salary = jobListing.Salary,
+                Status = jobListing.Status.ToString()
+            }, cancellationToken);
 
-        string cacheKey = $"jobListing:{request.Id}";
+        var cacheKey = $"jobListing:{request.Id}";
         _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);
         await _cache.RemoveAsync(cacheKey, cancellationToken);
 

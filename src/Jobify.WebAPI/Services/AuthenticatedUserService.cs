@@ -4,17 +4,18 @@ public class AuthenticatedUserService : IAuthenticatedUserService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public AuthenticatedUserService(IHttpContextAccessor httpContextAccessor) => _httpContextAccessor = httpContextAccessor;
+    public AuthenticatedUserService(IHttpContextAccessor httpContextAccessor) =>
+        _httpContextAccessor = httpContextAccessor;
 
     public Guid? Id
     {
         get
         {
-            string? userIdString =
+            var userIdString =
                 _httpContextAccessor.HttpContext?.User
                     .FindFirstValue(ClaimTypes.NameIdentifier);
 
-            return Guid.TryParse(userIdString, out Guid userId)
+            return Guid.TryParse(userIdString, out var userId)
                 ? userId
                 : null;
         }

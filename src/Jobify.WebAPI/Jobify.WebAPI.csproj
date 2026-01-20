@@ -8,11 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MassTransit" Version="8.5.7" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.7" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.10" />
-    <PackageReference Include="Microsoft.AspNetCore.OData" Version="9.4.1" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1" />
+    <PackageReference Include="MassTransit" Version="8.5.7"/>
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.7"/>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.10"/>
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="9.4.1"/>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.11">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -20,10 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Jobify.Application\Jobify.Application.csproj" />
-    <ProjectReference Include="..\Jobify.Domain\Jobify.Domain.csproj" />
-    <ProjectReference Include="..\Jobify.Infrastructure\Jobify.Infrastructure.csproj" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+    <ProjectReference Include="..\Jobify.Application\Jobify.Application.csproj"/>
+    <ProjectReference Include="..\Jobify.Domain\Jobify.Domain.csproj"/>
+    <ProjectReference Include="..\Jobify.Infrastructure\Jobify.Infrastructure.csproj"/>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6"/>
   </ItemGroup>
 
 </Project>

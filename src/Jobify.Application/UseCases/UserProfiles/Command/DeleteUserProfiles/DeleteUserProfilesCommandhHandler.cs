@@ -13,11 +13,11 @@ public class DeleteUserProfilesCommandhHandler : IRequestHandler<DeleteUserProfi
             return Unit.Value;
         }
 
-        List<UserProfile> profiles = await _dbContext.UserProfiles
+        var profiles = await _dbContext.UserProfiles
             .Where(p => request.Ids.Contains(p.Id))
             .ToListAsync(cancellationToken);
 
-        foreach (UserProfile profile in profiles)
+        foreach (var profile in profiles)
         {
             profile.IsDeleted = true;
         }

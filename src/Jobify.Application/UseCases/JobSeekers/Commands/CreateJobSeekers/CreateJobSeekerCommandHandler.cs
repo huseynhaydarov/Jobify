@@ -12,7 +12,7 @@ public class CreateJobSeekerCommandHandler : BaseSetting, IRequestHandler<Create
 
     public async Task<JobSeekerDto> Handle(CreateJobSeekerCommand request, CancellationToken cancellationToken)
     {
-        User? existingUser = await _dbContext.Users
+        var existingUser = await _dbContext.Users
             .Where(x => x.Email == request.Email)
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -21,7 +21,7 @@ public class CreateJobSeekerCommandHandler : BaseSetting, IRequestHandler<Create
             throw new DomainException("The email address is already in use.");
         }
 
-        Role? role = await _dbContext.Roles
+        var role = await _dbContext.Roles
             .Where(x => x.Name == UserRoles.JobSeeker)
             .FirstAsync(cancellationToken);
 
@@ -30,10 +30,7 @@ public class CreateJobSeekerCommandHandler : BaseSetting, IRequestHandler<Create
             throw new NotFoundException(nameof(Role));
         }
 
-        User user = new()
-        {
-            Email = request.Email, PasswordHash = request.Password, IsActive = true
-        };
+        User user = new() { Email = request.Email, PasswordHash = request.Password, IsActive = true };
 
         user.PasswordHash = await _hasherService.HashPasswordAsync(request.Password);
 

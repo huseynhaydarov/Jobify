@@ -11,7 +11,7 @@ public class GetJobListingsOdataQueryHandler
         GetAllJobListingsOdataQuery request,
         CancellationToken cancellationToken)
     {
-        IQueryable<JobListingOdataDto> query = _context.JobListings
+        var query = _context.JobListings
             .AsNoTracking()
             .Where(x => !x.IsDeleted && x.Status == JobStatus.Open)
             .Select(j => new JobListingOdataDto

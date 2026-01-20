@@ -2,7 +2,7 @@
 
 namespace Jobify.Contracts.JobListings.IntegrationEvents;
 
-public record JobListingDeleted  : IntegrationEvent
+public record JobListingDeleted : IntegrationEvent
 {
     public Guid Id { get; init; }
 }

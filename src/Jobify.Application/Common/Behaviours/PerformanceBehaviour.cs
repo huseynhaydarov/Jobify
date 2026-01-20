@@ -24,16 +24,16 @@ public class PerformanceBehaviour<TRequest, TResponse>
     {
         _timer.Start();
 
-        TResponse response = await next();
+        var response = await next();
 
         _timer.Stop();
 
-        long elapsedMilliseconds = _timer.ElapsedMilliseconds;
+        var elapsedMilliseconds = _timer.ElapsedMilliseconds;
 
         if (elapsedMilliseconds > 500)
         {
-            string requestName = typeof(TRequest).Name;
-            Guid? userId = _authenticatedUserService.Id;
+            var requestName = typeof(TRequest).Name;
+            var userId = _authenticatedUserService.Id;
 
 
             _logger.LogWarning(

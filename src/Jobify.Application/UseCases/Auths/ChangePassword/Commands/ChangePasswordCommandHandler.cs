@@ -18,7 +18,7 @@ public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordComman
 
     public async Task<Unit> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
-        User? user = await _dnContext.Users
+        var user = await _dnContext.Users
             .Where(c => c.Id == _authenticatedUserService.Id)
             .SingleOrDefaultAsync(cancellationToken);
 

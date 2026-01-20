@@ -1,15 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
-
-namespace Jobify.WebAPI.Filters;
+﻿namespace Jobify.WebAPI.Filters;
 
 public class SwaggerFileOperationFilter : IOperationFilter
 {
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        IEnumerable<ApiParameterDescription> formFileParameters = context.ApiDescription.ParameterDescriptions
+        var formFileParameters = context.ApiDescription.ParameterDescriptions
             .Where(x => x.Type == typeof(IFormFile));
 
-        foreach (ApiParameterDescription parameter in formFileParameters)
+        foreach (var parameter in formFileParameters)
         {
             Dictionary<string, OpenApiMediaType> content = new()
             {
