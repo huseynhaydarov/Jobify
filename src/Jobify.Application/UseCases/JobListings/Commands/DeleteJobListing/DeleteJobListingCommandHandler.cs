@@ -1,6 +1,19 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Exceptions;
+using Jobify.Application.Common.Extensions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Interfaces.Services;
+using Jobify.Application.UseCases.JobListings.Dtos;
 using Jobify.Application.UseCases.JobListings.Events;
 using Jobify.Contracts.JobListings.IntegrationEvents;
+using Jobify.Domain.Enums;
 using MassTransit;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 
 namespace Jobify.Application.UseCases.JobListings.Commands.DeleteJobListing;
 

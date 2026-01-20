@@ -1,4 +1,6 @@
-﻿namespace Jobify.WebAPI.Extensions;
+﻿using Jobify.Infrastructure.Persistence.Data;
+
+namespace Jobify.WebAPI.Extensions;
 
 public static class ApplicationBuilderExtensions
 {

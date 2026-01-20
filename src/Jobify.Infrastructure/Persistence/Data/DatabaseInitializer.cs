@@ -1,4 +1,6 @@
-﻿using Jobify.Infrastructure.Persistence.Data.Seed;
+﻿using System;
+using System.Threading.Tasks;
+using Jobify.Infrastructure.Persistence.Data.Seed;
 using Microsoft.Extensions.Logging;
 
 namespace Jobify.Infrastructure.Persistence.Data;

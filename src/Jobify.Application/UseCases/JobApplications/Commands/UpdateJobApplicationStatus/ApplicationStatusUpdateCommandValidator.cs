@@ -1,4 +1,8 @@
-﻿namespace Jobify.Application.UseCases.JobApplications.Commands.UpdateJobApplicationStatus;
+﻿using System;
+using FluentValidation;
+using Jobify.Domain.Enums;
+
+namespace Jobify.Application.UseCases.JobApplications.Commands.UpdateJobApplicationStatus;
 
 public class ApplicationStatusUpdateCommandValidator
     : AbstractValidator<ApplicationStatusUpdateCommand>

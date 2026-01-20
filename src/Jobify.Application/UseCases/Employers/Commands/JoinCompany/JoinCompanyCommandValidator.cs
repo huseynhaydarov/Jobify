@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.UseCases.Employers.Commands.JoinCompany;
+﻿using FluentValidation;
+
+namespace Jobify.Application.UseCases.Employers.Commands.JoinCompany;
 
 public class JoinCompanyCommandValidator : AbstractValidator<JoinCompanyCommand>
 {

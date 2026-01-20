@@ -1,4 +1,7 @@
-﻿namespace Jobify.Application.Common.Interfaces.Services;
+﻿using System;
+using System.Collections.Generic;
+
+namespace Jobify.Application.Common.Interfaces.Services;
 
 public interface IAuthenticatedUserService
 {

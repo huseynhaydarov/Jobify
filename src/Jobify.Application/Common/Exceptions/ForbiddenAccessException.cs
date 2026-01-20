@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.Common.Exceptions;
+﻿using System;
+
+namespace Jobify.Application.Common.Exceptions;
 
 public class ForbiddenAccessException : Exception
 {

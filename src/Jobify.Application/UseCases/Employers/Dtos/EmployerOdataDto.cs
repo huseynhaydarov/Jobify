@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.UseCases.Employers.Dtos;
+﻿using System;
+
+namespace Jobify.Application.UseCases.Employers.Dtos;
 
 public record EmployerOdataDto
 {

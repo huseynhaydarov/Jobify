@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.UseCases.Auths.Login.Commands;
+﻿using FluentValidation;
+
+namespace Jobify.Application.UseCases.Auths.Login.Commands;
 
 public class LoginCommandValidator : AbstractValidator<LoginCommand>
 {

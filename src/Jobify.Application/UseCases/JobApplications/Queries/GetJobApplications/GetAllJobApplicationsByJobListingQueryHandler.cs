@@ -1,4 +1,14 @@
-﻿namespace Jobify.Application.UseCases.JobApplications.Queries.GetJobApplications;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Exceptions;
+using Jobify.Application.Common.Extensions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Models.Pagination;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace Jobify.Application.UseCases.JobApplications.Queries.GetJobApplications;
 
 public class GetAllJobApplicationsByJobListingQueryHandler
     : IRequestHandler<GetAllJobApplicationsByJobListingQuery,

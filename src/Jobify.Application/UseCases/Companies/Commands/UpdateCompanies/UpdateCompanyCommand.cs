@@ -1,4 +1,7 @@
-﻿namespace Jobify.Application.UseCases.Companies.Commands.UpdateCompanies;
+﻿using System;
+using MediatR;
+
+namespace Jobify.Application.UseCases.Companies.Commands.UpdateCompanies;
 
 public record UpdateCompanyCommand(
     Guid Id,

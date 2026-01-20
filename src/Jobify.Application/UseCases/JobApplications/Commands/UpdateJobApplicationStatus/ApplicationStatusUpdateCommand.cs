@@ -1,4 +1,7 @@
-﻿namespace Jobify.Application.UseCases.JobApplications.Commands.UpdateJobApplicationStatus;
+﻿using System;
+using MediatR;
+
+namespace Jobify.Application.UseCases.JobApplications.Commands.UpdateJobApplicationStatus;
 
 public record ApplicationStatusUpdateCommand(
     Guid applicationId,

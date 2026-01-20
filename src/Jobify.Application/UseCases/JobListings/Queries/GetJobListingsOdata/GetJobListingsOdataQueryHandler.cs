@@ -1,4 +1,15 @@
-﻿namespace Jobify.Application.UseCases.JobListings.Queries.GetJobListingsOdata;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.UseCases.Companies.Dtos;
+using Jobify.Application.UseCases.Employers.Dtos;
+using Jobify.Application.UseCases.JobListings.Dtos;
+using Jobify.Domain.Enums;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace Jobify.Application.UseCases.JobListings.Queries.GetJobListingsOdata;
 
 public class GetJobListingsOdataQueryHandler
     : IRequestHandler<GetAllJobListingsOdataQuery, IQueryable<JobListingOdataDto>>

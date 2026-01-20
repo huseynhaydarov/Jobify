@@ -1,4 +1,15 @@
-﻿namespace Jobify.WebAPI.Controllers.V1;
+﻿using Jobify.Application.Common.Models.Pagination;
+using Jobify.Application.UseCases.JobApplications.Commands.CancelJobApplication;
+using Jobify.Application.UseCases.JobApplications.Commands.CreateJobApplication;
+using Jobify.Application.UseCases.JobApplications.Commands.UpdateJobApplicationStatus;
+using Jobify.Application.UseCases.JobApplications.Queries.GetJobApplicationDetail;
+using Jobify.Application.UseCases.JobApplications.Queries.GetJobApplications;
+using Jobify.Domain.Constants;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Jobify.WebAPI.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]

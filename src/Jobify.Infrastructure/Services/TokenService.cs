@@ -1,8 +1,21 @@
-﻿namespace Jobify.Infrastructure.Services;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Jobify.Infrastructure.Services;
 
 public class TokenService(IOptions<JwtSettings> jwtSettings) : ITokenService
 {
     private readonly JwtSettings _jwtSettings = jwtSettings.Value;
+
+
+    public string GenerateRefreshToken()
+    {
+        var randomNumber = new byte[32];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        return Convert.ToBase64String(randomNumber);
+    }
 
     public string GenerateJwtToken(User user)
     {
@@ -37,15 +50,6 @@ public class TokenService(IOptions<JwtSettings> jwtSettings) : ITokenService
             signingCredentials: credentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
-    }
-
-
-    public string GenerateRefreshToken()
-    {
-        var randomNumber = new byte[32];
-        using var rng = RandomNumberGenerator.Create();
-        rng.GetBytes(randomNumber);
-        return Convert.ToBase64String(randomNumber);
     }
 
     public ClaimsPrincipal? GetPrincipalFromExpiredToken(string token)

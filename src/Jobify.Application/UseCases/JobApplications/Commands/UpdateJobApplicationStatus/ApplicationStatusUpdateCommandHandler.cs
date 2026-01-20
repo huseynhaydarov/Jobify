@@ -1,4 +1,15 @@
-﻿namespace Jobify.Application.UseCases.JobApplications.Commands.UpdateJobApplicationStatus;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Exceptions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Interfaces.Services;
+using Jobify.Domain.Enums;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace Jobify.Application.UseCases.JobApplications.Commands.UpdateJobApplicationStatus;
 
 public class ApplicationStatusUpdateCommandHandler
     : IRequestHandler<ApplicationStatusUpdateCommand, Unit>

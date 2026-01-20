@@ -1,4 +1,7 @@
-﻿namespace Jobify.WebAPI.Filters;
+﻿using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+
+namespace Jobify.WebAPI.Filters;
 
 public class SwaggerFileOperationFilter : IOperationFilter
 {

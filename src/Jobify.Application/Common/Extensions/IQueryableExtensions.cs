@@ -1,4 +1,10 @@
-﻿namespace Jobify.Application.Common.Extensions;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Models.Pagination;
+using Microsoft.EntityFrameworkCore;
+
+namespace Jobify.Application.Common.Extensions;
 
 public static class IQueryableExtensions
 {

@@ -1,4 +1,13 @@
-﻿using Jobify.Application.UseCases.JobListings.Queries.GetJobListings;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Extensions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Models.Pagination;
+using Jobify.Application.UseCases.JobListings.Queries.GetJobListings;
+using MediatR;
+using Microsoft.Extensions.Configuration;
 using Refit;
 using SearchService.ApiClient;
 

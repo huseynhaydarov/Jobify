@@ -1,4 +1,16 @@
-﻿namespace Jobify.WebAPI.Controllers.V1;
+﻿using Jobify.Application.Common.Models.Pagination;
+using Jobify.Application.UseCases.UserProfiles.Command.CreateUserProfile;
+using Jobify.Application.UseCases.UserProfiles.Command.DeleteUserProfile;
+using Jobify.Application.UseCases.UserProfiles.Command.DeleteUserProfiles;
+using Jobify.Application.UseCases.UserProfiles.Command.UpdateUserProfile;
+using Jobify.Application.UseCases.UserProfiles.Queries.GetUserProfileDetail;
+using Jobify.Application.UseCases.UserProfiles.Queries.GetUserProfiles;
+using Jobify.Domain.Constants;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Jobify.WebAPI.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]

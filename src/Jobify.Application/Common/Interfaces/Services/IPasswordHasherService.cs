@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.Common.Interfaces.Services;
+﻿using System.Threading.Tasks;
+
+namespace Jobify.Application.Common.Interfaces.Services;
 
 public interface IPasswordHasherService
 {

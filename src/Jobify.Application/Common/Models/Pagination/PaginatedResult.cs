@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.Common.Models.Pagination;
+﻿using System.Collections.Generic;
+
+namespace Jobify.Application.Common.Models.Pagination;
 
 public class PaginatedResult<T>
 {

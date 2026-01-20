@@ -1,3 +1,6 @@
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using AutoFixture;
 using Jobify.Application.Common.Interfaces.Services;
 using Jobify.Infrastructure.Persistence;

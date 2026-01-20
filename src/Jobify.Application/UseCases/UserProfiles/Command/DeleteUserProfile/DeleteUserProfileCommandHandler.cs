@@ -1,4 +1,16 @@
-﻿namespace Jobify.Application.UseCases.UserProfiles.Command.DeleteUserProfile;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Exceptions;
+using Jobify.Application.Common.Extensions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Interfaces.Services;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
+
+namespace Jobify.Application.UseCases.UserProfiles.Command.DeleteUserProfile;
 
 public class DeleteUserProfileCommandHandler : BaseSetting, IRequestHandler<DeleteUserProfileCommand, Unit>
 {

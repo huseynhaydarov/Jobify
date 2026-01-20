@@ -1,4 +1,8 @@
-﻿namespace Jobify.Infrastructure.Persistence;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Jobify.Infrastructure.Persistence;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {

@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.UseCases.JobApplications.Commands.CancelJobApplication;
+﻿using FluentValidation;
+
+namespace Jobify.Application.UseCases.JobApplications.Commands.CancelJobApplication;
 
 public class CancelJobApplicationCommandValidator : AbstractValidator<CancelJobApplicationCommand>
 {

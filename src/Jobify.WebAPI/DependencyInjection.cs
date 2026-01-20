@@ -1,4 +1,13 @@
-﻿using Jobify.WebAPI.Extensions;
+﻿using System.Text;
+using Jobify.Application.Common.Interfaces.Services;
+using Jobify.Application.Common.Models;
+using Jobify.Domain.Constants;
+using Jobify.WebAPI.Extensions;
+using Jobify.WebAPI.Filters;
+using Jobify.WebAPI.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 namespace Jobify.WebAPI;
 

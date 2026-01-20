@@ -1,4 +1,11 @@
-﻿namespace Jobify.Application.Common.Extensions;
+﻿using System;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
+
+namespace Jobify.Application.Common.Extensions;
 
 public static class DistributedCacheExtensions
 {

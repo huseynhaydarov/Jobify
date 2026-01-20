@@ -1,4 +1,6 @@
-﻿namespace Jobify.Domain.Entities;
+﻿using System;
+
+namespace Jobify.Domain.Entities;
 
 public class UserProfile : BaseAuditableEntity
 {

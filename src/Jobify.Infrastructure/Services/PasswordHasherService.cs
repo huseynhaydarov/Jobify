@@ -1,4 +1,7 @@
-﻿namespace Jobify.Infrastructure.Services;
+﻿using System;
+using System.Threading.Tasks;
+
+namespace Jobify.Infrastructure.Services;
 
 public sealed class PasswordHasherService : IPasswordHasherService
 {

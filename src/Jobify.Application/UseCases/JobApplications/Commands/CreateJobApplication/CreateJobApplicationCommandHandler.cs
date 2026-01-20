@@ -1,4 +1,19 @@
-﻿namespace Jobify.Application.UseCases.JobApplications.Commands.CreateJobApplication;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Exceptions;
+using Jobify.Application.Common.Extensions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Interfaces.Services;
+using Jobify.Application.UseCases.JobApplications.Dtos;
+using Jobify.Domain.Entities;
+using Jobify.Domain.Enums;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+
+namespace Jobify.Application.UseCases.JobApplications.Commands.CreateJobApplication;
 
 public class CreateJobApplicationCommandHandler : BaseSetting,
     IRequestHandler<CreateJobApplicationCommand, JobApplicationDto>

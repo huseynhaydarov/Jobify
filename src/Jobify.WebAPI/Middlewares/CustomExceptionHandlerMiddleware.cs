@@ -1,4 +1,8 @@
-﻿namespace Jobify.WebAPI.Middlewares;
+﻿using System.Text.Json;
+using Jobify.Application.Common.Exceptions;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Jobify.WebAPI.Middlewares;
 
 public class CustomExceptionHandlerMiddleware(
     RequestDelegate next,

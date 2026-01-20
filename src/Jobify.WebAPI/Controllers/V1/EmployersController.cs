@@ -1,4 +1,15 @@
-﻿namespace Jobify.WebAPI.Controllers.V1;
+﻿using Jobify.Application.Common.Models.Pagination;
+using Jobify.Application.UseCases.Employers.Commands.CreateEmployers;
+using Jobify.Application.UseCases.Employers.Commands.JoinCompany;
+using Jobify.Application.UseCases.Employers.Commands.PositionUpdate;
+using Jobify.Application.UseCases.Employers.Queries.GetEmployers;
+using Jobify.Application.UseCases.Employers.Queries.GetJobListingsByEmployer;
+using Jobify.Domain.Constants;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Jobify.WebAPI.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]

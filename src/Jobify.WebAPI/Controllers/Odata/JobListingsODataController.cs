@@ -1,4 +1,11 @@
-﻿namespace Jobify.WebAPI.Controllers.Odata;
+﻿using Jobify.Application.UseCases.JobListings.Queries.GetJobListingsOdata;
+using Jobify.Domain.Constants;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
+
+namespace Jobify.WebAPI.Controllers.Odata;
 
 [Route("odata/JobListings")]
 public class JobListingsODataController : ControllerBase

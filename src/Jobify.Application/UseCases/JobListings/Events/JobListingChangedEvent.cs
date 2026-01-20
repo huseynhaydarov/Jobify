@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.UseCases.JobListings.Events;
+﻿using System;
+
+namespace Jobify.Application.UseCases.JobListings.Events;
 
 public record JobListingChangedEvent
 {

@@ -1,4 +1,13 @@
-﻿namespace Jobify.Application.UseCases.Roles.Queries.GetRoles;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Extensions;
+using Jobify.Application.Common.Interfaces.Data;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace Jobify.Application.UseCases.Roles.Queries.GetRoles;
 
 public class GetRoleDictionaryQueryHandler : BaseSetting,
     IRequestHandler<GetRoleDictionaryQuery, List<GetRoleDictionaryResponse>>

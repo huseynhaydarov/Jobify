@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.Common.Extensions;
+﻿using Jobify.Application.Common.Interfaces.Data;
+
+namespace Jobify.Application.Common.Extensions;
 
 public class BaseSetting
 {

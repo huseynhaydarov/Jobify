@@ -1,4 +1,7 @@
-﻿namespace Jobify.Application.UseCases.Companies.Commands.CreateCompanies;
+﻿using Jobify.Application.UseCases.Companies.Dtos;
+using MediatR;
+
+namespace Jobify.Application.UseCases.Companies.Commands.CreateCompanies;
 
 public record CreateCompanyCommand(
     string Name,

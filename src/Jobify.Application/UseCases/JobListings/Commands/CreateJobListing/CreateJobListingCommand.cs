@@ -1,4 +1,8 @@
-﻿namespace Jobify.Application.UseCases.JobListings.Commands.CreateJobListing;
+﻿using System;
+using Jobify.Application.UseCases.JobListings.Dtos;
+using MediatR;
+
+namespace Jobify.Application.UseCases.JobListings.Commands.CreateJobListing;
 
 public record CreateJobListingCommand(
     string Name,

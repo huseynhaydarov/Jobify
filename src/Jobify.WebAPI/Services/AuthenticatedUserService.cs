@@ -1,4 +1,7 @@
-﻿namespace Jobify.WebAPI.Services;
+﻿using System.Security.Claims;
+using Jobify.Application.Common.Interfaces.Services;
+
+namespace Jobify.WebAPI.Services;
 
 public class AuthenticatedUserService : IAuthenticatedUserService
 {

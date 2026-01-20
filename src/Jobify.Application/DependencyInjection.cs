@@ -1,4 +1,9 @@
-﻿using Jobify.Application.UseCases.JobApplications.Commands.CreateJobApplication;
+﻿using System.Reflection;
+using FluentValidation;
+using Jobify.Application.Common.Behaviours;
+using Jobify.Application.UseCases.JobApplications.Commands.CreateJobApplication;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Jobify.Application;
 

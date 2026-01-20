@@ -1,4 +1,13 @@
-﻿namespace Jobify.Application.UseCases.UserProfiles.Queries.GetUserProfiles;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Extensions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Models.Pagination;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace Jobify.Application.UseCases.UserProfiles.Queries.GetUserProfiles;
 
 public class GetAllUserProfilesQueryHandler : BaseSetting, IRequestHandler<GetAllUserProfilesQuery,
     PaginatedResult<GetAllUserProfilesResponse>>

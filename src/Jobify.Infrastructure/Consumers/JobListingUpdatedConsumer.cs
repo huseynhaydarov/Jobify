@@ -1,4 +1,5 @@
-﻿using Jobify.Application.Common.Models.Caching;
+﻿using System.Threading.Tasks;
+using Jobify.Application.Common.Models.Caching;
 using Jobify.Application.UseCases.JobListings.Events;
 using MassTransit;
 using Microsoft.Extensions.Logging;

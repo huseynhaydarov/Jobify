@@ -1,4 +1,17 @@
-﻿namespace Jobify.Application.UseCases.Employers.Commands.CreateEmployers;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Exceptions;
+using Jobify.Application.Common.Extensions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Interfaces.Services;
+using Jobify.Application.UseCases.Employers.Dtos;
+using Jobify.Domain.Constants;
+using Jobify.Domain.Entities;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace Jobify.Application.UseCases.Employers.Commands.CreateEmployers;
 
 public class CreateEmployerCommandCommandHandler : BaseSetting, IRequestHandler<CreateEmployerCommand, EmployerDto>
 {

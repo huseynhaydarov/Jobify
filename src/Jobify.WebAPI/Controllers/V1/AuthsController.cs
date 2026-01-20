@@ -1,4 +1,12 @@
-﻿namespace Jobify.WebAPI.Controllers.V1;
+﻿using Jobify.Application.UseCases.Auths.ChangePassword.Commands;
+using Jobify.Application.UseCases.Auths.Login.Commands;
+using Jobify.Application.UseCases.Auths.RefreshToken.Commands;
+using Jobify.Domain.Constants;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Jobify.WebAPI.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]

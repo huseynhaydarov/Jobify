@@ -1,4 +1,8 @@
-﻿namespace Jobify.Application.UseCases.Employers.Commands.PositionUpdate;
+﻿using System;
+using FluentValidation;
+using Jobify.Domain.Enums;
+
+namespace Jobify.Application.UseCases.Employers.Commands.PositionUpdate;
 
 public class PositionUpdateCommandValidator : AbstractValidator<PositionUpdateCommand>
 {
