@@ -90,8 +90,6 @@ public static class DependencyInjection
 
         services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
 
-        services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
-
         services.AddMassTransit(configuration);
 
         return services;
