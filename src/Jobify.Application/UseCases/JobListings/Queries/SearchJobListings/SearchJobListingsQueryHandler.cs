@@ -23,7 +23,7 @@ public class SearchJobListingsQueryHandler
     {
         var searchApi = RestService.For<IJobSearchApi>(_configuration["SearchService:BaseUrl"]);
 
-        var response = await searchApi.SearchAsync(request.SearchTerm, cancellationToken);
+        var response = await searchApi.SearchAsync(request.Request, cancellationToken);
 
         if (response.Ids.Count == 0)
         {
