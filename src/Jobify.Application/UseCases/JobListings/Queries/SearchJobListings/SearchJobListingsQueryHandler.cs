@@ -23,14 +23,14 @@ public class SearchJobListingsQueryHandler
     {
         var searchApi = RestService.For<IJobSearchApi>(_configuration["SearchService:BaseUrl"]);
 
-        var response = await searchApi.SearchAsync(request.Request, cancellationToken);
+        var response = await searchApi.SearchAsync(request.SearchTerm, cancellationToken);
 
         if (response.Ids.Count == 0)
         {
             return new PaginatedResult<GetAllJobListingsResponse>(
                 items: new List<GetAllJobListingsResponse>(),
-                request.Parameters.PageNumber,
-                request.Parameters.PageSize,
+                request.PageNumber,
+                request.PageSize,
                 hasNext: false
             );
         }
@@ -51,8 +51,8 @@ public class SearchJobListingsQueryHandler
             });
 
         return await queryable.PaginatedListAsync(
-            request.Parameters.PageNumber,
-            request.Parameters.PageSize,
+            request.PageNumber,
+            request.PageSize,
             cancellationToken);
     }
 }
