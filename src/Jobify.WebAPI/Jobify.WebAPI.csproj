@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Jobify.Application\Jobify.Application.csproj" />
-    <ProjectReference Include="..\Jobify.Contracts\Jobify.Contracts.csproj" />
     <ProjectReference Include="..\Jobify.Domain\Jobify.Domain.csproj" />
     <ProjectReference Include="..\Jobify.Infrastructure\Jobify.Infrastructure.csproj" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
