@@ -2,6 +2,7 @@
 using Jobify.Application.UseCases.Companies.Commands.CreateCompanies;
 using Jobify.Application.UseCases.Companies.Commands.DeleteCompany;
 using Jobify.Application.UseCases.Companies.Commands.UpdateCompanies;
+using Jobify.Application.UseCases.Companies.Dtos;
 using Jobify.Application.UseCases.Companies.Queries.GetCompanies;
 using Jobify.Application.UseCases.Companies.Queries.GetCompanyDetail;
 using Jobify.Domain.Constants;
@@ -21,41 +22,42 @@ public class CompaniesController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = UserRoles.Administrator)]
-    public async Task<IActionResult> Create([FromBody] CreateCompanyCommand command)
+    public async Task<CreateCompanyResponse> Create([FromBody] CreateCompanyCommand command)
     {
-        var data = await _mediator.Send(command);
-
-        return Ok(data);
+        return await _mediator.Send(command);
     }
 
     [HttpPut]
     [Authorize(Roles = UserRoles.Administrator)]
-    public async Task<IActionResult> Update([FromBody] UpdateCompanyCommand command)
+    public async Task<UpdateCompanyResponse> Update([FromRoute] Guid id, [FromBody] UpdateCompanyRequest request)
     {
-        await _mediator.Send(command);
+        var command = new UpdateCompanyCommand(
+            id,
+            request.Name,
+            request.Description,
+            request.WebsiteUrl,
+            request.Industry);
 
-        return NoContent();
+        return await _mediator.Send(command);
     }
 
     [HttpGet("{id}")]
     [Authorize(Policy = Policies.CanViewAll)]
-    public async Task<ActionResult<GetCompanyDetailResponse>> GetDetail([FromRoute] Guid id)
+    public async Task<GetCompanyDetailResponse> GetDetail([FromRoute] Guid id)
     {
         var data = await _mediator.Send(new GetCompanyDetailQuery(id));
 
-        return Ok(data);
+        return data;
     }
 
     [HttpGet]
     [Authorize(Policy = Policies.CanViewAll)]
-    public async Task<IActionResult> GetAll([FromQuery] PagingParameters parameters,
+    public async Task<PaginatedResult<GetAllCompaniesResponse>> GetAll([FromQuery] PagingParameters parameters,
         CancellationToken cancellationToken)
     {
-        GetAllCompaniesQuery query = new(parameters);
+        var query = new GetAllCompaniesQuery(parameters);
 
-        var data = await _mediator.Send(query, cancellationToken);
-
-        return Ok(data);
+        return await _mediator.Send(query, cancellationToken);
     }
 
     [HttpDelete("{id}")]

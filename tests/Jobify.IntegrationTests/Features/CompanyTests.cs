@@ -34,7 +34,7 @@ public class CompanyTests : IntegrationTestBase
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var matchResponse = await response.Content.ReadFromJsonAsync<CompanyDto>();
+        var matchResponse = await response.Content.ReadFromJsonAsync<CreateCompanyResponse>();
         matchResponse.ShouldNotBeNull();
         matchResponse.Id.ShouldNotBe(Guid.Empty);
     }

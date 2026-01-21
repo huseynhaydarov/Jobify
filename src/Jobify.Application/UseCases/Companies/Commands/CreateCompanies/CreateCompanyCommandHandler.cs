@@ -10,7 +10,7 @@ using MediatR;
 
 namespace Jobify.Application.UseCases.Companies.Commands.CreateCompanies;
 
-public class CreateCompanyCommandHandler : BaseSetting, IRequestHandler<CreateCompanyCommand, CompanyDto>
+public class CreateCompanyCommandHandler : BaseSetting, IRequestHandler<CreateCompanyCommand, CreateCompanyResponse>
 {
     private readonly IAuthenticatedUserService _authenticatedUserService;
 
@@ -18,12 +18,12 @@ public class CreateCompanyCommandHandler : BaseSetting, IRequestHandler<CreateCo
         IAuthenticatedUserService authenticatedUserService) : base(dbContext) =>
         _authenticatedUserService = authenticatedUserService;
 
-    public async Task<CompanyDto> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
+    public async Task<CreateCompanyResponse> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
     {
         var userId = _authenticatedUserService.Id
                      ?? throw new UnauthorizedException("User is not authenticated");
 
-        Company company = new()
+        var company = new Company()
         {
             Name = request.Name,
             Description = request.Description,
@@ -36,6 +36,8 @@ public class CreateCompanyCommandHandler : BaseSetting, IRequestHandler<CreateCo
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return new CompanyDto(company.Id);
+        return new CreateCompanyResponse(
+            company.Id,
+            company.CreatedAt);
     }
 }

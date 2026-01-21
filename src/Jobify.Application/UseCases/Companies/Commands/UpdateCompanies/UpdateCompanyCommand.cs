@@ -1,4 +1,5 @@
 ﻿using System;
+using Jobify.Application.UseCases.Companies.Dtos;
 using MediatR;
 
 namespace Jobify.Application.UseCases.Companies.Commands.UpdateCompanies;
@@ -8,4 +9,4 @@ public record UpdateCompanyCommand(
     string Name,
     string? WebsiteUrl,
     string? Description,
-    string? Industry) : IRequest<Unit>;
+    string? Industry) : IRequest<UpdateCompanyResponse>;
