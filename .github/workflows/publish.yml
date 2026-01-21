@@ -12,28 +12,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout the repo
+
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup .NET SDK
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 9.0.x  # match your project TFM
+          dotnet-version: 9.0.x
 
-      # 3️⃣ Restore dependencies
       - name: Restore dependencies
         run: dotnet restore
 
-      # 4️⃣ Build the project
       - name: Build
         run: dotnet build --no-restore -c Release
 
-      # 5️⃣ Pack the project into a .nupkg
       - name: Pack NuGet package
         run: dotnet pack Jobify.Contracts.csproj -c Release -o ./nupkgs
-
 
       - name: Push NuGet package
         run: dotnet nuget push ./nupkgs/*.nupkg \
