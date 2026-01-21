@@ -1,5 +1,4 @@
-﻿using Jobify.Application.UseCases.JobListings.Events;
-using Jobify.Contracts.JobListings.IntegrationEvents;
+﻿using Jobify.Contracts.JobListings.Events;
 using MassTransit;
 
 namespace Jobify.Application.UseCases.JobListings.Commands.CreateJobListing;
@@ -53,22 +52,20 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
         await _dbContext.JobListings.AddAsync(jobListing, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        var jobListingAddedEvent = new JobListingChangedEvent()
-        {
-            Id = jobListing.Id,
-            Action = ActionType.Added
-        };
-
-        await _publishEndpoint.Publish(jobListingAddedEvent, cancellationToken);
-
-        await _publishEndpoint.Publish(new JobListingCreated
+        await _publishEndpoint.Publish(new JobListingCreatedEvent
         {
             Id= jobListing.Id,
             Name = jobListing.Name,
             Description = jobListing.Description,
             Requirements = jobListing.Requirements,
-            Location = jobListing.Location,
-            PostedAt = jobListing.PostedAt,
+            Location = request.Location,
+            Salary = jobListing.Salary,
+            Currency = jobListing.Currency,
+            Status = jobListing.Status.ToString(),
+            CompanyId = jobListing.CompanyId,
+            EmployerId = jobListing.EmployerId,
+            PostedAt = DateTimeOffset.UtcNow,
+            ExpiresAt = request.ExpireDate
         }, cancellationToken);
 
         return new JobListingDto(
