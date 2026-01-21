@@ -27,8 +27,7 @@ public class JobListingDeletedConsumer : IConsumer<JobListingDeletedEvent>
 
         string cacheKey = $"jobListing:{context.Message.Id}";
         _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);
-         db.KeyDelete(cacheKey);
 
-        await db.KeyDeleteAsync(JobListingsCacheKeys.Registry);
+        await db.KeyDeleteAsync([cacheKey, JobListingsCacheKeys.Registry]);
     }
 }
