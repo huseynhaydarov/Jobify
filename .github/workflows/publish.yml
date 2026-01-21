@@ -4,6 +4,8 @@ name: Publish Publish Jobify.Contracts
 on:
   push:
     branches: [ "master" ]
+    pull_request:
+      branches: [ "master" ]
 
 jobs:
   publish:
@@ -32,7 +34,7 @@ jobs:
       - name: Pack NuGet package
         run: dotnet pack Jobify.Contracts.csproj -c Release -o ./nupkgs
 
-      # 6️⃣ Push the package to GitHub Packages
+
       - name: Push NuGet package
         run: dotnet nuget push ./nupkgs/*.nupkg \
           --source "https://nuget.pkg.github.com/huseynhaydarov/index.json" \
