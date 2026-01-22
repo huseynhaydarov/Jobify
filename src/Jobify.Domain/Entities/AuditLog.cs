@@ -12,7 +12,7 @@ public class AuditLog
     public string? ChangedByType { get; set; }
 
     public DateTime ChangedAt { get; set; }
+    public List<AuditLogDetail> AuditLogDetails { get; set; } = [];
 
-    public string? Changes { get; set; }
     public Guid EntityId { get; set; }
 }

@@ -6,13 +6,12 @@ public record GetAuditLogByJobListingResponse
 
     public required string EntityType { get; init; }
 
-    public required string Action { get; init; }
+    public required string? Action { get; init; }
 
     public Guid ChangedBy { get; init; }
     public string? ChangedByType { get; init; }
 
     public DateTime ChangedAt { get; init; }
-
-    public string? Changes { get; init; }
+    public List<AuditLogDetail> AuditLogDetails { get; init; }
     public Guid EntityId { get; init; }
 }

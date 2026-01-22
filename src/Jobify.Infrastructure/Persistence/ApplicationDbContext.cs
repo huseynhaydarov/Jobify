@@ -1,7 +1,4 @@
-﻿using Jobify.Domain.Enums;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-
-namespace Jobify.Infrastructure.Persistence;
+﻿namespace Jobify.Infrastructure.Persistence;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
@@ -24,53 +21,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         Guid? userId = _authenticatedUserService.Id;
 
-        var auditLogs = new List<AuditLog>();
-
-        var jobListingEntries = ChangeTracker.Entries<JobListing>()
-            .Where(e =>
-                e.State == EntityState.Added ||
-                e.State == EntityState.Modified)
-            .ToList();
-
-        foreach (var entry in jobListingEntries)
-        {
-            var auditLog = new AuditLog
-            {
-                Id = Guid.NewGuid(),
-                EntityType = nameof(JobListing),
-                ChangedBy = userId ?? Guid.Empty,
-                ChangedByType = _authenticatedUserService.Roles != null
-                    ? string.Join(", ", _authenticatedUserService.Roles)
-                    : null,
-                ChangedAt = DateTime.UtcNow,
-                EntityId = entry.Entity.Id
-            };
-
-            if (entry.State == EntityState.Added)
-            {
-                auditLog.Action = AuditAction.Created;
-            }
-            else if (entry.State == EntityState.Modified)
-            {
-                var status = entry.Property(nameof(JobListing.Status));
-
-                if (status.IsModified &&
-                    status.OriginalValue?.ToString() == nameof(JobStatus.Open) &&
-                    status.CurrentValue?.ToString() == nameof(JobStatus.Closed))
-                {
-                    auditLog.Action = AuditAction.Closed;
-                }
-                else
-                {
-                    auditLog.Action = AuditAction.Updated;
-                }
-
-                auditLog.Changes = GetChanges(entry);
-            }
-
-            auditLogs.Add(auditLog);
-        }
-
         foreach (var entry in ChangeTracker.Entries<BaseAuditableEntity>())
         {
             if (entry.State == EntityState.Added)
@@ -86,11 +36,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             }
         }
 
-        if (auditLogs.Any())
-        {
-            AuditLogs.AddRange(auditLogs);
-        }
-
         return await base.SaveChangesAsync(cancellationToken);
     }
 
@@ -99,30 +44,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         builder.Entity<UserProfile>()
             .HasQueryFilter(x => !x.IsDeleted);
 
-        builder.Entity<AuditLog>()
-            .Property(x => x.Action)
-            .HasConversion<string>()
-            .IsRequired();
-
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-    }
-
-    private string GetChanges(EntityEntry jobListingEntries)
-    {
-        var changes = new StringBuilder();
-
-        foreach (var property in jobListingEntries.OriginalValues.Properties)
-        {
-            var originalValue = jobListingEntries.OriginalValues[property];
-            var currentValue = jobListingEntries.CurrentValues[property];
-
-            if (!Equals(originalValue, currentValue))
-            {
-                changes.AppendLine($"{property.Name}: From '{originalValue}' to '{currentValue}'");
-            }
-        }
-
-        return changes.ToString();
     }
 }

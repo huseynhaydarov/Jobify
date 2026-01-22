@@ -24,7 +24,7 @@ public class GetAuditLogByJobListingQueryHandler : BaseSetting, IRequestHandler<
                 ChangedBy = j.ChangedBy,
                 ChangedByType = j.ChangedByType,
                 ChangedAt =  j.ChangedAt,
-                Changes =  j.Changes,
+                AuditLogDetails = j.AuditLogDetails ,
                 EntityId =  j.EntityId,
             });
 
