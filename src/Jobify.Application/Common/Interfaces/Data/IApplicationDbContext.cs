@@ -10,6 +10,7 @@ public interface IApplicationDbContext
     DbSet<UserRole> UsersRoles { get; }
     DbSet<Employer> Employers { get; }
     DbSet<UserProfile> UserProfiles { get; }
+    DbSet<AuditLog> AuditLogs { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

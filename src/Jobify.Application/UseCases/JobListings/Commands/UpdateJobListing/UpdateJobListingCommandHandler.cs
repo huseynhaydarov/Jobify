@@ -1,4 +1,4 @@
-﻿using Jobify.Contracts.JobListings.Events;
+using Jobify.Contracts.JobListings.Events;
 using MassTransit;
 
 namespace Jobify.Application.UseCases.JobListings.Commands.UpdateJobListing;
