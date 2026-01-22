@@ -1,5 +1,4 @@
 ﻿using Jobify.WebAPI.Extensions;
-using MassTransit;
 
 namespace Jobify.WebAPI;
 

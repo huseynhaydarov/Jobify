@@ -1,4 +1,4 @@
-using Jobify.Application.UseCases.JobListings.Events;
+using Jobify.Contracts.JobListings.Events;
 using MassTransit;
 
 namespace Jobify.Application.UseCases.JobListings.Commands.DeleteJobListing;
@@ -7,8 +7,6 @@ public class DeleteJobListingCommandHandler : BaseSetting,
     IRequestHandler<DeleteJobListingCommand, CloseJobListingResponse>
 {
     private readonly IAuthenticatedUserService _authenticatedUserService;
-    private readonly IDistributedCache _cache;
-    private readonly ILogger<DeleteJobListingCommandHandler> _logger;
     private readonly IPublishEndpoint _publishEndpoint;
 
     public DeleteJobListingCommandHandler(IApplicationDbContext dbContext,
@@ -16,8 +14,6 @@ public class DeleteJobListingCommandHandler : BaseSetting,
         ILogger<DeleteJobListingCommandHandler> logger, IPublishEndpoint publishEndpoint) : base(dbContext)
     {
         _authenticatedUserService = authenticatedUserService;
-        _cache = cache;
-        _logger = logger;
         _publishEndpoint = publishEndpoint;
     }
 
@@ -36,17 +32,10 @@ public class DeleteJobListingCommandHandler : BaseSetting,
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        var jobListingDeletedEvent = new JobListingChangedEvent()
+        await _publishEndpoint.Publish(new JobListingDeletedEvent
         {
-            Id = jobListing.Id,
-            Action = ActionType.Deleted
-        };
-
-        await _publishEndpoint.Publish(jobListingDeletedEvent, cancellationToken);
-
-        string cacheKey = $"jobListing:{request.Id}";
-        _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);
-        await _cache.RemoveAsync(cacheKey, cancellationToken);
+            Id = jobListing.Id
+        }, cancellationToken);
 
         return new CloseJobListingResponse(
             jobListing.Id,

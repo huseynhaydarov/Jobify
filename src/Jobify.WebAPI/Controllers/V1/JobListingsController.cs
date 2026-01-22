@@ -1,4 +1,5 @@
 ﻿using Jobify.Application.UseCases.JobListings.Dtos;
+using Jobify.Application.UseCases.JobListings.Queries.SearchJobListings;
 
 namespace Jobify.WebAPI.Controllers.V1;
 
@@ -46,6 +47,18 @@ public class JobListingsController : ControllerBase
         PaginatedResult<GetAllJobListingsResponse> data = await _mediator.Send(query);
 
         return Ok(data);
+    }
+
+    [HttpGet("search")]
+    [AllowAnonymous]
+    public async Task<PaginatedResult<GetAllJobListingsResponse>> Search([FromQuery] SearchRequestModel request)
+    {
+        var query = new SearchJobListingsQuery(
+            request.SearchTerm,
+            request.PageNumber,
+            request.PageSize);
+
+        return await _mediator.Send(query);
     }
 
     [HttpDelete("{id}")]

@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\Jobify.Contracts\Jobify.Contracts.csproj" />
     <ProjectReference Include="..\Jobify.Domain\Jobify.Domain.csproj"/>
   </ItemGroup>
 
@@ -11,6 +12,7 @@
     <PackageReference Include="MediatR" Version="13.1.0"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.11"/>
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.11"/>
+    <PackageReference Include="JobifySearchService.ApiClient" Version="1.0.2" />
     <PackageReference Include="StackExchange.Redis" Version="2.7.27" />
   </ItemGroup>
 
