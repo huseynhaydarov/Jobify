@@ -1,4 +1,6 @@
-﻿namespace Jobify.Infrastructure.Persistence;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+
+namespace Jobify.Infrastructure.Persistence;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
@@ -16,6 +18,9 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Employer> Employers => Set<Employer>();
     public DbSet<UserProfile> UserProfiles => Set<UserProfile>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+
+    public new EntityEntry Entry(object entity)
+        => base.Entry(entity);
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

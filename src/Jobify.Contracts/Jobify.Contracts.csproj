@@ -9,4 +9,8 @@
       <Version>1.0.3</Version>
       <Authors>Jobify</Authors>
     </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Jobify.Domain\Jobify.Domain.csproj" />
+    </ItemGroup>
 </Project>

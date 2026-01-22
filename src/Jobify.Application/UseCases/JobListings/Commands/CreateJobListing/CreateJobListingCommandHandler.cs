@@ -58,14 +58,17 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
             Name = jobListing.Name,
             Description = jobListing.Description,
             Requirements = jobListing.Requirements,
-            Location = request.Location,
+            Location = jobListing.Location,
             Salary = jobListing.Salary,
             Currency = jobListing.Currency,
             Status = jobListing.Status.ToString(),
             CompanyId = jobListing.CompanyId,
             EmployerId = jobListing.EmployerId,
             PostedAt = DateTimeOffset.UtcNow,
-            ExpiresAt = request.ExpireDate
+            ExpiresAt = jobListing.ExpiresAt,
+            CreatedAt = jobListing.CreatedAt,
+            CreatedById = jobListing.CreatedBy,
+            CreatedBy = string.Join(", ", _authenticatedUserService.Roles!),
         }, cancellationToken);
 
         return new JobListingDto(

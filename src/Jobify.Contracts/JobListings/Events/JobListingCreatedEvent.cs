@@ -18,4 +18,7 @@ public record JobListingCreatedEvent
     public DateTimeOffset? ExpiresAt { get; init; }
     public Guid CompanyId { get; init; }
     public Guid EmployerId { get; init; }
+    public DateTimeOffset CreatedAt { get; init; }
+    public Guid? CreatedById { get; init; }
+    public string? CreatedBy {get; init;}
 }

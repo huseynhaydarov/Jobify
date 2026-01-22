@@ -6,7 +6,7 @@ public record GetAuditLogByJobListingResponse
 
     public required string EntityType { get; init; }
 
-    public required string? Action { get; init; }
+    public required string Action { get; init; }
 
     public Guid ChangedBy { get; init; }
     public string? ChangedByType { get; init; }

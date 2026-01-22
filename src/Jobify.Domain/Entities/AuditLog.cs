@@ -1,18 +1,18 @@
-﻿namespace Jobify.Domain.Entities;
+﻿    namespace Jobify.Domain.Entities;
 
-public class AuditLog
-{
-    public Guid Id { get; set; }
+    public class AuditLog
+    {
+        public Guid Id { get; set; }
 
-    public required string EntityType { get; set; }
+        public required string EntityType { get; set; }
 
-    public AuditAction Action { get; set; }
+        public AuditAction Action { get; set; }
 
-    public Guid ChangedBy { get; set; }
-    public string? ChangedByType { get; set; }
+        public Guid ChangedBy { get; set; }
+        public string? ChangedByType { get; set; }
 
-    public DateTime ChangedAt { get; set; }
-    public List<AuditLogDetail> AuditLogDetails { get; set; } = [];
+        public DateTime ChangedAt { get; set; }
+        public List<AuditLogDetail> AuditLogDetails { get; set; } = [];
 
-    public Guid EntityId { get; set; }
-}
+        public Guid EntityId { get; set; }
+    }
