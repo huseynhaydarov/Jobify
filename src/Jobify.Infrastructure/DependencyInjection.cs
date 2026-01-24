@@ -1,4 +1,5 @@
-﻿using Jobify.Infrastructure.Persistence;
+﻿using Jobify.Infrastructure.Grpc;
+using Jobify.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Npgsql;
 using StackExchange.Redis;
@@ -40,6 +41,8 @@ public static class DependencyInjection
 
         services.AddSingleton<IPasswordHasherService, PasswordHasherService>();
         services.AddScoped<ITokenService, TokenService>();
+
+        services.AddSearchGrpcClient();
 
         return services;
     }
