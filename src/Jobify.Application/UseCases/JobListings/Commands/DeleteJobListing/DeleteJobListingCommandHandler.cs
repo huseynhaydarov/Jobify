@@ -37,7 +37,7 @@ public class DeleteJobListingCommandHandler : BaseSetting,
             Id = jobListing.Id,
             ClosedAt = jobListing.ModifiedAt ??  DateTimeOffset.UtcNow,
             ClosedById = jobListing.ModifiedBy ?? Guid.Empty,
-            ClosedBy = string.Join(", ", _authenticatedUserService.Roles!)
+            ClosedBy = _authenticatedUserService.Email
         }, cancellationToken);
 
         return new CloseJobListingResponse(
