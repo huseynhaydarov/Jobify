@@ -6,9 +6,8 @@ using Jobify.Application.Common.Extensions;
 using Jobify.Application.Common.Interfaces.Data;
 using Jobify.Application.Common.Interfaces.Services;
 using Jobify.Application.UseCases.JobListings.Dtos;
-using Jobify.Application.UseCases.JobListings.Events;
-using Jobify.Contracts.JobListings.IntegrationEvents;
 using Jobify.Domain.Enums;
+using Jobify.Contracts.JobListings.Events;
 using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -21,8 +20,6 @@ public class DeleteJobListingCommandHandler : BaseSetting,
     IRequestHandler<DeleteJobListingCommand, CloseJobListingResponse>
 {
     private readonly IAuthenticatedUserService _authenticatedUserService;
-    private readonly IDistributedCache _cache;
-    private readonly ILogger<DeleteJobListingCommandHandler> _logger;
     private readonly IPublishEndpoint _publishEndpoint;
 
     public DeleteJobListingCommandHandler(IApplicationDbContext dbContext,
@@ -30,8 +27,6 @@ public class DeleteJobListingCommandHandler : BaseSetting,
         ILogger<DeleteJobListingCommandHandler> logger, IPublishEndpoint publishEndpoint) : base(dbContext)
     {
         _authenticatedUserService = authenticatedUserService;
-        _cache = cache;
-        _logger = logger;
         _publishEndpoint = publishEndpoint;
     }
 
@@ -50,15 +45,13 @@ public class DeleteJobListingCommandHandler : BaseSetting,
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        var jobListingDeletedEvent = new JobListingChangedEvent { Id = jobListing.Id, Action = ActionType.Deleted };
-
-        await _publishEndpoint.Publish(jobListingDeletedEvent, cancellationToken);
-
-        await _publishEndpoint.Publish(new JobListingDeleted { Id = jobListing.Id }, cancellationToken);
-
-        var cacheKey = $"jobListing:{request.Id}";
-        _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);
-        await _cache.RemoveAsync(cacheKey, cancellationToken);
+        await _publishEndpoint.Publish(new JobListingDeletedEvent
+        {
+            Id = jobListing.Id,
+            ClosedAt = jobListing.ModifiedAt ??  DateTimeOffset.UtcNow,
+            ClosedById = jobListing.ModifiedBy ?? Guid.Empty,
+            ClosedBy = _authenticatedUserService.Email
+        }, cancellationToken);
 
         return new CloseJobListingResponse(
             jobListing.Id,

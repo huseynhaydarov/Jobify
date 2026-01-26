@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Jobify.Application.Common.Models.Caching;
-using Jobify.Application.UseCases.JobListings.Events;
+using Jobify.Contracts.JobListings.Events;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 
 namespace Jobify.Infrastructure.Consumers;
 
-public class JobListingDeletedConsumer : IConsumer<JobListingChangedEvent>
+public class JobListingDeletedConsumer : IConsumer<JobListingDeletedEvent>
 {
     private readonly ILogger<JobListingDeletedConsumer> _logger;
     private readonly IConnectionMultiplexer _redis;
@@ -20,12 +20,15 @@ public class JobListingDeletedConsumer : IConsumer<JobListingChangedEvent>
         _logger = logger;
     }
 
-    public async Task Consume(ConsumeContext<JobListingChangedEvent> context)
+    public async Task Consume(ConsumeContext<JobListingDeletedEvent> context)
     {
         _logger.LogInformation("Consuming jobListing event data: {jobListingEvent}", context.Message);
 
         var db = _redis.GetDatabase();
 
-        await db.KeyDeleteAsync(JobListingsCacheKeys.Registry);
+        string cacheKey = $"jobListing:{context.Message.Id}";
+        _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);
+
+        await db.KeyDeleteAsync([cacheKey, JobListingsCacheKeys.Registry]);
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,10 +7,9 @@ using Jobify.Application.Common.Extensions;
 using Jobify.Application.Common.Interfaces.Data;
 using Jobify.Application.Common.Interfaces.Services;
 using Jobify.Application.UseCases.JobListings.Dtos;
-using Jobify.Application.UseCases.JobListings.Events;
-using Jobify.Contracts.JobListings.IntegrationEvents;
 using Jobify.Domain.Entities;
 using Jobify.Domain.Enums;
+using Jobify.Contracts.JobListings.Events;
 using MassTransit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -67,20 +66,24 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
         await _dbContext.JobListings.AddAsync(jobListing, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        var jobListingAddedEvent = new JobListingChangedEvent { Id = jobListing.Id, Action = ActionType.Added };
-
-        await _publishEndpoint.Publish(jobListingAddedEvent, cancellationToken);
-
-        await _publishEndpoint.Publish(
-            new JobListingCreated
-            {
-                Id = jobListing.Id,
-                Name = jobListing.Name,
-                Description = jobListing.Description,
-                Requirements = jobListing.Requirements,
-                Location = jobListing.Location,
-                PostedAt = jobListing.PostedAt
-            }, cancellationToken);
+        await _publishEndpoint.Publish(new JobListingCreatedEvent
+        {
+            Id= jobListing.Id,
+            Name = jobListing.Name,
+            Description = jobListing.Description,
+            Requirements = jobListing.Requirements,
+            Location = jobListing.Location,
+            Salary = jobListing.Salary,
+            Currency = jobListing.Currency,
+            Status = jobListing.Status.ToString(),
+            CompanyId = jobListing.CompanyId,
+            EmployerId = jobListing.EmployerId,
+            PostedAt = DateTimeOffset.UtcNow,
+            ExpiresAt = jobListing.ExpiresAt,
+            CreatedAt = jobListing.CreatedAt,
+            CreatedById = jobListing.CreatedBy,
+            CreatedBy = _authenticatedUserService.Email
+        }, cancellationToken);
 
         return new JobListingDto(
             jobListing.Id,

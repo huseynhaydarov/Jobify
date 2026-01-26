@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,39 +8,40 @@ using Jobify.Application.Common.Models.Pagination;
 using Jobify.Application.UseCases.JobListings.Queries.GetJobListings;
 using MediatR;
 using Microsoft.Extensions.Configuration;
-using Refit;
-using SearchService.ApiClient;
+using SearchService.Contracts.Interfaces;
+using SearchService.Contracts.Requests;
 
 namespace Jobify.Application.UseCases.JobListings.Queries.SearchJobListings;
 
 public class SearchJobListingsQueryHandler
     : IRequestHandler<SearchJobListingsQuery, PaginatedResult<GetAllJobListingsResponse>>
 {
-    private readonly IConfiguration _configuration;
     private readonly IApplicationDbContext _context;
+    private readonly ISearchService _searchService;
 
     public SearchJobListingsQueryHandler(
-        IApplicationDbContext context, IConfiguration configuration)
+        IApplicationDbContext context, IConfiguration configuration, ISearchService searchService)
     {
         _context = context;
-        _configuration = configuration;
+        _searchService = searchService;
     }
 
     public async Task<PaginatedResult<GetAllJobListingsResponse>> Handle(
         SearchJobListingsQuery request,
         CancellationToken cancellationToken)
     {
-        var searchApi = RestService.For<IJobSearchApi>(_configuration["SearchService:BaseUrl"]);
-
-        var response = await searchApi.SearchAsync(request.SearchTerm, cancellationToken);
+        var response = await _searchService.SearchAsync(new SearchRequest
+        {
+            SearchTerm = request.SearchTerm
+        });
 
         if (response.Ids.Count == 0)
         {
             return new PaginatedResult<GetAllJobListingsResponse>(
-                new List<GetAllJobListingsResponse>(),
+                items: new List<GetAllJobListingsResponse>(),
                 request.PageNumber,
                 request.PageSize,
-                false
+                hasNext: false
             );
         }
 
