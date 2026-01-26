@@ -1,5 +1,6 @@
 using Jobify.Contracts.JobListings.Events;
 using MassTransit;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Jobify.Application.UseCases.JobListings.Commands.UpdateJobListing;
 
@@ -34,6 +35,9 @@ public class UpdateJobListingCommandHandler : BaseSetting,
 
         jobListing.MapFrom(request);
 
+        var entry = _dbContext.Entry(jobListing);
+        var changes = GetChanges(entry);
+
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         await _publishEndpoint.Publish(new JobListingUpdatedEvent
@@ -46,7 +50,17 @@ public class UpdateJobListingCommandHandler : BaseSetting,
             Salary =  jobListing.Salary,
             Status = jobListing.Status.ToString(),
             Currency = jobListing.Currency,
-            ExpireDate = jobListing.ExpiresAt
+            ExpireDate = jobListing.ExpiresAt,
+            Changes = changes.Select(c => new Jobify.Contracts.JobListings.Models.AuditLogDetail
+                {
+                    PropertyName = c.PropertyName,
+                    OldValue = c.OldValue,
+                    NewValue = c.NewValue
+                })
+                .ToList(),
+            ModifiedAt = jobListing.ModifiedAt ??  DateTime.UtcNow,
+            ModifiedBy = _authenticatedUserService.Email,
+            ModifiedById = jobListing.ModifiedBy ?? Guid.Empty,
         }, cancellationToken);
 
         return new UpdateJobListingResponse(
@@ -54,4 +68,24 @@ public class UpdateJobListingCommandHandler : BaseSetting,
             jobListing.Status,
             jobListing.ModifiedAt);
     }
+
+    private static List<AuditLogDetail> GetChanges(EntityEntry entry)
+    {
+        var changes = new List<AuditLogDetail>();
+
+        foreach (var property in entry.Properties)
+        {
+            if (!property.IsModified)
+                continue;
+
+            changes.Add(new AuditLogDetail
+            {
+                PropertyName = property.Metadata.Name,
+                OldValue = property.OriginalValue?.ToString(),
+                NewValue = property.CurrentValue?.ToString()
+            });
+        }
+        return changes;
+    }
+
 }

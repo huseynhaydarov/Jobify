@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.Common.Interfaces.Data;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+
+namespace Jobify.Application.Common.Interfaces.Data;
 
 public interface IApplicationDbContext
 {
@@ -11,6 +13,8 @@ public interface IApplicationDbContext
     DbSet<Employer> Employers { get; }
     DbSet<UserProfile> UserProfiles { get; }
     DbSet<AuditLog> AuditLogs { get; }
+
+    EntityEntry Entry(object entity);
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

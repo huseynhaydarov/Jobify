@@ -12,7 +12,6 @@ public record GetAuditLogByJobListingResponse
     public string? ChangedByType { get; init; }
 
     public DateTime ChangedAt { get; init; }
-
-    public string? Changes { get; init; }
+    public List<AuditLogDetail> AuditLogDetails { get; init; }
     public Guid EntityId { get; init; }
 }

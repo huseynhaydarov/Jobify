@@ -1,4 +1,6 @@
-﻿namespace Jobify.Contracts.JobListings.Events;
+﻿using Jobify.Contracts.JobListings.Models;
+
+namespace Jobify.Contracts.JobListings.Events;
 
 public record JobListingUpdatedEvent
 {
@@ -11,4 +13,8 @@ public record JobListingUpdatedEvent
    public string Status { get; init; } = default!;
    public string? Currency   { get; init; }
    public DateTimeOffset? ExpireDate { get; init; }
+   public DateTimeOffset ModifiedAt { get; init; }
+   public Guid ModifiedById { get; init; }
+   public string? ModifiedBy {get; init;}
+   public List<AuditLogDetail> Changes { get; set; } = [];
 }
