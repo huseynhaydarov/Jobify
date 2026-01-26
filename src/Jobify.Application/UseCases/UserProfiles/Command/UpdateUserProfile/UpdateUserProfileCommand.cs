@@ -1,4 +1,7 @@
-﻿namespace Jobify.Application.UseCases.UserProfiles.Command.UpdateUserProfile;
+﻿using System;
+using MediatR;
+
+namespace Jobify.Application.UseCases.UserProfiles.Command.UpdateUserProfile;
 
 public record UpdateUserProfileCommand(
     Guid Id,

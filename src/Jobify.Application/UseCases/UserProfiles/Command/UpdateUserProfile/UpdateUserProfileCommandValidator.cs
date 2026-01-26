@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.UseCases.UserProfiles.Command.UpdateUserProfile;
+﻿using FluentValidation;
+
+namespace Jobify.Application.UseCases.UserProfiles.Command.UpdateUserProfile;
 
 public class UpdateUserProfileCommandValidator : AbstractValidator<UpdateUserProfileCommand>
 {

@@ -1,11 +1,13 @@
+using Jobify.Application;
 using Jobify.Application.UseCases.JobListings.Dtos;
+using Jobify.Infrastructure;
 using Jobify.WebAPI;
 using Jobify.WebAPI.Extensions;
 using Jobify.WebAPI.Middlewares;
 using Microsoft.AspNetCore.OData;
 using Microsoft.OData.ModelBuilder;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
 ODataConventionModelBuilder modelBuilder = new();
 modelBuilder.EntitySet<JobListingOdataDto>("JobListings");
@@ -35,7 +37,7 @@ builder.Services
     .AddApplicationServices(builder.Configuration)
     .AddWebServices(builder.Configuration);
 
-WebApplication app = builder.Build();
+var app = builder.Build();
 
 await app.InitDbAsync();
 

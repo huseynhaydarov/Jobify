@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.UseCases.UserProfiles.Command.DeleteUserProfile;
+﻿using FluentValidation;
+
+namespace Jobify.Application.UseCases.UserProfiles.Command.DeleteUserProfile;
 
 public class DeleteUserProfileCommandValidator : AbstractValidator<DeleteUserProfileCommand>
 {

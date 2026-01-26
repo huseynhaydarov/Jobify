@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.UseCases.Auths.ChangePassword.Commands;
+﻿using MediatR;
+
+namespace Jobify.Application.UseCases.Auths.ChangePassword.Commands;
 
 public record ChangePasswordCommand(
     string CurrentPassword,

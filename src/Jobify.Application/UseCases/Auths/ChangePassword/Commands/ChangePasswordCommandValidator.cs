@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.UseCases.Auths.ChangePassword.Commands;
+﻿using FluentValidation;
+
+namespace Jobify.Application.UseCases.Auths.ChangePassword.Commands;
 
 public class ChangePasswordCommandValidator : AbstractValidator<ChangePasswordCommand>
 {

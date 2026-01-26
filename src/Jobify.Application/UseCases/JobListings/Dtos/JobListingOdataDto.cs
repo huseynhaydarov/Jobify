@@ -1,4 +1,9 @@
-﻿namespace Jobify.Application.UseCases.JobListings.Dtos;
+﻿using System;
+using Jobify.Application.UseCases.Companies.Dtos;
+using Jobify.Application.UseCases.Employers.Dtos;
+using Jobify.Domain.Enums;
+
+namespace Jobify.Application.UseCases.JobListings.Dtos;
 
 public record JobListingOdataDto
 {

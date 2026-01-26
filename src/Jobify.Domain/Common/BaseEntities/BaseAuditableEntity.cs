@@ -1,4 +1,6 @@
-﻿namespace Jobify.Domain.Common.BaseEntities;
+﻿using System;
+
+namespace Jobify.Domain.Common.BaseEntities;
 
 public abstract class BaseAuditableEntity : BaseEntity
 {

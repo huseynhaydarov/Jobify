@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.UseCases.JobListings.Commands.UpdateJobListing;
+﻿using Jobify.Domain.Entities;
+
+namespace Jobify.Application.UseCases.JobListings.Commands.UpdateJobListing;
 
 public static class JobListingMappingExtensions
 {

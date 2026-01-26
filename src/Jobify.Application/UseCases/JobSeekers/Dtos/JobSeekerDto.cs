@@ -1,3 +1,5 @@
-﻿namespace Jobify.Application.UseCases.JobSeekers.Dtos;
+﻿using System;
+
+namespace Jobify.Application.UseCases.JobSeekers.Dtos;
 
 public record JobSeekerDto(Guid Id);

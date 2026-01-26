@@ -1,4 +1,14 @@
-﻿namespace Jobify.Application.UseCases.JobSeekers.Queries.GetJobSeekers;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Extensions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Models.Pagination;
+using Jobify.Domain.Constants;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace Jobify.Application.UseCases.JobSeekers.Queries.GetJobSeekers;
 
 public class GetAllJobSeekersQueryHandler : BaseSetting,
     IRequestHandler<GetAllJobSeekersQuery, PaginatedResult<GetAllJobSeekersResponse>>
@@ -10,17 +20,13 @@ public class GetAllJobSeekersQueryHandler : BaseSetting,
     public async Task<PaginatedResult<GetAllJobSeekersResponse>> Handle(GetAllJobSeekersQuery request,
         CancellationToken cancellationToken)
     {
-        IQueryable<GetAllJobSeekersResponse> queryable =
+        var queryable =
             _dbContext.Users
                 .AsNoTracking()
                 .Where(u =>
                     u.UserRoles.Any(ur => ur.Role != null && ur.Role.Name == UserRoles.JobSeeker))
                 .OrderByDescending(u => u.CreatedAt)
-                .Select(u => new GetAllJobSeekersResponse
-                {
-                    Id = u.Id,
-                    Email = u.Email
-                });
+                .Select(u => new GetAllJobSeekersResponse { Id = u.Id, Email = u.Email });
 
 
         return await queryable.PaginatedListAsync(

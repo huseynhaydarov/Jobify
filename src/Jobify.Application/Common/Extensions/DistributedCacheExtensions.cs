@@ -1,4 +1,11 @@
-﻿namespace Jobify.Application.Common.Extensions;
+﻿using System;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
+
+namespace Jobify.Application.Common.Extensions;
 
 public static class DistributedCacheExtensions
 {
@@ -16,13 +23,13 @@ public static class DistributedCacheExtensions
         T value,
         DistributedCacheEntryOptions options)
     {
-        byte[] bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(value, serializerOptions));
+        var bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(value, serializerOptions));
         return cache.SetAsync(key, bytes, options);
     }
 
     public static bool TryGetValue<T>(this IDistributedCache cache, string key, out T? value)
     {
-        byte[]? val = cache.Get(key);
+        var val = cache.Get(key);
         value = default;
 
         if (val == null)

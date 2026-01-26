@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.UseCases.Companies.Commands.UpdateCompanies;
+﻿using Jobify.Domain.Entities;
+
+namespace Jobify.Application.UseCases.Companies.Commands.UpdateCompanies;
 
 public static class CompanyMappingExtensions
 {

@@ -1,4 +1,19 @@
-﻿namespace Jobify.Application.UseCases.JobApplications.Commands.CreateJobApplication;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Exceptions;
+using Jobify.Application.Common.Extensions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Interfaces.Services;
+using Jobify.Application.UseCases.JobApplications.Dtos;
+using Jobify.Domain.Entities;
+using Jobify.Domain.Enums;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+
+namespace Jobify.Application.UseCases.JobApplications.Commands.CreateJobApplication;
 
 public class CreateJobApplicationCommandHandler : BaseSetting,
     IRequestHandler<CreateJobApplicationCommand, JobApplicationDto>
@@ -19,10 +34,10 @@ public class CreateJobApplicationCommandHandler : BaseSetting,
     public async Task<JobApplicationDto> Handle(CreateJobApplicationCommand request,
         CancellationToken cancellationToken)
     {
-        Guid userId = _authenticatedUserService.Id
-                      ?? throw new UnauthorizedException("User is not authenticated");
+        var userId = _authenticatedUserService.Id
+                     ?? throw new UnauthorizedException("User is not authenticated");
 
-        bool submittedApplication = await _dbContext.JobApplications
+        var submittedApplication = await _dbContext.JobApplications
             .AnyAsync(a => a.JobListingId == request.JobListingId &&
                            a.ApplicantId == userId, cancellationToken);
 
@@ -31,7 +46,7 @@ public class CreateJobApplicationCommandHandler : BaseSetting,
             throw new DomainException("You have already applied to this job.");
         }
 
-        JobListing? jobListing = await _dbContext.JobListings
+        var jobListing = await _dbContext.JobListings
             .Where(l => l.Id == request.JobListingId && !l.IsDeleted)
             .FirstOrDefaultAsync(cancellationToken);
 

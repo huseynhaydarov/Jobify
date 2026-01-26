@@ -1,4 +1,8 @@
-﻿namespace Jobify.Application.UseCases.AuditLogs.Dtos;
+﻿using System;
+using System.Collections.Generic;
+using Jobify.Domain.Entities;
+
+namespace Jobify.Application.UseCases.AuditLogs.Dtos;
 
 public record GetAuditLogByJobListingResponse
 {
@@ -12,7 +16,6 @@ public record GetAuditLogByJobListingResponse
     public string? ChangedByType { get; init; }
 
     public DateTime ChangedAt { get; init; }
-
-    public string? Changes { get; init; }
+    public List<AuditLogDetail> AuditLogDetails { get; init; }
     public Guid EntityId { get; init; }
 }

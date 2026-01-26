@@ -1,4 +1,9 @@
-﻿namespace Jobify.Application.UseCases.JobListings.Commands.UpdateJobListing;
+﻿using System;
+using Jobify.Application.UseCases.JobListings.Dtos;
+using Jobify.Domain.Enums;
+using MediatR;
+
+namespace Jobify.Application.UseCases.JobListings.Commands.UpdateJobListing;
 
 public record UpdateJobListingCommand(
     Guid Id,

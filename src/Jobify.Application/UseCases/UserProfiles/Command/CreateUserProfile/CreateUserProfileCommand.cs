@@ -1,4 +1,7 @@
-﻿namespace Jobify.Application.UseCases.UserProfiles.Command.CreateUserProfile;
+﻿using Jobify.Application.UseCases.UserProfiles.Dtos;
+using MediatR;
+
+namespace Jobify.Application.UseCases.UserProfiles.Command.CreateUserProfile;
 
 public record CreateUserProfileCommand(
     string FirstName,

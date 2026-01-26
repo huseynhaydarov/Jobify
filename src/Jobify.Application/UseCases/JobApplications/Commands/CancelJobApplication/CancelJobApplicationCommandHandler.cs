@@ -1,6 +1,19 @@
-﻿namespace Jobify.Application.UseCases.JobApplications.Commands.CancelJobApplication;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Exceptions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Interfaces.Services;
+using Jobify.Application.UseCases.JobApplications.Dtos;
+using Jobify.Domain.Enums;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
-public class CancelJobApplicationCommandHandler : IRequestHandler<CancelJobApplicationCommand, CancelJobApplicationResponse>
+namespace Jobify.Application.UseCases.JobApplications.Commands.CancelJobApplication;
+
+public class
+    CancelJobApplicationCommandHandler : IRequestHandler<CancelJobApplicationCommand, CancelJobApplicationResponse>
 {
     private readonly IAuthenticatedUserService _authenticatedUserService;
     private readonly IApplicationDbContext _dbContext;
@@ -15,9 +28,10 @@ public class CancelJobApplicationCommandHandler : IRequestHandler<CancelJobAppli
         _logger = logger;
     }
 
-    public async Task<CancelJobApplicationResponse> Handle(CancelJobApplicationCommand request, CancellationToken cancellationToken)
+    public async Task<CancelJobApplicationResponse> Handle(CancelJobApplicationCommand request,
+        CancellationToken cancellationToken)
     {
-        JobApplication? application = await _dbContext.JobApplications
+        var application = await _dbContext.JobApplications
             .FirstOrDefaultAsync(x => x.Id == request.ApplicationId, cancellationToken);
 
         if (application == null)
@@ -42,6 +56,6 @@ public class CancelJobApplicationCommandHandler : IRequestHandler<CancelJobAppli
 
         _logger.LogInformation($"Cancelled job application by user {application.ApplicantId}");
 
-        return new  CancelJobApplicationResponse(application.Id, application.WithdrawnAt);
+        return new CancelJobApplicationResponse(application.Id, application.WithdrawnAt);
     }
 }

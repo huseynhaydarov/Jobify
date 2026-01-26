@@ -1,4 +1,6 @@
-﻿namespace Jobify.Domain.Entities;
+﻿using System.Collections.Generic;
+
+namespace Jobify.Domain.Entities;
 
 public class User : BaseAuditableEntity
 {

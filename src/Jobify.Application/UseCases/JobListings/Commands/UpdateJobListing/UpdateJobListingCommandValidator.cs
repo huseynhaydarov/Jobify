@@ -1,4 +1,7 @@
-﻿namespace Jobify.Application.UseCases.JobListings.Commands.UpdateJobListing;
+﻿using System;
+using FluentValidation;
+
+namespace Jobify.Application.UseCases.JobListings.Commands.UpdateJobListing;
 
 public class UpdateJobListingCommandValidator : AbstractValidator<UpdateJobListingCommand>
 {

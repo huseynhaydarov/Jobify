@@ -1,4 +1,10 @@
-﻿namespace Jobify.WebAPI.Controllers.V1;
+﻿using Jobify.Application.UseCases.Roles.Queries.GetRoles;
+using Jobify.Domain.Constants;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Jobify.WebAPI.Controllers.V1;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -12,7 +18,7 @@ public class RolesController : ControllerBase
     [Authorize(Roles = UserRoles.Administrator)]
     public async Task<ActionResult> GetDictionary([FromQuery] GetRoleDictionaryQuery query)
     {
-        List<GetRoleDictionaryResponse> data = await _mediator.Send(query);
+        var data = await _mediator.Send(query);
 
         return Ok(data);
     }

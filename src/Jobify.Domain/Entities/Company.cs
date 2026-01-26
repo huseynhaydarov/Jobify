@@ -1,4 +1,7 @@
-﻿namespace Jobify.Domain.Entities;
+﻿using System;
+using System.Collections.Generic;
+
+namespace Jobify.Domain.Entities;
 
 public class Company : BaseAuditableEntity
 {

@@ -1,4 +1,15 @@
-﻿namespace Jobify.Application.UseCases.UserProfiles.Command.CreateUserProfile;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Exceptions;
+using Jobify.Application.Common.Extensions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Interfaces.Services;
+using Jobify.Application.UseCases.UserProfiles.Dtos;
+using Jobify.Domain.Entities;
+using MediatR;
+using Microsoft.Extensions.Logging;
+
+namespace Jobify.Application.UseCases.UserProfiles.Command.CreateUserProfile;
 
 public class CreateUserProfileCommandHandler : BaseSetting, IRequestHandler<CreateUserProfileCommand, UserProfileDto>
 {
@@ -17,8 +28,8 @@ public class CreateUserProfileCommandHandler : BaseSetting, IRequestHandler<Crea
 
     public async Task<UserProfileDto> Handle(CreateUserProfileCommand request, CancellationToken cancellationToken)
     {
-        Guid userId = _authenticatedUserService.Id
-                      ?? throw new UnauthorizedException("User is not authenticated");
+        var userId = _authenticatedUserService.Id
+                     ?? throw new UnauthorizedException("User is not authenticated");
 
         UserProfile userProfile = new()
         {

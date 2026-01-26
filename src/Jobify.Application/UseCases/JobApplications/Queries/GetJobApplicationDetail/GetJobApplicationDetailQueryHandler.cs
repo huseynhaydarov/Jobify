@@ -1,4 +1,12 @@
-﻿namespace Jobify.Application.UseCases.JobApplications.Queries.GetJobApplicationDetail;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Exceptions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Interfaces.Services;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace Jobify.Application.UseCases.JobApplications.Queries.GetJobApplicationDetail;
 
 public class GetJobApplicationDetailQueryHandler
     : IRequestHandler<GetJobApplicationDetailQuery, GetJobApplicationDetailResponse>
@@ -17,7 +25,7 @@ public class GetJobApplicationDetailQueryHandler
     public async Task<GetJobApplicationDetailResponse> Handle(GetJobApplicationDetailQuery request,
         CancellationToken cancellationToken)
     {
-        JobApplication? application = await _dbContext.JobApplications
+        var application = await _dbContext.JobApplications
             .AsNoTracking()
             .Include(x => x.JobListing)
             .ThenInclude(j => j.Company)

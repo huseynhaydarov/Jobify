@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.UseCases.UserProfiles.Queries.GetUserProfileDetail;
+﻿using System;
+
+namespace Jobify.Application.UseCases.UserProfiles.Queries.GetUserProfileDetail;
 
 public record GetUserProfileDetailResponse
 {

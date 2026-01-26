@@ -1,4 +1,7 @@
-﻿namespace Jobify.Application.UseCases.JobApplications.Queries.GetJobApplications;
+﻿using System;
+using Jobify.Domain.Enums;
+
+namespace Jobify.Application.UseCases.JobApplications.Queries.GetJobApplications;
 
 public class GetAllJobApplicationsByJobListingResponse
 {

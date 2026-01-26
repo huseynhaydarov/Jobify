@@ -1,3 +1,5 @@
+using FluentValidation;
+
 namespace Jobify.Application.UseCases.JobListings.Commands.DeleteJobListing;
 
 public class DeleteJobListingCommandValidator : AbstractValidator<DeleteJobListingCommand>

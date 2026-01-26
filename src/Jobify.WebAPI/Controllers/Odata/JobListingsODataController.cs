@@ -1,4 +1,9 @@
-﻿using Jobify.Application.UseCases.JobListings.Dtos;
+﻿using Jobify.Application.UseCases.JobListings.Queries.GetJobListingsOdata;
+using Jobify.Domain.Constants;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 
 namespace Jobify.WebAPI.Controllers.Odata;
 
@@ -14,7 +19,7 @@ public class JobListingsODataController : ControllerBase
     [Authorize(Roles = UserRoles.JobSeeker)]
     public async Task<IActionResult> Get()
     {
-        IQueryable<JobListingOdataDto> query = await _mediator.Send(new GetAllJobListingsOdataQuery());
+        var query = await _mediator.Send(new GetAllJobListingsOdataQuery());
 
         return Ok(query);
     }

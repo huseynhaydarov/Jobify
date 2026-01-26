@@ -1,4 +1,13 @@
-﻿using Jobify.Application.UseCases.Employers.Dtos;
+﻿using Jobify.Application.Common.Models.Pagination;
+using Jobify.Application.UseCases.Employers.Commands.CreateEmployers;
+using Jobify.Application.UseCases.Employers.Commands.JoinCompany;
+using Jobify.Application.UseCases.Employers.Commands.PositionUpdate;
+using Jobify.Application.UseCases.Employers.Queries.GetEmployers;
+using Jobify.Application.UseCases.Employers.Queries.GetJobListingsByEmployer;
+using Jobify.Domain.Constants;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Jobify.WebAPI.Controllers.V1;
 
@@ -13,7 +22,7 @@ public class EmployersController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateEmployerCommand command)
     {
-        EmployerDto data = await _mediator.Send(command);
+        var data = await _mediator.Send(command);
 
         return Ok(data);
     }
@@ -42,7 +51,7 @@ public class EmployersController : ControllerBase
     {
         GetAllEmployersQuery query = new(parameters);
 
-        PaginatedResult<GetAllEmployersResponse> data = await _mediator.Send(query);
+        var data = await _mediator.Send(query);
 
         return Ok(data);
     }
@@ -53,7 +62,7 @@ public class EmployersController : ControllerBase
     {
         GetAllJobListingsByEmployerQuery query = new(parameters);
 
-        PaginatedResult<GetAllJobListingsByEmployerResponse> data = await _mediator.Send(query);
+        var data = await _mediator.Send(query);
 
         return Ok(data);
     }

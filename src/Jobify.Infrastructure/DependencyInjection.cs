@@ -1,5 +1,7 @@
-﻿using Jobify.Infrastructure.Persistence;
+﻿using Jobify.Infrastructure.Grpc;
+using Jobify.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Npgsql;
 using StackExchange.Redis;
 
 namespace Jobify.Infrastructure;
@@ -9,11 +11,17 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructureServices(
         this IServiceCollection services, IConfiguration configuration)
     {
-        string? connectionString = configuration.GetConnectionString("Postgres");
+        var connectionString = configuration.GetConnectionString("Postgres");
+
+        var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+
+        dataSourceBuilder.EnableDynamicJson();
+
+        var dataSource = dataSourceBuilder.Build();
 
         services.AddDbContext<ApplicationDbContext>((db, options) =>
         {
-            options.UseNpgsql(connectionString);
+            options.UseNpgsql(dataSource);
             options.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
         });
 
@@ -33,6 +41,8 @@ public static class DependencyInjection
 
         services.AddSingleton<IPasswordHasherService, PasswordHasherService>();
         services.AddScoped<ITokenService, TokenService>();
+
+        services.AddSearchGrpcClient();
 
         return services;
     }

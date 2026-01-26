@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.UseCases.UserProfiles.Command.UpdateUserProfile;
+﻿using Jobify.Domain.Entities;
+
+namespace Jobify.Application.UseCases.UserProfiles.Command.UpdateUserProfile;
 
 public static class UserProfileMappingExtensions
 {

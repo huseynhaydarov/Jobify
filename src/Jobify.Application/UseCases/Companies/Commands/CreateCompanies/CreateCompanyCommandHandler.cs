@@ -1,6 +1,16 @@
-﻿namespace Jobify.Application.UseCases.Companies.Commands.CreateCompanies;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Exceptions;
+using Jobify.Application.Common.Extensions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Interfaces.Services;
+using Jobify.Application.UseCases.Companies.Dtos;
+using Jobify.Domain.Entities;
+using MediatR;
 
-public class CreateCompanyCommandHandler : BaseSetting, IRequestHandler<CreateCompanyCommand, CompanyDto>
+namespace Jobify.Application.UseCases.Companies.Commands.CreateCompanies;
+
+public class CreateCompanyCommandHandler : BaseSetting, IRequestHandler<CreateCompanyCommand, CreateCompanyResponse>
 {
     private readonly IAuthenticatedUserService _authenticatedUserService;
 
@@ -8,12 +18,12 @@ public class CreateCompanyCommandHandler : BaseSetting, IRequestHandler<CreateCo
         IAuthenticatedUserService authenticatedUserService) : base(dbContext) =>
         _authenticatedUserService = authenticatedUserService;
 
-    public async Task<CompanyDto> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
+    public async Task<CreateCompanyResponse> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
     {
-        Guid userId = _authenticatedUserService.Id
-                      ?? throw new UnauthorizedException("User is not authenticated");
+        var userId = _authenticatedUserService.Id
+                     ?? throw new UnauthorizedException("User is not authenticated");
 
-        Company company = new()
+        var company = new Company
         {
             Name = request.Name,
             Description = request.Description,
@@ -26,6 +36,8 @@ public class CreateCompanyCommandHandler : BaseSetting, IRequestHandler<CreateCo
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return new CompanyDto(company.Id);
+        return new CreateCompanyResponse(
+            company.Id,
+            company.CreatedAt);
     }
 }

@@ -1,3 +1,6 @@
+using System;
+using FluentValidation;
+
 namespace Jobify.Application.UseCases.Companies.Commands.UpdateCompanies;
 
 public class UpdateCompanyCommandValidator : AbstractValidator<UpdateCompanyCommand>

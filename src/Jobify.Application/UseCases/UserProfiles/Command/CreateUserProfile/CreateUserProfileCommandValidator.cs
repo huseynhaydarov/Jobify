@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.UseCases.UserProfiles.Command.CreateUserProfile;
+﻿using FluentValidation;
+
+namespace Jobify.Application.UseCases.UserProfiles.Command.CreateUserProfile;
 
 public class CreateUserProfileCommandValidator : AbstractValidator<CreateUserProfileCommand>
 {

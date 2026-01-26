@@ -1,4 +1,10 @@
-﻿namespace Jobify.Application.Common.Extensions;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Models.Pagination;
+using Microsoft.EntityFrameworkCore;
+
+namespace Jobify.Application.Common.Extensions;
 
 public static class IQueryableExtensions
 {
@@ -8,12 +14,12 @@ public static class IQueryableExtensions
         int pageSize,
         CancellationToken cancellationToken)
     {
-        List<T> items = await queryable
+        var items = await queryable
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize + 1)
             .ToListAsync(cancellationToken);
 
-        bool hasNext = items.Count > pageSize;
+        var hasNext = items.Count > pageSize;
 
         if (hasNext)
         {

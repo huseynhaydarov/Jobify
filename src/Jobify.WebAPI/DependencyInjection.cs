@@ -1,4 +1,13 @@
-﻿using Jobify.WebAPI.Extensions;
+﻿using System.Text;
+using Jobify.Application.Common.Interfaces.Services;
+using Jobify.Application.Common.Models;
+using Jobify.Domain.Constants;
+using Jobify.WebAPI.Extensions;
+using Jobify.WebAPI.Filters;
+using Jobify.WebAPI.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 namespace Jobify.WebAPI;
 
@@ -7,7 +16,7 @@ public static class DependencyInjection
     public static IServiceCollection AddWebServices(this IServiceCollection services,
         IConfiguration configuration)
     {
-        JwtSettings? jwtSettings = configuration.GetSection(nameof(JwtSettings)).Get<JwtSettings>();
+        var jwtSettings = configuration.GetSection(nameof(JwtSettings)).Get<JwtSettings>();
 
         services.Configure<JwtSettings>(configuration.GetSection(nameof(JwtSettings)));
 
@@ -34,14 +43,14 @@ public static class DependencyInjection
                 {
                     OnAuthenticationFailed = context =>
                     {
-                        ILogger<Program> logger = context.HttpContext.RequestServices
+                        var logger = context.HttpContext.RequestServices
                             .GetRequiredService<ILogger<Program>>();
                         logger.LogError("Authentication failed: {Error}", context.Exception.Message);
                         return Task.CompletedTask;
                     },
                     OnForbidden = context =>
                     {
-                        ILogger<Program> logger = context.HttpContext.RequestServices
+                        var logger = context.HttpContext.RequestServices
                             .GetRequiredService<ILogger<Program>>();
                         logger.LogWarning("Forbidden access attempt for path: {Path}",
                             context.HttpContext.Request.Path);

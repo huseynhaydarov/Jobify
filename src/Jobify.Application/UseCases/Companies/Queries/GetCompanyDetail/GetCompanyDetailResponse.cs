@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.UseCases.Companies.Queries.GetCompanyDetail;
+﻿using System;
+
+namespace Jobify.Application.UseCases.Companies.Queries.GetCompanyDetail;
 
 public class GetCompanyDetailResponse
 {

@@ -1,4 +1,14 @@
-﻿using Jobify.Application.UseCases.UserProfiles.Dtos;
+﻿using Jobify.Application.Common.Models.Pagination;
+using Jobify.Application.UseCases.UserProfiles.Command.CreateUserProfile;
+using Jobify.Application.UseCases.UserProfiles.Command.DeleteUserProfile;
+using Jobify.Application.UseCases.UserProfiles.Command.DeleteUserProfiles;
+using Jobify.Application.UseCases.UserProfiles.Command.UpdateUserProfile;
+using Jobify.Application.UseCases.UserProfiles.Queries.GetUserProfileDetail;
+using Jobify.Application.UseCases.UserProfiles.Queries.GetUserProfiles;
+using Jobify.Domain.Constants;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Jobify.WebAPI.Controllers.V1;
 
@@ -14,7 +24,7 @@ public class UserProfilesController : ControllerBase
     [Authorize(Roles = UserRoles.EmployerOrJobSeeker)]
     public async Task<IActionResult> Create([FromBody] CreateUserProfileCommand command)
     {
-        UserProfileDto userProfile = await _mediator.Send(command);
+        var userProfile = await _mediator.Send(command);
 
         return Ok(userProfile);
     }
@@ -32,7 +42,7 @@ public class UserProfilesController : ControllerBase
     [Authorize(Roles = UserRoles.EmployerOrJobSeeker)]
     public async Task<IActionResult> GetDetail([FromRoute] Guid id)
     {
-        GetUserProfileDetailResponse data = await _mediator.Send(new GetUserProfileDetailQuery(id));
+        var data = await _mediator.Send(new GetUserProfileDetailQuery(id));
 
         return Ok(data);
     }
@@ -43,7 +53,7 @@ public class UserProfilesController : ControllerBase
     {
         GetAllUserProfilesQuery query = new(parameters);
 
-        PaginatedResult<GetAllUserProfilesResponse> data = await _mediator.Send(query);
+        var data = await _mediator.Send(query);
 
         return Ok(data);
     }

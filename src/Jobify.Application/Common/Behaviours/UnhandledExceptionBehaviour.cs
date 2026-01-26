@@ -1,4 +1,10 @@
-﻿namespace Jobify.Application.Common.Behaviours;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using MediatR;
+using Microsoft.Extensions.Logging;
+
+namespace Jobify.Application.Common.Behaviours;
 
 public class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull
@@ -16,7 +22,7 @@ public class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipelineBehavio
         }
         catch (Exception ex)
         {
-            string requestName = typeof(TRequest).Name;
+            var requestName = typeof(TRequest).Name;
 
             _logger.LogError(ex, " Unhandled Exception for Request {Name} {@Request}", requestName, request);
 

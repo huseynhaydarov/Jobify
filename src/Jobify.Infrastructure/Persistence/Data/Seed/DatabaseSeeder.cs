@@ -1,4 +1,8 @@
-﻿using Jobify.Domain.Constants;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Jobify.Domain.Constants;
 
 namespace Jobify.Infrastructure.Persistence.Data.Seed;
 
@@ -6,9 +10,9 @@ public static class DatabaseSeeder
 {
     public static async Task SeedAsync(IServiceProvider services)
     {
-        using IServiceScope scope = services.CreateScope();
-        ApplicationDbContext db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        IPasswordHasherService hasher = services.GetRequiredService<IPasswordHasherService>();
+        using var scope = services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var hasher = services.GetRequiredService<IPasswordHasherService>();
 
         await SeedRolesAsync(db);
         await SeedUsersAsync(db, hasher);
@@ -44,7 +48,7 @@ public static class DatabaseSeeder
                 PasswordHash = await hasher.HashPasswordAsync("JobSeeker123!")
             };
 
-            List<Role> roles = await db.Roles.ToListAsync();
+            var roles = await db.Roles.ToListAsync();
 
             adminUser.UserRoles.Add(new UserRole
             {
@@ -69,7 +73,9 @@ public static class DatabaseSeeder
     private static async Task SeedRolesAsync(ApplicationDbContext db)
     {
         if (await db.Roles.AnyAsync())
+        {
             return;
+        }
 
         var roles = new List<Role>
         {

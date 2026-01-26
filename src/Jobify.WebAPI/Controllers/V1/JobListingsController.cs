@@ -1,5 +1,15 @@
-﻿using Jobify.Application.UseCases.JobListings.Dtos;
+﻿using Jobify.Application.Common.Models.Pagination;
+using Jobify.Application.UseCases.JobListings.Commands.CreateJobListing;
+using Jobify.Application.UseCases.JobListings.Commands.DeleteJobListing;
+using Jobify.Application.UseCases.JobListings.Commands.UpdateJobListing;
+using Jobify.Application.UseCases.JobListings.Dtos;
+using Jobify.Application.UseCases.JobListings.Queries.GetJobListingDetail;
+using Jobify.Application.UseCases.JobListings.Queries.GetJobListings;
 using Jobify.Application.UseCases.JobListings.Queries.SearchJobListings;
+using Jobify.Domain.Constants;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Jobify.WebAPI.Controllers.V1;
 
@@ -15,7 +25,7 @@ public class JobListingsController : ControllerBase
     [Authorize(Roles = UserRoles.Employer)]
     public async Task<IActionResult> Create(CreateJobListingCommand command)
     {
-        JobListingDto data = await _mediator.Send(command);
+        var data = await _mediator.Send(command);
 
         return Ok(data);
     }
@@ -24,7 +34,7 @@ public class JobListingsController : ControllerBase
     [Authorize(Roles = UserRoles.Employer)]
     public async Task<IActionResult> Update([FromBody] UpdateJobListingCommand command)
     {
-        UpdateJobListingResponse data = await _mediator.Send(command);
+        var data = await _mediator.Send(command);
 
         return Ok(data);
     }
@@ -33,7 +43,7 @@ public class JobListingsController : ControllerBase
     [Authorize(Policy = Policies.CanViewAll)]
     public async Task<ActionResult<JobListingDetailResponse>> GetDetail(Guid id)
     {
-        JobListingDetailResponse data = await _mediator.Send(new GetJobListingDetailQuery(id));
+        var data = await _mediator.Send(new GetJobListingDetailQuery(id));
 
         return Ok(data);
     }
@@ -44,7 +54,7 @@ public class JobListingsController : ControllerBase
     {
         GetAllJobListingsQuery query = new(parameters);
 
-        PaginatedResult<GetAllJobListingsResponse> data = await _mediator.Send(query);
+        var data = await _mediator.Send(query);
 
         return Ok(data);
     }
@@ -65,7 +75,7 @@ public class JobListingsController : ControllerBase
     [Authorize(Roles = UserRoles.Employer)]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
-        CloseJobListingResponse data = await _mediator.Send(new DeleteJobListingCommand(id));
+        var data = await _mediator.Send(new DeleteJobListingCommand(id));
 
         return Ok(data);
     }

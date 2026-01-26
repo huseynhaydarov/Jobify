@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.UseCases.Roles.Queries.GetRoles;
+﻿using System;
+
+namespace Jobify.Application.UseCases.Roles.Queries.GetRoles;
 
 public class GetRoleDictionaryResponse
 {

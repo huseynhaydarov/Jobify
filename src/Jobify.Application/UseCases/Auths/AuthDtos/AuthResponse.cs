@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.UseCases.Auths.AuthDtos;
+﻿using System.Collections.Generic;
+
+namespace Jobify.Application.UseCases.Auths.AuthDtos;
 
 public record AuthResponse(
     bool Success,

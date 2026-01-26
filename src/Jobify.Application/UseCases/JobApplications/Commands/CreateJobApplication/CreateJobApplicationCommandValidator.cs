@@ -1,4 +1,7 @@
-﻿namespace Jobify.Application.UseCases.JobApplications.Commands.CreateJobApplication;
+﻿using FluentValidation;
+using Jobify.Application.Common.Interfaces.Data;
+
+namespace Jobify.Application.UseCases.JobApplications.Commands.CreateJobApplication;
 
 public class CreateJobApplicationCommandValidator : AbstractValidator<CreateJobApplicationCommand>
 {

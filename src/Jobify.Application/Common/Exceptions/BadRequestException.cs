@@ -1,3 +1,5 @@
+using System;
+
 namespace Jobify.Application.Common.Exceptions;
 
 public class BadRequestException : Exception

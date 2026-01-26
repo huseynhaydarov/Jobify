@@ -1,4 +1,16 @@
-﻿namespace Jobify.Application.UseCases.UserProfiles.Queries.GetUserProfileDetail;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Exceptions;
+using Jobify.Application.Common.Extensions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Interfaces.Services;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
+
+namespace Jobify.Application.UseCases.UserProfiles.Queries.GetUserProfileDetail;
 
 public class GetUserProfileDetailQueryHandler : BaseSetting,
     IRequestHandler<GetUserProfileDetailQuery, GetUserProfileDetailResponse>
@@ -21,10 +33,10 @@ public class GetUserProfileDetailQueryHandler : BaseSetting,
     public async Task<GetUserProfileDetailResponse> Handle(GetUserProfileDetailQuery request,
         CancellationToken cancellationToken)
     {
-        string cacheKey = $"userProfile:{request.Id}";
+        var cacheKey = $"userProfile:{request.Id}";
         _logger.LogInformation("fetching data for key: {cacheKey} from cache.", cacheKey);
 
-        GetUserProfileDetailResponse? userProfile = await _cache.GetOrSetAsync(cacheKey,
+        var userProfile = await _cache.GetOrSetAsync(cacheKey,
             async () =>
             {
                 _logger.LogInformation("cache miss. fetching data for key:  {CacheKey} from database.", cacheKey);

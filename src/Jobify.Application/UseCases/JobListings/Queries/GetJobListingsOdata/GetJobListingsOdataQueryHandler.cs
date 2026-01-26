@@ -1,4 +1,15 @@
-﻿namespace Jobify.Application.UseCases.JobListings.Queries.GetJobListingsOdata;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.UseCases.Companies.Dtos;
+using Jobify.Application.UseCases.Employers.Dtos;
+using Jobify.Application.UseCases.JobListings.Dtos;
+using Jobify.Domain.Enums;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace Jobify.Application.UseCases.JobListings.Queries.GetJobListingsOdata;
 
 public class GetJobListingsOdataQueryHandler
     : IRequestHandler<GetAllJobListingsOdataQuery, IQueryable<JobListingOdataDto>>
@@ -11,7 +22,7 @@ public class GetJobListingsOdataQueryHandler
         GetAllJobListingsOdataQuery request,
         CancellationToken cancellationToken)
     {
-        IQueryable<JobListingOdataDto> query = _context.JobListings
+        var query = _context.JobListings
             .AsNoTracking()
             .Where(x => !x.IsDeleted && x.Status == JobStatus.Open)
             .Select(j => new JobListingOdataDto

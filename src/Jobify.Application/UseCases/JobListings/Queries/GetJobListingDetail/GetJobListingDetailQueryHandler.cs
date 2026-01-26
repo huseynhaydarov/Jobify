@@ -1,4 +1,15 @@
-﻿namespace Jobify.Application.UseCases.JobListings.Queries.GetJobListingDetail;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Exceptions;
+using Jobify.Application.Common.Extensions;
+using Jobify.Application.Common.Interfaces.Data;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
+
+namespace Jobify.Application.UseCases.JobListings.Queries.GetJobListingDetail;
 
 public class GetJobListingByIdQueryHandler : BaseSetting,
     IRequestHandler<GetJobListingDetailQuery, JobListingDetailResponse>
@@ -19,10 +30,10 @@ public class GetJobListingByIdQueryHandler : BaseSetting,
     public async Task<JobListingDetailResponse> Handle(GetJobListingDetailQuery request,
         CancellationToken cancellationToken)
     {
-        string cacheKey = $"jobListing:{request.Id}";
+        var cacheKey = $"jobListing:{request.Id}";
         _logger.LogInformation("fetching data for key: {CacheKey} from cache.", cacheKey);
 
-         JobListingDetailResponse? jobListing = await _cache.GetOrSetAsync(cacheKey,
+        var jobListing = await _cache.GetOrSetAsync(cacheKey,
             async () =>
             {
                 _logger.LogInformation("cache miss. fetching data for key: {CacheKey} from database.", cacheKey);

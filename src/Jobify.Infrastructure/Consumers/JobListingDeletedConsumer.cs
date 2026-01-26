@@ -1,4 +1,5 @@
-﻿using Jobify.Application.Common.Models.Caching;
+﻿using System.Threading.Tasks;
+using Jobify.Application.Common.Models.Caching;
 using Jobify.Contracts.JobListings.Events;
 using MassTransit;
 using Microsoft.Extensions.Logging;
@@ -8,8 +9,8 @@ namespace Jobify.Infrastructure.Consumers;
 
 public class JobListingDeletedConsumer : IConsumer<JobListingDeletedEvent>
 {
-    private readonly IConnectionMultiplexer _redis;
     private readonly ILogger<JobListingDeletedConsumer> _logger;
+    private readonly IConnectionMultiplexer _redis;
 
     public JobListingDeletedConsumer(
         IConnectionMultiplexer redis,
@@ -25,7 +26,7 @@ public class JobListingDeletedConsumer : IConsumer<JobListingDeletedEvent>
 
         var db = _redis.GetDatabase();
 
-        string cacheKey = $"jobListing:{context.Message.Id}";
+        var cacheKey = $"jobListing:{context.Message.Id}";
         _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);
 
         await db.KeyDeleteAsync([cacheKey, JobListingsCacheKeys.Registry]);

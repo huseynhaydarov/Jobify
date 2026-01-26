@@ -1,3 +1,13 @@
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Exceptions;
+using Jobify.Application.Common.Extensions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Interfaces.Services;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
 namespace Jobify.Application.UseCases.Companies.Commands.DeleteCompany;
 
 public class DeleteCompanyCommandHandler : BaseSetting, IRequestHandler<DeleteCompanyCommand, Unit>
@@ -10,11 +20,11 @@ public class DeleteCompanyCommandHandler : BaseSetting, IRequestHandler<DeleteCo
 
     public async Task<Unit> Handle(DeleteCompanyCommand request, CancellationToken cancellationToken)
     {
-        Company company = await _dbContext.Companies
-                              .Where(x => x.Id == request.CompanyId
-                                          && x.CreatedById == _authenticatedUserService.Id)
-                              .FirstOrDefaultAsync(cancellationToken)
-                          ?? throw new NotFoundException("Company not found");
+        var company = await _dbContext.Companies
+                          .Where(x => x.Id == request.CompanyId
+                                      && x.CreatedById == _authenticatedUserService.Id)
+                          .FirstOrDefaultAsync(cancellationToken)
+                      ?? throw new NotFoundException("Company not found");
 
         company.IsDeleted = true;
 

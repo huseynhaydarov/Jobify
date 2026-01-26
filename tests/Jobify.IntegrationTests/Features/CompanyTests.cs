@@ -1,6 +1,8 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Threading.Tasks;
 using AutoFixture;
 using Jobify.Application.UseCases.Companies.Commands.CreateCompanies;
 using Jobify.Application.UseCases.Companies.Commands.UpdateCompanies;
@@ -20,10 +22,10 @@ public class CompanyTests : IntegrationTestBase
         var token = await GetJwtTokenByRoleAsync(UserRoles.Administrator);
 
         var createCommand = new CreateCompanyCommand(
-            Name: "Test Company",
-            Description: "Test Description",
-            WebsiteUrl: "https://api-test.com",
-            Industry: "IT"
+            "Test Company",
+            "Test Description",
+            "https://api-test.com",
+            "IT"
         );
 
         // Act
@@ -32,7 +34,7 @@ public class CompanyTests : IntegrationTestBase
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var matchResponse = await response.Content.ReadFromJsonAsync<CompanyDto>();
+        var matchResponse = await response.Content.ReadFromJsonAsync<CreateCompanyResponse>();
         matchResponse.ShouldNotBeNull();
         matchResponse.Id.ShouldNotBe(Guid.Empty);
     }
@@ -40,13 +42,12 @@ public class CompanyTests : IntegrationTestBase
     [Test]
     public async Task CreateCompany_UnAuthorizedUser_Returns401Test()
     {
-
         // Arrange
         var createCommand = new CreateCompanyCommand(
-            Name: "Test Company",
-            Description: "Test Description",
-            WebsiteUrl: "https://api-test.com",
-            Industry: "IT"
+            "Test Company",
+            "Test Description",
+            "https://api-test.com",
+            "IT"
         );
 
         // Act

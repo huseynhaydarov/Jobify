@@ -1,4 +1,10 @@
-﻿namespace Jobify.Application.Common.Behaviours;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Interfaces.Services;
+using MediatR.Pipeline;
+using Microsoft.Extensions.Logging;
+
+namespace Jobify.Application.Common.Behaviours;
 
 public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest>
     where TRequest : notnull
@@ -14,8 +20,8 @@ public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest>
 
     public async Task Process(TRequest request, CancellationToken cancellationToken)
     {
-        string requestName = typeof(TRequest).Name;
-        Guid? userId = _authenticatedUserService.Id;
+        var requestName = typeof(TRequest).Name;
+        var userId = _authenticatedUserService.Id;
 
         _logger.LogInformation("Request: {Name} {@UserId} {@UserName}",
             requestName, userId, request);

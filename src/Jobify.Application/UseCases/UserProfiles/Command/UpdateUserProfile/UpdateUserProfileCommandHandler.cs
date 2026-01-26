@@ -1,4 +1,16 @@
-﻿namespace Jobify.Application.UseCases.UserProfiles.Command.UpdateUserProfile;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Exceptions;
+using Jobify.Application.Common.Extensions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Interfaces.Services;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
+
+namespace Jobify.Application.UseCases.UserProfiles.Command.UpdateUserProfile;
 
 public class UpdateUserProfileCommandHandler : BaseSetting, IRequestHandler<UpdateUserProfileCommand, Unit>
 {
@@ -19,16 +31,16 @@ public class UpdateUserProfileCommandHandler : BaseSetting, IRequestHandler<Upda
 
     public async Task<Unit> Handle(UpdateUserProfileCommand request, CancellationToken cancellationToken)
     {
-        UserProfile profile = await _dbContext.UserProfiles
-                                  .Where(c => c.Id == request.Id && c.UserId == _authenticatedUserService.Id)
-                                  .FirstOrDefaultAsync(cancellationToken)
-                              ?? throw new NotFoundException("Profile not found");
+        var profile = await _dbContext.UserProfiles
+                          .Where(c => c.Id == request.Id && c.UserId == _authenticatedUserService.Id)
+                          .FirstOrDefaultAsync(cancellationToken)
+                      ?? throw new NotFoundException("Profile not found");
 
         profile.MapTo(request);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        string cacheKey = $"userProfile:{request.Id}";
+        var cacheKey = $"userProfile:{request.Id}";
         ;
         _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);
         await _cache.RemoveAsync(cacheKey, cancellationToken);

@@ -1,4 +1,14 @@
-﻿namespace Jobify.Application.UseCases.Employers.Queries.GetJobListingsByEmployer;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Extensions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Interfaces.Services;
+using Jobify.Application.Common.Models.Pagination;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace Jobify.Application.UseCases.Employers.Queries.GetJobListingsByEmployer;
 
 public class GetAllJobListingsByEmployerQueryHandler : BaseSetting,
     IRequestHandler<GetAllJobListingsByEmployerQuery, PaginatedResult<GetAllJobListingsByEmployerResponse>>
@@ -15,13 +25,13 @@ public class GetAllJobListingsByEmployerQueryHandler : BaseSetting,
         GetAllJobListingsByEmployerQuery request,
         CancellationToken cancellationToken)
     {
-        Guid employerCompanyId = await _dbContext.Employers
+        var employerCompanyId = await _dbContext.Employers
             .AsNoTracking()
             .Where(c => c.UserId == _authenticatedUserService.Id)
             .Select(e => e.CompanyId)
             .FirstOrDefaultAsync(cancellationToken);
 
-        IQueryable<GetAllJobListingsByEmployerResponse> queryable = _dbContext.JobListings
+        var queryable = _dbContext.JobListings
             .IgnoreQueryFilters()
             .Where(c => c.CompanyId == employerCompanyId && c.CreatedBy == _authenticatedUserService.Id)
             .AsNoTracking()

@@ -1,4 +1,11 @@
-﻿namespace Jobify.Application.UseCases.UserProfiles.Command.DeleteUserProfiles;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Interfaces.Data;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace Jobify.Application.UseCases.UserProfiles.Command.DeleteUserProfiles;
 
 public class DeleteUserProfilesCommandhHandler : IRequestHandler<DeleteUserProfilesCommand, Unit>
 {
@@ -13,11 +20,11 @@ public class DeleteUserProfilesCommandhHandler : IRequestHandler<DeleteUserProfi
             return Unit.Value;
         }
 
-        List<UserProfile> profiles = await _dbContext.UserProfiles
+        var profiles = await _dbContext.UserProfiles
             .Where(p => request.Ids.Contains(p.Id))
             .ToListAsync(cancellationToken);
 
-        foreach (UserProfile profile in profiles)
+        foreach (var profile in profiles)
         {
             profile.IsDeleted = true;
         }

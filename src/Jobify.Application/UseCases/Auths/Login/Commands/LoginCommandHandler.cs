@@ -1,4 +1,15 @@
-﻿namespace Jobify.Application.UseCases.Auths.Login.Commands;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Exceptions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Interfaces.Services;
+using Jobify.Application.UseCases.Auths.AuthDtos;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace Jobify.Application.UseCases.Auths.Login.Commands;
 
 public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponse>
 {
@@ -17,7 +28,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponse>
 
     public async Task<AuthResponse> Handle(LoginCommand command, CancellationToken cancellationToken)
     {
-        User? user = await _dbContext.Users
+        var user = await _dbContext.Users
             .Include(u => u.UserRoles)
             .ThenInclude(r => r.Role)
             .FirstOrDefaultAsync(u => u.Email == command.Email, cancellationToken);
@@ -44,9 +55,9 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponse>
             return UnauthorizedResponse("Account is not active");
         }
 
-        string token = _tokenService.GenerateJwtToken(user);
+        var token = _tokenService.GenerateJwtToken(user);
 
-        string refreshToken = _tokenService.GenerateRefreshToken();
+        var refreshToken = _tokenService.GenerateRefreshToken();
 
         return new AuthResponse(
             true,

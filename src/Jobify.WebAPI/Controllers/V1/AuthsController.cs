@@ -1,4 +1,10 @@
-﻿using Jobify.Application.UseCases.Auths.AuthDtos;
+﻿using Jobify.Application.UseCases.Auths.ChangePassword.Commands;
+using Jobify.Application.UseCases.Auths.Login.Commands;
+using Jobify.Application.UseCases.Auths.RefreshToken.Commands;
+using Jobify.Domain.Constants;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Jobify.WebAPI.Controllers.V1;
 
@@ -13,7 +19,7 @@ public class AuthsController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginCommand command)
     {
-        AuthResponse data = await _mediator.Send(command);
+        var data = await _mediator.Send(command);
 
         if (!data.Success)
         {
@@ -36,23 +42,23 @@ public class AuthsController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> RefreshToken(CancellationToken cancellationToken)
     {
-        if (!Request.Cookies.TryGetValue("RefreshToken", out string? refreshToken))
+        if (!Request.Cookies.TryGetValue("RefreshToken", out var refreshToken))
         {
             return BadRequest("Missing RefreshToken cookie.");
         }
 
-        string? rawHeader = Request.Headers["Authorization"].FirstOrDefault();
+        var rawHeader = Request.Headers["Authorization"].FirstOrDefault();
 
         if (string.IsNullOrEmpty(rawHeader) || !rawHeader.StartsWith("Bearer "))
         {
             return BadRequest("Missing Authorization header.");
         }
 
-        string accessToken = rawHeader["Bearer ".Length..].Trim();
+        var accessToken = rawHeader["Bearer ".Length..].Trim();
 
         RefreshTokenCommand command = new(accessToken, refreshToken);
 
-        RefreshTokenResult result = await _mediator.Send(command, cancellationToken);
+        var result = await _mediator.Send(command, cancellationToken);
 
         Response.Cookies.Append("RefreshToken", result.RefreshToken,
             new CookieOptions
@@ -70,7 +76,7 @@ public class AuthsController : ControllerBase
     [Authorize(Roles = UserRoles.EmployerOrJobSeeker)]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand command)
     {
-        Unit data = await _mediator.Send(command);
+        var data = await _mediator.Send(command);
 
         return Ok(data);
     }

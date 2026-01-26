@@ -1,5 +1,17 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Exceptions;
+using Jobify.Application.Common.Extensions;
+using Jobify.Application.Common.Interfaces.Data;
 using Jobify.Application.Common.Models.Caching;
+using Jobify.Application.Common.Models.Pagination;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 
 namespace Jobify.Application.UseCases.JobListings.Queries.GetJobListings;
@@ -7,8 +19,8 @@ namespace Jobify.Application.UseCases.JobListings.Queries.GetJobListings;
 public class GetAllJobListingsQueryHandler : BaseSetting,
     IRequestHandler<GetAllJobListingsQuery, PaginatedResult<GetAllJobListingsResponse>>
 {
-    private readonly ILogger<GetAllJobListingsQueryHandler> _logger;
     private readonly IDistributedCache _cache;
+    private readonly ILogger<GetAllJobListingsQueryHandler> _logger;
     private readonly IConnectionMultiplexer _redis;
 
     public GetAllJobListingsQueryHandler(

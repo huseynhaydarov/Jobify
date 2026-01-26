@@ -1,4 +1,13 @@
-﻿using Microsoft.IdentityModel.JsonWebTokens;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Exceptions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Interfaces.Services;
+using Jobify.Application.UseCases.Auths.AuthDtos;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace Jobify.Application.UseCases.Auths.RefreshToken.Commands;
 
@@ -26,21 +35,21 @@ public class RefreshTokenCommandHandler
             throw new BadRequestException("Missing access token.");
         }
 
-        ClaimsPrincipal? principal = _tokenService.GetPrincipalFromExpiredToken(request.AccessToken);
+        var principal = _tokenService.GetPrincipalFromExpiredToken(request.AccessToken);
 
         if (principal == null)
         {
             throw new UnauthorizedAccessException("Invalid access token.");
         }
 
-        string? userIdString = principal.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+        var userIdString = principal.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
 
-        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid userId))
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
         {
             throw new NotFoundException("User not found.", $"with id {userIdString}");
         }
 
-        User? user = await _dbContext.Users
+        var user = await _dbContext.Users
             .Include(u => u.UserRoles)
             .ThenInclude(ur => ur.Role)
             .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
@@ -50,8 +59,8 @@ public class RefreshTokenCommandHandler
             throw new NotFoundException("User not found.", $"with id {userId}");
         }
 
-        string newAccessToken = _tokenService.GenerateJwtToken(user);
-        string newRefreshToken = _tokenService.GenerateRefreshToken();
+        var newAccessToken = _tokenService.GenerateJwtToken(user);
+        var newRefreshToken = _tokenService.GenerateRefreshToken();
 
         return new RefreshTokenResult { Token = newAccessToken, RefreshToken = newRefreshToken };
     }

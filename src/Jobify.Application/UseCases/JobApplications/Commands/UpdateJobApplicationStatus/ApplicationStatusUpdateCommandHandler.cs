@@ -1,4 +1,15 @@
-﻿namespace Jobify.Application.UseCases.JobApplications.Commands.UpdateJobApplicationStatus;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Exceptions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Interfaces.Services;
+using Jobify.Domain.Enums;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace Jobify.Application.UseCases.JobApplications.Commands.UpdateJobApplicationStatus;
 
 public class ApplicationStatusUpdateCommandHandler
     : IRequestHandler<ApplicationStatusUpdateCommand, Unit>
@@ -16,7 +27,7 @@ public class ApplicationStatusUpdateCommandHandler
 
     public async Task<Unit> Handle(ApplicationStatusUpdateCommand request, CancellationToken cancellationToken)
     {
-        JobApplication? application = await _dbContext.JobApplications
+        var application = await _dbContext.JobApplications
             .Where(x => x.Id == request.applicationId
                         && x.ApplicationStatus != (ApplicationStatus)request.status)
             .FirstOrDefaultAsync(cancellationToken);
@@ -26,7 +37,7 @@ public class ApplicationStatusUpdateCommandHandler
             throw new NotFoundException("Job application not found.");
         }
 
-        ApplicationStatus newStatus = (ApplicationStatus)request.status;
+        var newStatus = (ApplicationStatus)request.status;
 
         ValidateStatusTransition(application.ApplicationStatus, newStatus);
 

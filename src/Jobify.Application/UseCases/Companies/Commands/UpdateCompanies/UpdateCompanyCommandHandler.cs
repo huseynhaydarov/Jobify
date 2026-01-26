@@ -1,6 +1,16 @@
-﻿namespace Jobify.Application.UseCases.Companies.Commands.UpdateCompanies;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Exceptions;
+using Jobify.Application.Common.Extensions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Interfaces.Services;
+using Jobify.Application.UseCases.Companies.Dtos;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 
-public class UpdateCompanyCommandHandler : BaseSetting, IRequestHandler<UpdateCompanyCommand, Unit>
+namespace Jobify.Application.UseCases.Companies.Commands.UpdateCompanies;
+
+public class UpdateCompanyCommandHandler : BaseSetting, IRequestHandler<UpdateCompanyCommand, UpdateCompanyResponse>
 {
     private readonly IAuthenticatedUserService _authenticatedUserService;
     private readonly IApplicationDbContext _dbContext;
@@ -12,17 +22,19 @@ public class UpdateCompanyCommandHandler : BaseSetting, IRequestHandler<UpdateCo
         _authenticatedUserService = authenticatedUserService;
     }
 
-    public async Task<Unit> Handle(UpdateCompanyCommand request, CancellationToken cancellationToken)
+    public async Task<UpdateCompanyResponse> Handle(UpdateCompanyCommand request, CancellationToken cancellationToken)
     {
-        Company company = await _dbContext.Companies
-                              .FirstOrDefaultAsync(c => c.Id == request.Id && c.CreatedById == _authenticatedUserService.Id,
-                                  cancellationToken)
-                          ?? throw new NotFoundException("Company not found");
+        var company = await _dbContext.Companies
+                          .FirstOrDefaultAsync(c => c.Id == request.Id && c.CreatedById == _authenticatedUserService.Id,
+                              cancellationToken)
+                      ?? throw new NotFoundException("Company not found");
 
         company.MapFrom(request);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return Unit.Value;
+        return new UpdateCompanyResponse(
+            company.Id,
+            company.ModifiedAt);
     }
 }

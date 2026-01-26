@@ -1,4 +1,10 @@
-﻿using Jobify.Application.UseCases.JobSeekers.Dtos;
+﻿using Jobify.Application.Common.Models.Pagination;
+using Jobify.Application.UseCases.JobSeekers.Commands.CreateJobSeekers;
+using Jobify.Application.UseCases.JobSeekers.Queries.GetJobSeekers;
+using Jobify.Domain.Constants;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Jobify.WebAPI.Controllers.V1;
 
@@ -13,7 +19,7 @@ public class JobSeekersController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateJobSeekerCommand command)
     {
-        JobSeekerDto data = await _mediator.Send(command);
+        var data = await _mediator.Send(command);
 
         return Ok(data);
     }
@@ -24,7 +30,7 @@ public class JobSeekersController : ControllerBase
     {
         GetAllJobSeekersQuery query = new(parameters);
 
-        PaginatedResult<GetAllJobSeekersResponse> data = await _mediator.Send(query);
+        var data = await _mediator.Send(query);
 
         return Ok(data);
     }

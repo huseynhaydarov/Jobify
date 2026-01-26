@@ -1,8 +1,21 @@
-﻿namespace Jobify.Infrastructure.Services;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Jobify.Infrastructure.Services;
 
 public class TokenService(IOptions<JwtSettings> jwtSettings) : ITokenService
 {
     private readonly JwtSettings _jwtSettings = jwtSettings.Value;
+
+
+    public string GenerateRefreshToken()
+    {
+        var randomNumber = new byte[32];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        return Convert.ToBase64String(randomNumber);
+    }
 
     public string GenerateJwtToken(User user)
     {
@@ -13,7 +26,7 @@ public class TokenService(IOptions<JwtSettings> jwtSettings) : ITokenService
             securityKey,
             SecurityAlgorithms.HmacSha256);
 
-        List<string> roles = user.UserRoles
+        var roles = user.UserRoles
             .Where(ur => ur.Role != null)
             .Select(ur => ur.Role!.Name)
             .ToList();
@@ -24,7 +37,7 @@ public class TokenService(IOptions<JwtSettings> jwtSettings) : ITokenService
             new Claim(JwtRegisteredClaimNames.Email, user.Email)
         };
 
-        foreach (string role in roles)
+        foreach (var role in roles)
         {
             claims.Add(new Claim(ClaimTypes.Role, role));
         }
@@ -37,15 +50,6 @@ public class TokenService(IOptions<JwtSettings> jwtSettings) : ITokenService
             signingCredentials: credentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
-    }
-
-
-    public string GenerateRefreshToken()
-    {
-        byte[] randomNumber = new byte[32];
-        using RandomNumberGenerator rng = RandomNumberGenerator.Create();
-        rng.GetBytes(randomNumber);
-        return Convert.ToBase64String(randomNumber);
     }
 
     public ClaimsPrincipal? GetPrincipalFromExpiredToken(string token)
@@ -67,8 +71,8 @@ public class TokenService(IOptions<JwtSettings> jwtSettings) : ITokenService
         {
             tokenHandler.InboundClaimTypeMap.Clear();
 
-            ClaimsPrincipal? principal =
-                tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken? validatedToken);
+            var principal =
+                tokenHandler.ValidateToken(token, tokenValidationParameters, out var validatedToken);
 
             if (validatedToken is not JwtSecurityToken jwtToken ||
                 !jwtToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
@@ -76,7 +80,7 @@ public class TokenService(IOptions<JwtSettings> jwtSettings) : ITokenService
                 throw new SecurityTokenException("Invalid token");
             }
 
-            foreach (Claim claim in principal.Claims)
+            foreach (var claim in principal.Claims)
             {
                 Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
             }

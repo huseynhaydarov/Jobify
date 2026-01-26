@@ -1,4 +1,13 @@
-﻿using Jobify.Application.UseCases.JobApplications.Dtos;
+﻿using Jobify.Application.Common.Models.Pagination;
+using Jobify.Application.UseCases.JobApplications.Commands.CancelJobApplication;
+using Jobify.Application.UseCases.JobApplications.Commands.CreateJobApplication;
+using Jobify.Application.UseCases.JobApplications.Commands.UpdateJobApplicationStatus;
+using Jobify.Application.UseCases.JobApplications.Queries.GetJobApplicationDetail;
+using Jobify.Application.UseCases.JobApplications.Queries.GetJobApplications;
+using Jobify.Domain.Constants;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Jobify.WebAPI.Controllers.V1;
 
@@ -14,7 +23,7 @@ public class JobApplicationsController : ControllerBase
     [Authorize(Roles = UserRoles.JobSeeker)]
     public async Task<IActionResult> Apply([FromBody] CreateJobApplicationCommand command)
     {
-        JobApplicationDto application = await _mediator.Send(command);
+        var application = await _mediator.Send(command);
 
         return Ok(application);
     }
@@ -34,7 +43,7 @@ public class JobApplicationsController : ControllerBase
         [FromQuery] Guid? jobListingId,
         [FromQuery] PagingParameters paging)
     {
-        PaginatedResult<GetAllJobApplicationsByJobListingResponse> result =
+        var result =
             await _mediator.Send(new GetAllJobApplicationsByJobListingQuery(jobListingId, paging));
 
         return Ok(result);
@@ -44,7 +53,7 @@ public class JobApplicationsController : ControllerBase
     [Authorize(Policy = Policies.CanViewAll)]
     public async Task<ActionResult<GetJobApplicationDetailResponse>> GetById([FromRoute] Guid id)
     {
-        GetJobApplicationDetailResponse result = await _mediator.Send(new GetJobApplicationDetailQuery(id));
+        var result = await _mediator.Send(new GetJobApplicationDetailQuery(id));
 
         return Ok(result);
     }

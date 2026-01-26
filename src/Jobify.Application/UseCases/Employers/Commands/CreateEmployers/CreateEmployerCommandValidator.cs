@@ -1,4 +1,6 @@
-﻿namespace Jobify.Application.UseCases.Employers.Commands.CreateEmployers;
+﻿using FluentValidation;
+
+namespace Jobify.Application.UseCases.Employers.Commands.CreateEmployers;
 
 public class CreateEmployerCommandValidator : AbstractValidator<CreateEmployerCommand>
 {

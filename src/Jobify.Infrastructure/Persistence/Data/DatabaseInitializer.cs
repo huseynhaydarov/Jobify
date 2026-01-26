@@ -1,4 +1,6 @@
-﻿using Jobify.Infrastructure.Persistence.Data.Seed;
+﻿using System;
+using System.Threading.Tasks;
+using Jobify.Infrastructure.Persistence.Data.Seed;
 using Microsoft.Extensions.Logging;
 
 namespace Jobify.Infrastructure.Persistence.Data;
@@ -8,15 +10,15 @@ public static class DatabaseInitializer
     public static async Task InitializeAsync(
         IServiceProvider serviceProvider)
     {
-        using IServiceScope scope = serviceProvider.CreateScope();
+        using var scope = serviceProvider.CreateScope();
 
-        ILogger logger = scope.ServiceProvider
+        var logger = scope.ServiceProvider
             .GetRequiredService<ILoggerFactory>()
             .CreateLogger("DatabaseInitializer");
 
         try
         {
-            ApplicationDbContext dbContext = scope.ServiceProvider
+            var dbContext = scope.ServiceProvider
                 .GetRequiredService<ApplicationDbContext>();
 
             logger.LogInformation("Applying database migrations...");

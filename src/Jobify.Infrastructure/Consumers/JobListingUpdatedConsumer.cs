@@ -1,4 +1,5 @@
-﻿using Jobify.Application.Common.Models.Caching;
+﻿using System.Threading.Tasks;
+using Jobify.Application.Common.Models.Caching;
 using Jobify.Contracts.JobListings.Events;
 using MassTransit;
 using Microsoft.Extensions.Logging;
@@ -25,9 +26,9 @@ public class JobListingUpdatedConsumer : IConsumer<JobListingUpdatedEvent>
 
         var db = _redis.GetDatabase();
 
-        string cacheKey = $"jobListing:{context.Message.Id}";
+        var cacheKey = $"jobListing:{context.Message.Id}";
         _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);
 
-        await db.KeyDeleteAsync( [cacheKey, JobListingsCacheKeys.Registry]);
+        await db.KeyDeleteAsync([cacheKey, JobListingsCacheKeys.Registry]);
     }
 }

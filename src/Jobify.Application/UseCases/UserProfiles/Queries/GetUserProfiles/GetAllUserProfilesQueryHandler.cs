@@ -1,4 +1,13 @@
-﻿namespace Jobify.Application.UseCases.UserProfiles.Queries.GetUserProfiles;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Jobify.Application.Common.Extensions;
+using Jobify.Application.Common.Interfaces.Data;
+using Jobify.Application.Common.Models.Pagination;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace Jobify.Application.UseCases.UserProfiles.Queries.GetUserProfiles;
 
 public class GetAllUserProfilesQueryHandler : BaseSetting, IRequestHandler<GetAllUserProfilesQuery,
     PaginatedResult<GetAllUserProfilesResponse>>
@@ -10,7 +19,7 @@ public class GetAllUserProfilesQueryHandler : BaseSetting, IRequestHandler<GetAl
     public async Task<PaginatedResult<GetAllUserProfilesResponse>> Handle(GetAllUserProfilesQuery request,
         CancellationToken cancellationToken)
     {
-        IQueryable<GetAllUserProfilesResponse> queryable = _dbContext.UserProfiles
+        var queryable = _dbContext.UserProfiles
             .AsNoTracking()
             .OrderByDescending(x => x.CreatedAt)
             .Select(p => new GetAllUserProfilesResponse
