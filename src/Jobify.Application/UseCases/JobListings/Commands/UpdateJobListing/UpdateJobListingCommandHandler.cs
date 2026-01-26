@@ -55,22 +55,23 @@ public class UpdateJobListingCommandHandler : BaseSetting,
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        await _publishEndpoint.Publish(new JobListingUpdatedEvent
-        {
-            Id = jobListing.Id,
-            Name = jobListing.Name,
-            Description = jobListing.Description,
-            Requirements = jobListing.Requirements,
-            Location = jobListing.Location,
-            Salary =  jobListing.Salary,
-            Status = jobListing.Status.ToString(),
-            Currency = jobListing.Currency,
-            ExpireDate = jobListing.ExpiresAt,
-            Changes = changes,
-            ModifiedAt = jobListing.ModifiedAt ??  DateTime.UtcNow,
-            ModifiedBy = _authenticatedUserService.Email,
-            ModifiedById = jobListing.ModifiedBy ?? Guid.Empty,
-        }, cancellationToken);
+        await _publishEndpoint.Publish(
+            new JobListingUpdatedEvent
+            {
+                Id = jobListing.Id,
+                Name = jobListing.Name,
+                Description = jobListing.Description,
+                Requirements = jobListing.Requirements,
+                Location = jobListing.Location,
+                Salary = jobListing.Salary,
+                Status = jobListing.Status.ToString(),
+                Currency = jobListing.Currency,
+                ExpireDate = jobListing.ExpiresAt,
+                Changes = changes,
+                ModifiedAt = jobListing.ModifiedAt ?? DateTime.UtcNow,
+                ModifiedBy = _authenticatedUserService.Email,
+                ModifiedById = jobListing.ModifiedBy ?? Guid.Empty
+            }, cancellationToken);
 
         return new UpdateJobListingResponse(
             jobListing.Id,
@@ -85,7 +86,9 @@ public class UpdateJobListingCommandHandler : BaseSetting,
         foreach (var property in entry.Properties)
         {
             if (!property.IsModified)
+            {
                 continue;
+            }
 
             changes.Add(new AuditLogDetail
             {
@@ -94,7 +97,7 @@ public class UpdateJobListingCommandHandler : BaseSetting,
                 NewValue = property.CurrentValue?.ToString()
             });
         }
+
         return changes;
     }
-
 }

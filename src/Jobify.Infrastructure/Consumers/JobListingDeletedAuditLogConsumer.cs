@@ -11,10 +11,7 @@ public class JobListingDeletedAuditLogConsumer : IConsumer<JobListingDeletedEven
 {
     private readonly ApplicationDbContext _dbContext;
 
-    public JobListingDeletedAuditLogConsumer(ApplicationDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    public JobListingDeletedAuditLogConsumer(ApplicationDbContext dbContext) => _dbContext = dbContext;
 
     public async Task Consume(ConsumeContext<JobListingDeletedEvent> context)
     {

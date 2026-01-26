@@ -34,48 +34,36 @@ public static class MassTransitExtension
 
             x.UsingRabbitMq((context, cfg) =>
             {
-                cfg.Host(massTransitConfig.Url , massTransitConfig.Host, h =>
+                cfg.Host(massTransitConfig.Url, massTransitConfig.Host, h =>
                 {
                     h.Username(massTransitConfig.Username);
                     h.Password(massTransitConfig.Password);
                 });
 
-                cfg.UseMessageRetry(retry => {
+                cfg.UseMessageRetry(retry =>
+                {
                     retry.Interval(3,
-                    TimeSpan.FromSeconds(5));
+                        TimeSpan.FromSeconds(5));
                 });
 
-                cfg.ReceiveEndpoint("add-jobListing-queue",e =>
-                {
-                    e.ConfigureConsumer<JobListingAddedConsumer>(context);
-                });
+                cfg.ReceiveEndpoint("add-jobListing-queue",
+                    e => { e.ConfigureConsumer<JobListingAddedConsumer>(context); });
 
-                cfg.ReceiveEndpoint("delete-jobListing-queue",e =>
-                {
-                    e.ConfigureConsumer<JobListingDeletedConsumer>(context);
-                });
+                cfg.ReceiveEndpoint("delete-jobListing-queue",
+                    e => { e.ConfigureConsumer<JobListingDeletedConsumer>(context); });
 
-                cfg.ReceiveEndpoint("update-jobListing-queue", e =>
-                {
-                    e.ConfigureConsumer<JobListingUpdatedConsumer>(context);
-                });
+                cfg.ReceiveEndpoint("update-jobListing-queue",
+                    e => { e.ConfigureConsumer<JobListingUpdatedConsumer>(context); });
 
-                cfg.ReceiveEndpoint("create-jobListing-auditLog-queue", e =>
-                {
-                    e.ConfigureConsumer<JobListingAddedAuditLogConsumer>(context);
-                });
+                cfg.ReceiveEndpoint("create-jobListing-auditLog-queue",
+                    e => { e.ConfigureConsumer<JobListingAddedAuditLogConsumer>(context); });
 
-                cfg.ReceiveEndpoint("update-jobListing-auditLog-queue", e =>
-                {
-                    e.ConfigureConsumer<JobListingUpdatedAuditLogConsumer>(context);
-                });
+                cfg.ReceiveEndpoint("update-jobListing-auditLog-queue",
+                    e => { e.ConfigureConsumer<JobListingUpdatedAuditLogConsumer>(context); });
 
-                cfg.ReceiveEndpoint("delete-jobListing-auditLog-queue", e =>
-                {
-                    e.ConfigureConsumer<JobListingDeletedAuditLogConsumer>(context);
-                });
+                cfg.ReceiveEndpoint("delete-jobListing-auditLog-queue",
+                    e => { e.ConfigureConsumer<JobListingDeletedAuditLogConsumer>(context); });
             });
         });
-
     }
 }

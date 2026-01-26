@@ -20,5 +20,5 @@ public record JobListingCreatedEvent
     public Guid EmployerId { get; init; }
     public DateTimeOffset CreatedAt { get; init; }
     public Guid? CreatedById { get; init; }
-    public string? CreatedBy {get; init;}
+    public string? CreatedBy { get; init; }
 }

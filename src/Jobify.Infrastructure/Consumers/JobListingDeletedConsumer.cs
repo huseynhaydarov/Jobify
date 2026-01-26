@@ -26,7 +26,7 @@ public class JobListingDeletedConsumer : IConsumer<JobListingDeletedEvent>
 
         var db = _redis.GetDatabase();
 
-        string cacheKey = $"jobListing:{context.Message.Id}";
+        var cacheKey = $"jobListing:{context.Message.Id}";
         _logger.LogInformation("invalidating cache for key: {CacheKey} from cache.", cacheKey);
 
         await db.KeyDeleteAsync([cacheKey, JobListingsCacheKeys.Registry]);

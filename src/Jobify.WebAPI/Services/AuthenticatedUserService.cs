@@ -27,11 +27,5 @@ public class AuthenticatedUserService : IAuthenticatedUserService
     public List<string>? Roles =>
         _httpContextAccessor.HttpContext?.User.FindAll(ClaimTypes.Role).Select(x => x.Value).ToList();
 
-    public string Email
-    {
-        get
-        {
-            return _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Email) ?? string.Empty;
-        }
-    }
+    public string Email => _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Email) ?? string.Empty;
 }

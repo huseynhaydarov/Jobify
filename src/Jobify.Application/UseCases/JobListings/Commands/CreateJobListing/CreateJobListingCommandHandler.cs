@@ -66,24 +66,25 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
         await _dbContext.JobListings.AddAsync(jobListing, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        await _publishEndpoint.Publish(new JobListingCreatedEvent
-        {
-            Id= jobListing.Id,
-            Name = jobListing.Name,
-            Description = jobListing.Description,
-            Requirements = jobListing.Requirements,
-            Location = jobListing.Location,
-            Salary = jobListing.Salary,
-            Currency = jobListing.Currency,
-            Status = jobListing.Status.ToString(),
-            CompanyId = jobListing.CompanyId,
-            EmployerId = jobListing.EmployerId,
-            PostedAt = DateTimeOffset.UtcNow,
-            ExpiresAt = jobListing.ExpiresAt,
-            CreatedAt = jobListing.CreatedAt,
-            CreatedById = jobListing.CreatedBy,
-            CreatedBy = _authenticatedUserService.Email
-        }, cancellationToken);
+        await _publishEndpoint.Publish(
+            new JobListingCreatedEvent
+            {
+                Id = jobListing.Id,
+                Name = jobListing.Name,
+                Description = jobListing.Description,
+                Requirements = jobListing.Requirements,
+                Location = jobListing.Location,
+                Salary = jobListing.Salary,
+                Currency = jobListing.Currency,
+                Status = jobListing.Status.ToString(),
+                CompanyId = jobListing.CompanyId,
+                EmployerId = jobListing.EmployerId,
+                PostedAt = DateTimeOffset.UtcNow,
+                ExpiresAt = jobListing.ExpiresAt,
+                CreatedAt = jobListing.CreatedAt,
+                CreatedById = jobListing.CreatedBy,
+                CreatedBy = _authenticatedUserService.Email
+            }, cancellationToken);
 
         return new JobListingDto(
             jobListing.Id,

@@ -30,18 +30,15 @@ public class SearchJobListingsQueryHandler
         SearchJobListingsQuery request,
         CancellationToken cancellationToken)
     {
-        var response = await _searchService.SearchAsync(new SearchRequest
-        {
-            SearchTerm = request.SearchTerm
-        });
+        var response = await _searchService.SearchAsync(new SearchRequest { SearchTerm = request.SearchTerm });
 
         if (response.Ids.Count == 0)
         {
             return new PaginatedResult<GetAllJobListingsResponse>(
-                items: new List<GetAllJobListingsResponse>(),
+                new List<GetAllJobListingsResponse>(),
                 request.PageNumber,
                 request.PageSize,
-                hasNext: false
+                false
             );
         }
 

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Jobify.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Jobify.Application.Common.Interfaces.Data;

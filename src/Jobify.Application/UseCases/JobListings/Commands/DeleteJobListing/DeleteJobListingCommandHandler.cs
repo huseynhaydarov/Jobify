@@ -45,13 +45,14 @@ public class DeleteJobListingCommandHandler : BaseSetting,
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        await _publishEndpoint.Publish(new JobListingDeletedEvent
-        {
-            Id = jobListing.Id,
-            ClosedAt = jobListing.ModifiedAt ??  DateTimeOffset.UtcNow,
-            ClosedById = jobListing.ModifiedBy ?? Guid.Empty,
-            ClosedBy = _authenticatedUserService.Email
-        }, cancellationToken);
+        await _publishEndpoint.Publish(
+            new JobListingDeletedEvent
+            {
+                Id = jobListing.Id,
+                ClosedAt = jobListing.ModifiedAt ?? DateTimeOffset.UtcNow,
+                ClosedById = jobListing.ModifiedBy ?? Guid.Empty,
+                ClosedBy = _authenticatedUserService.Email
+            }, cancellationToken);
 
         return new CloseJobListingResponse(
             jobListing.Id,

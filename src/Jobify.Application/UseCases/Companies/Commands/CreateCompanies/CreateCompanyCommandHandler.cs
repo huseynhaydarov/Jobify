@@ -23,7 +23,7 @@ public class CreateCompanyCommandHandler : BaseSetting, IRequestHandler<CreateCo
         var userId = _authenticatedUserService.Id
                      ?? throw new UnauthorizedException("User is not authenticated");
 
-        var company = new Company()
+        var company = new Company
         {
             Name = request.Name,
             Description = request.Description,

@@ -11,10 +11,7 @@ public class JobListingAddedAuditLogConsumer : IConsumer<JobListingCreatedEvent>
 {
     private readonly ApplicationDbContext _dbContext;
 
-    public JobListingAddedAuditLogConsumer(ApplicationDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    public JobListingAddedAuditLogConsumer(ApplicationDbContext dbContext) => _dbContext = dbContext;
 
     public async Task Consume(ConsumeContext<JobListingCreatedEvent> context)
     {
@@ -31,45 +28,16 @@ public class JobListingAddedAuditLogConsumer : IConsumer<JobListingCreatedEvent>
             ChangedByType = message.CreatedBy,
             AuditLogDetails =
             [
+                new AuditLogDetail { PropertyName = nameof(message.Name), NewValue = message.Name },
+                new AuditLogDetail { PropertyName = nameof(message.Description), NewValue = message.Description },
+                new AuditLogDetail { PropertyName = nameof(message.Requirements), NewValue = message.Requirements },
+                new AuditLogDetail { PropertyName = nameof(message.Location), NewValue = message.Location },
+                new AuditLogDetail { PropertyName = nameof(message.Salary), NewValue = message.Salary.ToString() },
+                new AuditLogDetail { PropertyName = nameof(message.Currency), NewValue = message.Currency },
+                new AuditLogDetail { PropertyName = nameof(message.Status), NewValue = message.Status },
                 new AuditLogDetail
                 {
-                    PropertyName = nameof(message.Name),
-                    NewValue = message.Name
-                },
-                new AuditLogDetail
-                {
-                    PropertyName = nameof(message.Description),
-                    NewValue = message.Description
-                },
-                new AuditLogDetail
-                {
-                    PropertyName = nameof(message.Requirements),
-                    NewValue = message.Requirements
-                },
-                new AuditLogDetail
-                {
-                    PropertyName = nameof(message.Location),
-                    NewValue = message.Location
-                },
-                new AuditLogDetail
-                {
-                    PropertyName = nameof(message.Salary),
-                    NewValue = message.Salary.ToString()
-                },
-                new AuditLogDetail
-                {
-                    PropertyName = nameof(message.Currency),
-                    NewValue = message.Currency
-                },
-                new AuditLogDetail
-                {
-                    PropertyName = nameof(message.Status),
-                    NewValue = message.Status
-                },
-                new AuditLogDetail
-                {
-                    PropertyName = nameof(message.ExpiresAt),
-                    NewValue = message.ExpiresAt?.ToString()
+                    PropertyName = nameof(message.ExpiresAt), NewValue = message.ExpiresAt?.ToString()
                 }
             ]
         };

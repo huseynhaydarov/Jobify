@@ -10,10 +10,7 @@ public class JobListingUpdatedAuditLogConsumer : IConsumer<JobListingUpdatedEven
 {
     private readonly IApplicationDbContext _dbContext;
 
-    public JobListingUpdatedAuditLogConsumer(IApplicationDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    public JobListingUpdatedAuditLogConsumer(IApplicationDbContext dbContext) => _dbContext = dbContext;
 
     public async Task Consume(ConsumeContext<JobListingUpdatedEvent> context)
     {
@@ -35,4 +32,3 @@ public class JobListingUpdatedAuditLogConsumer : IConsumer<JobListingUpdatedEven
         await _dbContext.SaveChangesAsync(context.CancellationToken);
     }
 }
-

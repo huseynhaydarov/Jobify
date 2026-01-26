@@ -14,16 +14,11 @@ public class AuditLogsController : ControllerBase
 {
     private readonly ISender _mediator;
 
-    public AuditLogsController(ISender mediator)
-    {
-        _mediator = mediator;
-    }
+    public AuditLogsController(ISender mediator) => _mediator = mediator;
 
     [HttpGet("jobListings/{id}")]
     [Authorize(Roles = UserRoles.Administrator)]
     public async Task<PaginatedResult<GetAuditLogByJobListingResponse>> GetAll([FromRoute] Guid id,
-        [FromQuery] PagingParameters paging)
-    {
-        return await _mediator.Send(new GetAuditLogByJobListingQuery(id, paging));
-    }
+        [FromQuery] PagingParameters paging) =>
+        await _mediator.Send(new GetAuditLogByJobListingQuery(id, paging));
 }
