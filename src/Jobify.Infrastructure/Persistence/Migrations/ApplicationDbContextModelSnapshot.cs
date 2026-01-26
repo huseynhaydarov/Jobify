@@ -36,7 +36,9 @@ namespace Jobify.Infrastructure.Migrations
 
                     b.Property<List<AuditLogDetail>>("AuditLogDetails")
                         .IsRequired()
-                        .HasColumnType("jsonb");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("jsonb")
+                        .HasDefaultValueSql("'[]'::jsonb");
 
                     b.Property<DateTime>("ChangedAt")
                         .HasColumnType("timestamp with time zone");

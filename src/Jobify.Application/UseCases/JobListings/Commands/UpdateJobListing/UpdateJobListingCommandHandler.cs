@@ -53,7 +53,7 @@ public class UpdateJobListingCommandHandler : BaseSetting,
             ExpireDate = jobListing.ExpiresAt,
             Changes = changes,
             ModifiedAt = jobListing.ModifiedAt ??  DateTime.UtcNow,
-            ModifiedBy = string.Join(", ", _authenticatedUserService.Roles!),
+            ModifiedBy = _authenticatedUserService.Email,
             ModifiedById = jobListing.ModifiedBy ?? Guid.Empty,
         }, cancellationToken);
 

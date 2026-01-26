@@ -21,7 +21,8 @@ public class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
         builder.Property(x => x.ChangedByType);
 
         builder.Property(x => x.AuditLogDetails)
-            .HasColumnType("jsonb");
+            .HasColumnType("jsonb")
+            .HasDefaultValueSql("'[]'::jsonb");
 
         builder.Property(x => x.EntityId)
             .IsRequired();

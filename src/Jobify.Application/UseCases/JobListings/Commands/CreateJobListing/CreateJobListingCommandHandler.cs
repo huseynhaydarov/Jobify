@@ -68,7 +68,7 @@ public class CreateJobListingCommandHandler : BaseSetting, IRequestHandler<Creat
             ExpiresAt = jobListing.ExpiresAt,
             CreatedAt = jobListing.CreatedAt,
             CreatedById = jobListing.CreatedBy,
-            CreatedBy = string.Join(", ", _authenticatedUserService.Roles!),
+            CreatedBy = _authenticatedUserService.Email
         }, cancellationToken);
 
         return new JobListingDto(
