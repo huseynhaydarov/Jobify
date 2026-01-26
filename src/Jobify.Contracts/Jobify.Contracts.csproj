@@ -6,11 +6,7 @@
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
       <PackageId>Jobify.Contracts</PackageId>
-      <Version>1.0.3</Version>
+      <Version>1.0.4</Version>
       <Authors>Jobify</Authors>
     </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Jobify.Domain\Jobify.Domain.csproj" />
-    </ItemGroup>
 </Project>

@@ -27,6 +27,13 @@ public class JobListingUpdatedAuditLogConsumer : IConsumer<JobListingUpdatedEven
             ChangedBy = message.ModifiedById,
             ChangedByType = message.ModifiedBy,
             AuditLogDetails = message.Changes
+                .Select(c => new AuditLogDetail
+                {
+                    PropertyName = c.PropertyName,
+                    OldValue = c.OldValue,
+                    NewValue = c.NewValue
+                })
+                .ToList()
         };
 
         _dbContext.AuditLogs.Add(auditLog);
