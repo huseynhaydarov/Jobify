@@ -51,7 +51,13 @@ public class UpdateJobListingCommandHandler : BaseSetting,
             Status = jobListing.Status.ToString(),
             Currency = jobListing.Currency,
             ExpireDate = jobListing.ExpiresAt,
-            Changes = changes,
+            Changes = changes.Select(c => new Jobify.Contracts.JobListings.Models.AuditLogDetail
+                {
+                    PropertyName = c.PropertyName,
+                    OldValue = c.OldValue,
+                    NewValue = c.NewValue
+                })
+                .ToList(),
             ModifiedAt = jobListing.ModifiedAt ??  DateTime.UtcNow,
             ModifiedBy = _authenticatedUserService.Email,
             ModifiedById = jobListing.ModifiedBy ?? Guid.Empty,

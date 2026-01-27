@@ -1,4 +1,4 @@
-﻿using Jobify.Domain.Entities;
+﻿using Jobify.Contracts.JobListings.Models;
 
 namespace Jobify.Contracts.JobListings.Events;
 
