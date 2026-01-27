@@ -10,7 +10,13 @@ public static class SearchGrpcExtensions
     {
         services.AddSingleton<ISearchService>(sp =>
         {
-            var channel = GrpcChannel.ForAddress("https://localhost:7212");
+            var channel = GrpcChannel.ForAddress("http://localhost:5041", new GrpcChannelOptions
+            {
+                HttpHandler = new SocketsHttpHandler
+                {
+                    EnableMultipleHttp2Connections = true
+                }
+            });
 
             return MagicOnionClient.Create<ISearchService>(channel);
         });
